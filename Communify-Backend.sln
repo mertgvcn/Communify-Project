@@ -4,11 +4,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Communify-Backend", "Communify-Backend.csproj", "{4CD58F3B-894E-484C-A9B3-7F7E14A477B8}"
-	ProjectSection(ProjectDependencies) = postProject
-		{7DF77EA2-59D2-47E3-B90F-FA0A19924DA5} = {7DF77EA2-59D2-47E3-B90F-FA0A19924DA5}
-	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunifyLibrary", "..\CommunifyLibrary\CommunifyLibrary.csproj", "{7DF77EA2-59D2-47E3-B90F-FA0A19924DA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommunifyLibrary", "CommunifyLibrary\CommunifyLibrary.csproj", "{A3947E85-0863-47BC-8CE5-727D49E51CA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,10 +17,10 @@ Global
 		{4CD58F3B-894E-484C-A9B3-7F7E14A477B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CD58F3B-894E-484C-A9B3-7F7E14A477B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CD58F3B-894E-484C-A9B3-7F7E14A477B8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7DF77EA2-59D2-47E3-B90F-FA0A19924DA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7DF77EA2-59D2-47E3-B90F-FA0A19924DA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7DF77EA2-59D2-47E3-B90F-FA0A19924DA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7DF77EA2-59D2-47E3-B90F-FA0A19924DA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3947E85-0863-47BC-8CE5-727D49E51CA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3947E85-0863-47BC-8CE5-727D49E51CA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3947E85-0863-47BC-8CE5-727D49E51CA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3947E85-0863-47BC-8CE5-727D49E51CA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

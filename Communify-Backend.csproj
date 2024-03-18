@@ -23,8 +23,4 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\CommunifyLibrary\CommunifyLibrary.csproj" />
-  </ItemGroup>
-
 </Project>
