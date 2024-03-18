@@ -1,16 +1,16 @@
-using LethalCompany_Backend;
+using Communify_Backend;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddAPI(); //add controller, swagger, apis
-
+// Add services to the container.
+builder.AddAPI();
+builder.ConfigureAuthorization();
 
 //Enable CORS(dýþarýdan gerçekleþen iþlemlere izin)
 builder.Services.AddCors(c =>
 {
     c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 });
-
 
 
 var app = builder.Build();
@@ -27,8 +27,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-//authentication ekle
-//app.UseAuthentication();
+app.UseAuthentication();
 
 app.UseAuthorization();
 

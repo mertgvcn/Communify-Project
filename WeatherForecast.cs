@@ -1,4 +1,4 @@
-namespace LethalCompany_Backend
+namespace Communify_Backend
 {
     public class WeatherForecast
     {
