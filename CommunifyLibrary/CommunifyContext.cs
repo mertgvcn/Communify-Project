@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+
 
 namespace CommunifyLibrary
 {
-    public class CommunifyContext
+    public class CommunifyContext : DbContext
     {
+        public CommunifyContext(DbContextOptions<CommunifyContext> options) : base(options)
+        {
+            
+        }
+
+
     }
 }

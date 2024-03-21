@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Communify-Backend", "Communify-Backend.csproj", "{4CD58F3B-894E-484C-A9B3-7F7E14A477B8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A3947E85-0863-47BC-8CE5-727D49E51CA9} = {A3947E85-0863-47BC-8CE5-727D49E51CA9}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommunifyLibrary", "CommunifyLibrary\CommunifyLibrary.csproj", "{A3947E85-0863-47BC-8CE5-727D49E51CA9}"
 EndProject
