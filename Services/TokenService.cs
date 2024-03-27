@@ -2,5 +2,9 @@
 {
     public class TokenService
     {
+        public TokenService()
+        {
+            
+        }
     }
 }
