@@ -8,11 +8,15 @@ using System.Threading.Tasks;
 
 namespace CommunifyLibrary.Configurations
 {
-    public class PostConfiguration: BaseEntityConfiguration<Post>
+    public class RoleConfiguration : BaseEntityConfiguration<Role>
     {
-        public void Configure(EntityTypeBuilder<Post> builder)
+        public void Configure(EntityTypeBuilder<Role> builder)
         {
             base.Configure(builder);
+
+            builder.Property(x => x.Name)
+                .IsRequired(true)
+                .HasMaxLength(128);
         }
     }
 }

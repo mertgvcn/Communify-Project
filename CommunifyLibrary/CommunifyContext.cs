@@ -1,6 +1,5 @@
 ﻿using CommunifyLibrary.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.CompilerServices;
 
 namespace CommunifyLibrary
 {
@@ -8,12 +7,15 @@ namespace CommunifyLibrary
     {
         public CommunifyContext(DbContextOptions<CommunifyContext> options) : base(options)
         {
-            
+
         }
 
-        public DbSet<User> Users { get; set; } 
+        public DbSet<User> Users { get; set; }
 
-        public DbSet<Post> Posts { get; set; }
+        public DbSet<Role> Roles { get; set; }
+
+        public DbSet<Interest> Interests { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

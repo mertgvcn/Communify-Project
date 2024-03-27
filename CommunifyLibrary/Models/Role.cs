@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace CommunifyLibrary.Models
 {
-    public class Post: BaseEntity
+    public class Role : BaseEntity
     {
-        [MaxLength(300)]
-        public string postName { get; set; }
+        public string Name { get; set; }
+
+        public ICollection<User> Users { get; set; }
     }
 }

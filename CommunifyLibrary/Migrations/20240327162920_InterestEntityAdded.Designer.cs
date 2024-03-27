@@ -3,6 +3,7 @@ using System;
 using CommunifyLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CommunifyLibrary.Migrations
 {
     [DbContext(typeof(CommunifyContext))]
-    partial class CommunifyContextModelSnapshot : ModelSnapshot
+    [Migration("20240327162920_InterestEntityAdded")]
+    partial class InterestEntityAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

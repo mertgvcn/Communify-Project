@@ -1,11 +1,5 @@
 ﻿using CommunifyLibrary.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CommunifyLibrary.Configurations
 {
@@ -15,13 +9,51 @@ namespace CommunifyLibrary.Configurations
         {
             base.Configure(builder);
 
-            builder.Property(x => x.Name)
+            builder.Property(x => x.FirstName)
                 .IsRequired(true)
-                .HasMaxLength(128);
+                .HasMaxLength(64);
+
+            builder.Property(x => x.LastName)
+                .IsRequired(true)
+                .HasMaxLength(64);
+
+            builder.Property(x => x.BirthDate)
+                .IsRequired(true);
+
+            builder.Property(x => x.BirthCountry)
+                .IsRequired(true)
+                .HasMaxLength(64);
+
+            builder.Property(x => x.BirthCity)
+                .IsRequired(true)
+                .HasMaxLength(64);
+
+            builder.Property(x => x.CurrentCountry)
+                .IsRequired(true)
+                .HasMaxLength(64);
+
+            builder.Property(x => x.CurrentCity)
+                .IsRequired(true)
+                .HasMaxLength(64);
+
+            builder.Property(x => x.Gender)
+                .IsRequired(true);
+
+            builder.Property(x => x.Address)
+                .IsRequired(false)
+                .HasMaxLength(256);
+
+            builder.Property(x => x.PhoneNumber)
+                .IsRequired(true)
+                .HasMaxLength(32);
 
             builder.Property(x => x.Email)
                 .IsRequired(true)
-                .HasMaxLength(128);        
+                .HasMaxLength(64);
+
+            builder.Property(x => x.Password)
+                .IsRequired(false)
+                .HasMaxLength(64);
         }
     }
 }
