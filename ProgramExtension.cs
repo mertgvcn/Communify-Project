@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Communify_Backend.Services;
+using Communify_Backend.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -26,6 +28,12 @@ namespace Communify_Backend
 
                 options.OperationFilter<SecurityRequirementsOperationFilter>();
             });
+        }
+
+        public static void ConfigureServices(this WebApplicationBuilder builder)
+        {
+            builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddTransient<ITokenService, TokenService>();
         }
 
         public static void ConfigureAuthorization(this WebApplicationBuilder builder)

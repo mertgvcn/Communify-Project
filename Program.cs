@@ -11,6 +11,7 @@ builder.Services.AddDbContext<CommunifyContext>(options =>
 
 // Add services to the container.
 builder.AddAPI();
+builder.ConfigureServices();
 builder.ConfigureAuthorization();
 
 
@@ -25,6 +26,8 @@ var app = builder.Build();
 
 //enable cors devamý
 app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

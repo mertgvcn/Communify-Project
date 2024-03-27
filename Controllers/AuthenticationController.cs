@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Communify_Backend.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static Communify_Backend.Models.AuthenticationModels;
 
 namespace Communify_Backend.Controllers
 {
@@ -8,10 +10,27 @@ namespace Communify_Backend.Controllers
     [AllowAnonymous]
     public class AuthenticationController : Controller
     {
-        [HttpGet("GetString")]
-        public string GetString()
+        private readonly IAuthenticationService authenticationService;
+
+        public AuthenticationController(IAuthenticationService authenticationService)
         {
-            return "selam";
+            this.authenticationService = authenticationService;
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<UserLoginResponse>> Login([FromBody] UserLoginRequest request)
+        {
+            var result = await authenticationService.LoginUserAsync(request);
+
+            return result;
+        }
+
+        [HttpPost("register")]
+        public async Task<ActionResult<UserRegisterResponse>> Register([FromBody] UserRegisterRequest user)
+        {
+            var result = await authenticationService.RegisterUserAsync(user);
+
+            return result;
         }
     }
 }
