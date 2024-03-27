@@ -38,28 +38,50 @@ namespace Communify_Backend.Services
 
         public async Task<UserLoginResponse> LoginUserAsync(UserLoginRequest request)
         {
-            UserLoginResponse response = new();
+            UserLoginResponse response = new UserLoginResponse()
+            {
+                AuthenticateResult = false,
+                AuthToken = "No Token",
+                AccessTokenExpireDate = DateTime.Now,
+                Role = "No Role",
+                ErrorMessage = ""
+            };
+
             bool isLogin = false;
 
             var user = context.Users.Where(user => user.Email == request.Email)
-                            .Include(a => a.Role).FirstOrDefault();
-            if (user is null) return response;
+                            .Include(user => user.Role).FirstOrDefault();
 
+            //Invalid email
+            if (user is null)
+            {
+                response.ErrorMessage = "Wrong Email";
+
+                return response;
+            };
+
+            //Check password is correct
             isLogin = (user.Password == request.Password);
 
-            if (isLogin)
+            //Invalid password
+            if (!isLogin)
             {
-                var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequest
-                {
-                    UserID = user.Id.ToString(),
-                    Role = user.Role,
-                });
+                response.ErrorMessage = "Wrong Password";
 
-                response.AuthenticateResult = true;
-                response.AuthToken = generatedToken.Token;
-                response.AccessTokenExpireDate = generatedToken.TokenExpireDate;
-                response.Role = user.Role.Name;
+                return response;
             }
+
+            //Login success
+            var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequest
+            {
+                UserID = user.Id.ToString(),
+                Role = user.Role,
+            });
+
+            response.AuthenticateResult = true;
+            response.AuthToken = generatedToken.Token;
+            response.AccessTokenExpireDate = generatedToken.TokenExpireDate;
+            response.Role = user.Role.Name;
 
             return await Task.FromResult(response);
         }
