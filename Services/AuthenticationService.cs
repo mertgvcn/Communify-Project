@@ -1,6 +1,7 @@
 ﻿using Communify_Backend.Services.Interfaces;
 using CommunifyLibrary;
 using CommunifyLibrary.Models;
+using LethalCompany_Backend.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using static Communify_Backend.Models.AuthenticationModels;
 using static Communify_Backend.Models.TokenParameterModels;
@@ -11,11 +12,13 @@ namespace Communify_Backend.Services
     {
         private readonly CommunifyContext context;
         private readonly ITokenService tokenService;
+        private readonly IEmailSender emailSender;
 
-        public AuthenticationService(CommunifyContext context, ITokenService tokenService)
+        public AuthenticationService(CommunifyContext context, ITokenService tokenService, IEmailSender emailSender)
         {
             this.context = context;
             this.tokenService = tokenService;
+            this.emailSender = emailSender;
         }
 
         public async Task<long> GetIdByEmail(string email)
@@ -43,45 +46,30 @@ namespace Communify_Backend.Services
                 AuthenticateResult = false,
                 AuthToken = "No Token",
                 AccessTokenExpireDate = DateTime.Now,
+                ReplyMessage = "Email or password is wrong",
                 Role = "No Role",
-                ErrorMessage = ""
             };
-
-            bool isLogin = false;
 
             var user = context.Users.Where(user => user.Email == request.Email)
                             .Include(user => user.Role).FirstOrDefault();
 
-            //Invalid email
-            if (user is null)
+            if (user is not null && BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
             {
-                response.ErrorMessage = "Wrong Email";
+                //Login success
+                var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequest
+                {
+                    UserID = user.Id.ToString(),
+                    Role = user.Role,
+                });
 
-                return response;
-            };
+                response.AuthenticateResult = true;
+                response.AuthToken = generatedToken.Token;
+                response.AccessTokenExpireDate = generatedToken.TokenExpireDate;
+                response.ReplyMessage = "Login Successful";
+                response.Role = user.Role.Name;
 
-            //Check password is correct
-            isLogin = (user.Password == request.Password);
-
-            //Invalid password
-            if (!isLogin)
-            {
-                response.ErrorMessage = "Wrong Password";
-
-                return response;
+                return await Task.FromResult(response);
             }
-
-            //Login success
-            var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequest
-            {
-                UserID = user.Id.ToString(),
-                Role = user.Role,
-            });
-
-            response.AuthenticateResult = true;
-            response.AuthToken = generatedToken.Token;
-            response.AccessTokenExpireDate = generatedToken.TokenExpireDate;
-            response.Role = user.Role.Name;
 
             return await Task.FromResult(response);
         }
@@ -90,23 +78,27 @@ namespace Communify_Backend.Services
         {
             UserRegisterResponse response = new();
             response.isSuccess = true;
+            response.ReplyMessage = "Register successful.";
 
             //Check if email already exists
             if (!await IsEmailAvailable(request.Email))
             {
                 response.isSuccess = false;
-                response.ErrorMessage = "Email is used by another user.";
+                response.ReplyMessage = "Email is used by another user.";
                 return response;
             }
 
             //Assign "User" role as default
             var role = context.Roles.Where(x => x.Id == 2).FirstOrDefault();
 
+            //Hashing the password for security
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
+
             User newUser = new User()
             {
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-                BirthDate = DateTime.Now, //Frontendten gelen doğum tarihinin girilmesi lazım
+                BirthDate = request.BirthDate,
                 BirthCountry = request.PhoneNumber,
                 BirthCity = request.Email,
                 CurrentCountry = request.CurrentCountry,
@@ -115,14 +107,20 @@ namespace Communify_Backend.Services
                 Address = request.Address,
                 PhoneNumber = request.PhoneNumber,
                 Email = request.Email,
-                Password = request.Password,
+                Password = hashedPassword, //email sistemi gelince kalkacak
                 Role = role,
+                //interestleri eklicez
             };
 
             context.Users.Add(newUser);
             await context.SaveChangesAsync();
 
             return await Task.FromResult(response);
+        }
+
+        public async Task SendEmail(string toEmail)
+        {
+            await emailSender.SendEmailAsync(toEmail);
         }
     }
 }

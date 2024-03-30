@@ -15,7 +15,7 @@ namespace Communify_Backend.Models
             public bool AuthenticateResult { get; set; }
             public string AuthToken { get; set; }
             public DateTime AccessTokenExpireDate { get; set; }
-            public string ErrorMessage { get; set; }
+            public string ReplyMessage { get; set; }
             public string Role { get; set; }
 
         }
@@ -26,7 +26,7 @@ namespace Communify_Backend.Models
 
             public string LastName { get; set; }
 
-            //public DateTime BirthDate { get; set; }
+            public DateTime BirthDate { get; set; }
 
             public string BirthCountry { get; set; }
 
@@ -45,14 +45,12 @@ namespace Communify_Backend.Models
             public string Email { get; set; }
 
             public string Password { get; set; }
-
-            public long RoleId { get; set; }
         }
 
         public class UserRegisterResponse
         {
             public bool isSuccess { get; set; }
-            public string ErrorMessage { get; set; }
+            public string ReplyMessage { get; set; }
         }
     }
 }

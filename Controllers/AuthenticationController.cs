@@ -32,5 +32,11 @@ namespace Communify_Backend.Controllers
 
             return result;
         }
+
+        [HttpPost("sendEmail")]
+        public async Task SendEmail([FromBody] string toEmail)
+        {
+            await authenticationService.SendEmail(toEmail);
+        }
     }
 }

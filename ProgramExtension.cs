@@ -1,5 +1,7 @@
 ﻿using Communify_Backend.Services;
 using Communify_Backend.Services.Interfaces;
+using LethalCompany_Backend.Services;
+using LethalCompany_Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -34,6 +36,7 @@ namespace Communify_Backend
         {
             builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
             builder.Services.AddTransient<ITokenService, TokenService>();
+            builder.Services.AddSingleton<IEmailSender, EmailSender>();
         }
 
         public static void ConfigureAuthorization(this WebApplicationBuilder builder)
