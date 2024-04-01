@@ -4,10 +4,12 @@ namespace Communify_Backend.Services.Interfaces
 {
     public interface IAuthenticationService
     {
+        Task<bool> isEmailAvailable(isEmailAvailableRequest request);
+
         Task<UserLoginResponse> LoginUserAsync(UserLoginRequest request);
 
         Task<UserRegisterResponse> RegisterUserAsync(UserRegisterRequest user);
 
-        Task SendEmail(string toEmail);
+        Task SetPassword(SetPasswordRequest request);
     }
 }

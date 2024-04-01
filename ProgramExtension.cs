@@ -34,6 +34,7 @@ namespace Communify_Backend
 
         public static void ConfigureServices(this WebApplicationBuilder builder)
         {
+            builder.Services.AddTransient<IUserService, UserService>();
             builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
             builder.Services.AddTransient<ITokenService, TokenService>();
             builder.Services.AddSingleton<IEmailSender, EmailSender>();

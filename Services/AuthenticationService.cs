@@ -11,12 +11,14 @@ namespace Communify_Backend.Services
     public class AuthenticationService : IAuthenticationService
     {
         private readonly CommunifyContext context;
+        private readonly IUserService userService;
         private readonly ITokenService tokenService;
         private readonly IEmailSender emailSender;
 
-        public AuthenticationService(CommunifyContext context, ITokenService tokenService, IEmailSender emailSender)
+        public AuthenticationService(CommunifyContext context, IUserService userService, ITokenService tokenService, IEmailSender emailSender)
         {
             this.context = context;
+            this.userService = userService;
             this.tokenService = tokenService;
             this.emailSender = emailSender;
         }
@@ -30,9 +32,9 @@ namespace Communify_Backend.Services
             return user.Id;
         }
 
-        public async Task<bool> IsEmailAvailable(string email)
+        public async Task<bool> isEmailAvailable(isEmailAvailableRequest request)
         {
-            var user = context.Users.Where(user => user.Email == email).FirstOrDefault();
+            var user = context.Users.Where(user => user.Email == request.Email).FirstOrDefault();
 
             if (user is null) return true;
 
@@ -76,51 +78,79 @@ namespace Communify_Backend.Services
 
         public async Task<UserRegisterResponse> RegisterUserAsync(UserRegisterRequest request)
         {
-            UserRegisterResponse response = new();
-            response.isSuccess = true;
-            response.ReplyMessage = "Register successful.";
-
-            //Check if email already exists
-            if (!await IsEmailAvailable(request.Email))
-            {
-                response.isSuccess = false;
-                response.ReplyMessage = "Email is used by another user.";
-                return response;
-            }
-
-            //Assign "User" role as default
-            var role = context.Roles.Where(x => x.Id == 2).FirstOrDefault();
-
-            //Hashing the password for security
-            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
+            //Assign "UnAuthorizedUser" role as default
+            var role = context.Roles.Where(x => x.Id == 3).FirstOrDefault();
 
             User newUser = new User()
             {
                 FirstName = request.FirstName,
                 LastName = request.LastName,
+                PhoneNumber = request.PhoneNumber,
                 BirthDate = request.BirthDate,
+                Email = request.Email,
+                Gender = request.Gender,
                 BirthCountry = request.PhoneNumber,
                 BirthCity = request.Email,
                 CurrentCountry = request.CurrentCountry,
                 CurrentCity = request.CurrentCity,
-                Gender = request.Gender,
                 Address = request.Address,
-                PhoneNumber = request.PhoneNumber,
-                Email = request.Email,
-                Password = hashedPassword, //email sistemi gelince kalkacak
                 Role = role,
-                //interestleri eklicez
             };
 
             context.Users.Add(newUser);
             await context.SaveChangesAsync();
 
-            return await Task.FromResult(response);
+            var user = context.Users.Where(a => a.Email == newUser.Email).FirstOrDefault();
+
+            //Create user's interest list
+            if (user.Interests is null)
+            {
+                user.Interests = new List<Interest>();
+            }
+
+            foreach (var interestId in request.InterestIdList)
+            {
+                var interest = context.Interests.Where(i => i.Id == interestId).FirstOrDefault();
+
+                user.Interests.Add(interest);
+            }
+
+            await context.SaveChangesAsync();
+
+            //Create token for password
+            var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequest
+            {
+                UserID = user.Id.ToString(),
+                Role = user.Role,
+            });
+
+            await emailSender.SendEmailAsync(newUser.Email);
+
+            return new UserRegisterResponse()
+            {
+                isSuccess = true,
+                Token = generatedToken.Token,
+                TokenExpireDate = generatedToken.TokenExpireDate,
+            };
         }
 
-        public async Task SendEmail(string toEmail)
+        public async Task SetPassword(SetPasswordRequest request)
         {
-            await emailSender.SendEmailAsync(toEmail);
+            var userId = userService.GetCurrentUserID();
+
+            var user = context.Users.Where(u => u.Id == userId).FirstOrDefault();
+            var role = context.Roles.Where(r => r.Id == 2).FirstOrDefault();
+
+            //Hashing the password for security
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
+
+            user.Role = role;
+            user.Password = hashedPassword;
+
+            context.Attach(user);
+            context.Entry(user).Property(p => p.Role).IsModified = true;
+            context.Entry(user).Property(p => p.Password).IsModified = true;
+            await context.SaveChangesAsync();
         }
     }
 }

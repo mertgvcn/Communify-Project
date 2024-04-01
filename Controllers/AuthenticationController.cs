@@ -7,7 +7,6 @@ namespace Communify_Backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [AllowAnonymous]
     public class AuthenticationController : Controller
     {
         private readonly IAuthenticationService authenticationService;
@@ -17,6 +16,7 @@ namespace Communify_Backend.Controllers
             this.authenticationService = authenticationService;
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<UserLoginResponse>> Login([FromBody] UserLoginRequest request)
         {
@@ -25,18 +25,25 @@ namespace Communify_Backend.Controllers
             return result;
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<ActionResult<UserRegisterResponse>> Register([FromBody] UserRegisterRequest user)
+        public async Task<UserRegisterResponse> Register([FromBody] UserRegisterRequest user)
         {
-            var result = await authenticationService.RegisterUserAsync(user);
-
-            return result;
+            return await authenticationService.RegisterUserAsync(user);
         }
 
-        [HttpPost("sendEmail")]
-        public async Task SendEmail([FromBody] string toEmail)
+        [AllowAnonymous]
+        [HttpPost("isEmailAvailable")]
+        public async Task<bool> isEmailAvailable([FromBody] isEmailAvailableRequest request)
         {
-            await authenticationService.SendEmail(toEmail);
+            return await authenticationService.isEmailAvailable(request);
+        }
+
+        [Authorize(Roles = "unAuthorizedUser")]
+        [HttpPost("SetPassword")]
+        public async Task setPassword([FromBody] SetPasswordRequest request)
+        {
+            await authenticationService.SetPassword(request);
         }
     }
 }

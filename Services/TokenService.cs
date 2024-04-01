@@ -47,7 +47,7 @@ namespace Communify_Backend.Services
             {
                 new Claim(ClaimTypes.NameIdentifier, userID),
                 new Claim(ClaimTypes.Role, role.Name),
-                new Claim("Role", role.Name)
+                new Claim("role", role.Name)
             };
 
             return claims;
