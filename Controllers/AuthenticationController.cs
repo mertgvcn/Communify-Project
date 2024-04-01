@@ -40,7 +40,7 @@ namespace Communify_Backend.Controllers
         }
 
         [Authorize(Roles = "unAuthorizedUser")]
-        [HttpPost("SetPassword")]
+        [HttpPost("setPassword")]
         public async Task setPassword([FromBody] SetPasswordRequest request)
         {
             await authenticationService.SetPassword(request);

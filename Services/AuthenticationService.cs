@@ -130,7 +130,7 @@ namespace Communify_Backend.Services
             {
                 isSuccess = true,
                 Token = generatedToken.Token,
-                TokenExpireDate = generatedToken.TokenExpireDate,
+                TokenExpireDate = DateTime.UtcNow.Add(TimeSpan.FromMinutes(5)),
             };
         }
 
@@ -138,7 +138,7 @@ namespace Communify_Backend.Services
         {
             var userId = userService.GetCurrentUserID();
 
-            var user = context.Users.Where(u => u.Id == userId).FirstOrDefault();
+            var user = context.Users.Where(u => u.Id == userId).Include(u => u.Role).FirstOrDefault();
             var role = context.Roles.Where(r => r.Id == 2).FirstOrDefault();
 
             //Hashing the password for security
@@ -148,7 +148,7 @@ namespace Communify_Backend.Services
             user.Password = hashedPassword;
 
             context.Attach(user);
-            context.Entry(user).Property(p => p.Role).IsModified = true;
+            context.Entry(user).Reference(p => p.Role).IsModified = true;
             context.Entry(user).Property(p => p.Password).IsModified = true;
             await context.SaveChangesAsync();
         }
