@@ -1,5 +1,6 @@
 ﻿using Communify_Backend.Services;
 using Communify_Backend.Services.Interfaces;
+using CommunifyLibrary.Repository;
 using LethalCompany_Backend.Services;
 using LethalCompany_Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -34,10 +35,18 @@ namespace Communify_Backend
 
         public static void ConfigureServices(this WebApplicationBuilder builder)
         {
-            builder.Services.AddTransient<IUserService, UserService>();
+            builder.Services.AddTransient<IUserService, HttpContextService>();
             builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
             builder.Services.AddTransient<ITokenService, TokenService>();
             builder.Services.AddSingleton<IEmailSender, EmailSender>();
+
+        }
+
+        public static void ConfigureRepositories(this IServiceCollection collection)
+        {
+            collection.AddScoped<IUserRepository, UserRepository>();
+            collection.AddScoped<IRoleRepository, RoleRepository>();
+            collection.AddScoped<IInterestRepository, InterestRepository>();
         }
 
         public static void ConfigureAuthorization(this WebApplicationBuilder builder)

@@ -1,6 +1,6 @@
 ﻿namespace LethalCompany_Backend.Services.Interfaces
 {
-    public interface IUserService
+    public interface IHttpContextService
     {
         long GetCurrentUserID();
     }

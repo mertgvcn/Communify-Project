@@ -3,11 +3,11 @@ using System.Security.Claims;
 
 namespace LethalCompany_Backend.Services
 {
-    public class UserService : IUserService
+    public class HttpContextService : IHttpContextService
     {
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public UserService(IHttpContextAccessor httpContextAccessor)
+        public HttpContextService(IHttpContextAccessor httpContextAccessor)
         {
             this.httpContextAccessor = httpContextAccessor;
         }

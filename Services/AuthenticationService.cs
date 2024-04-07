@@ -1,6 +1,6 @@
 ﻿using Communify_Backend.Services.Interfaces;
-using CommunifyLibrary;
 using CommunifyLibrary.Models;
+using CommunifyLibrary.Repository;
 using LethalCompany_Backend.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using static Communify_Backend.Models.AuthenticationModels;
@@ -10,36 +10,33 @@ namespace Communify_Backend.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly CommunifyContext context;
-        private readonly IUserService userService;
-        private readonly ITokenService tokenService;
-        private readonly IEmailSender emailSender;
+        private readonly IUserRepository _userRepository;
+        private readonly IRoleRepository _roleRepository;
+        private readonly IInterestRepository _interestRepository;
+        private readonly ITokenService _tokenService;
+        private readonly IEmailSender _emailSender;
+        private readonly IHttpContextService _httpContextService;
 
-        public AuthenticationService(CommunifyContext context, IUserService userService, ITokenService tokenService, IEmailSender emailSender)
+        public AuthenticationService(
+            IUserRepository userRepository,
+            IRoleRepository roleRepository,
+            IInterestRepository interestRepository,
+            ITokenService tokenService,
+            IEmailSender emailSender,
+            IHttpContextService httpContextService
+            )
         {
-            this.context = context;
-            this.userService = userService;
-            this.tokenService = tokenService;
-            this.emailSender = emailSender;
+            _userRepository = userRepository;
+            _roleRepository = roleRepository;
+            _interestRepository = interestRepository;
+            _tokenService = tokenService;
+            _emailSender = emailSender;
+            _httpContextService = httpContextService;
         }
 
-        public async Task<long> GetIdByEmail(string email)
-        {
-            var user = context.Users.Where(user => user.Email == email).FirstOrDefault();
+        public async Task<long> GetIdByEmail(string email) => (await _userRepository.GetByEmail(email).SingleAsync()).Id;
 
-            if (user is null) return -1;
-
-            return user.Id;
-        }
-
-        public async Task<bool> isEmailAvailable(isEmailAvailableRequest request)
-        {
-            var user = context.Users.Where(user => user.Email == request.Email).FirstOrDefault();
-
-            if (user is null) return true;
-
-            return false;
-        }
+        public async Task<bool> isEmailAvailable(isEmailAvailableRequest request) => _userRepository.GetByEmail(request.Email).Any(); //thanks to .Any(), if it finds a email it will return true, otherwise false
 
         public async Task<UserLoginResponse> LoginUserAsync(UserLoginRequest request)
         {
@@ -52,13 +49,12 @@ namespace Communify_Backend.Services
                 Role = "No Role",
             };
 
-            var user = context.Users.Where(user => user.Email == request.Email)
-                            .Include(user => user.Role).FirstOrDefault();
+            var user = _userRepository.GetByEmail(request.Email).Include(user => user.Role).FirstOrDefault();
 
             if (user is not null && BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
             {
                 //Login success
-                var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequest
+                var generatedToken = await _tokenService.GenerateToken(new GenerateTokenRequest
                 {
                     UserID = user.Id.ToString(),
                     Role = user.Role,
@@ -78,9 +74,6 @@ namespace Communify_Backend.Services
 
         public async Task<UserRegisterResponse> RegisterUserAsync(UserRegisterRequest request)
         {
-            //Assign "UnAuthorizedUser" role as default
-            var role = context.Roles.Where(x => x.Id == 3).FirstOrDefault();
-
             User newUser = new User()
             {
                 FirstName = request.FirstName,
@@ -94,37 +87,25 @@ namespace Communify_Backend.Services
                 CurrentCountry = request.CurrentCountry,
                 CurrentCity = request.CurrentCity,
                 Address = request.Address,
-                Role = role,
+                RoleId = 3,
             };
 
-            context.Users.Add(newUser);
-            await context.SaveChangesAsync();
-
-            var user = context.Users.Where(a => a.Email == newUser.Email).FirstOrDefault();
-
-            //Create user's interest list
-            if (user.Interests is null)
-            {
-                user.Interests = new List<Interest>();
-            }
+            var user = await _userRepository.AddAsync(newUser);
 
             foreach (var interestId in request.InterestIdList)
             {
-                var interest = context.Interests.Where(i => i.Id == interestId).FirstOrDefault();
-
-                user.Interests.Add(interest);
+                var interest = await _interestRepository.GetByIdAsync(interestId);
+                await _userRepository.AddInterest(user.Id, interest);
             }
 
-            await context.SaveChangesAsync();
-
             //Create token for password
-            var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequest
+            var generatedToken = await _tokenService.GenerateToken(new GenerateTokenRequest
             {
                 UserID = user.Id.ToString(),
                 Role = user.Role,
             });
 
-            await emailSender.SendEmailAsync(newUser.Email);
+            await _emailSender.SendEmailAsync(newUser.Email);
 
             return new UserRegisterResponse()
             {
@@ -136,21 +117,15 @@ namespace Communify_Backend.Services
 
         public async Task SetPassword(SetPasswordRequest request)
         {
-            var userId = userService.GetCurrentUserID();
-
-            var user = context.Users.Where(u => u.Id == userId).Include(u => u.Role).FirstOrDefault();
-            var role = context.Roles.Where(r => r.Id == 2).FirstOrDefault();
+            var user = await _userRepository.GetAll().Where(a => a.Id == _httpContextService.GetCurrentUserID()).Include(a => a.Role).SingleAsync();
 
             //Hashing the password for security
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
-            user.Role = role;
+            user.RoleId = 2;
             user.Password = hashedPassword;
 
-            context.Attach(user);
-            context.Entry(user).Reference(p => p.Role).IsModified = true;
-            context.Entry(user).Property(p => p.Password).IsModified = true;
-            await context.SaveChangesAsync();
+            await _userRepository.UpdateAsync(user);
         }
     }
 }

@@ -13,6 +13,7 @@ builder.Services.AddDbContext<CommunifyContext>(options =>
 builder.AddAPI();
 builder.ConfigureServices();
 builder.ConfigureAuthorization();
+builder.Services.ConfigureRepositories();
 
 
 //Enable CORS(dýþarýdan gerçekleþen iþlemlere izin)
