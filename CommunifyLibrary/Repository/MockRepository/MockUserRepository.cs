@@ -1,4 +1,5 @@
 ﻿using CommunifyLibrary.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CommunifyLibrary.Repository.MockRepository
 {
@@ -55,9 +56,9 @@ namespace CommunifyLibrary.Repository.MockRepository
 
         public IQueryable<User> GetAll() => userList.AsQueryable();
 
-        public IQueryable<User> GetByEmail(string email) => userList.Where(u => u.Email == email).AsQueryable();
+        public IQueryable<User> GetByEmail(string email) => GetAll().Where(u => u.Email == email);
 
-        public async Task<User> GetByIdAsync(long id) => await Task.FromResult(userList.Where(u => u.Id == id).Single());
+        public async Task<User> GetByIdAsync(long id) => await GetAll().Where(u => u.Id == id).SingleAsync();
 
         public async Task<User> AddAsync(User Entity)
         {
@@ -65,7 +66,14 @@ namespace CommunifyLibrary.Repository.MockRepository
             return await Task.FromResult(Entity);
         }
 
-        public async Task AddInterest(long userId, Interest interest) => (await GetByIdAsync(userId)).Interests.Add(interest);
+        public async Task AddInterest(long userId, Interest interest)
+        {
+            var user = await GetByIdAsync(userId);
+
+            user.Interests ??= new List<Interest>();
+
+            user.Interests.Add(interest);
+        }
 
         public async Task UpdateAsync(User user)
         {

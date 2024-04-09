@@ -13,7 +13,7 @@ builder.Services.AddDbContext<CommunifyContext>(options =>
 builder.AddAPI();
 builder.ConfigureAuthorization();
 builder.Services.ConfigureServices();
-builder.Services.ConfigureRepositories();
+builder.Services.ConfigureRepositories(builder.Configuration);
 
 
 //Enable CORS(dýþarýdan gerçekleþen iþlemlere izin)
@@ -38,7 +38,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+else
+    app.UseHttpsRedirection();
 
 app.UseAuthentication();
 

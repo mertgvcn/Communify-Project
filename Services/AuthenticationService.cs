@@ -33,7 +33,7 @@ namespace Communify_Backend.Services
 
         public async Task<long> GetIdByEmail(string email) => (await _userRepository.GetByEmail(email).SingleAsync()).Id;
 
-        public async Task<bool> isEmailAvailable(isEmailAvailableRequest request) => !_userRepository.GetByEmail(request.Email).Any(); //thanks to .Any(), if it finds a email it will return true, otherwise false
+        public async Task<bool> isEmailAvailable(isEmailAvailableRequest request) => !await _userRepository.GetByEmail(request.Email).AnyAsync(); //thanks to .Any(), if it finds a email it will return true, otherwise false
 
         public async Task<UserLoginResponse> LoginUserAsync(UserLoginRequest request)
         {
@@ -89,7 +89,7 @@ namespace Communify_Backend.Services
             };
 
             var user = await _userRepository.AddAsync(newUser);
-            user = await _userRepository.GetAll().Where(u => u.Id == user.Id).Include(u => u.Role).SingleAsync();
+            user = await _userRepository.GetAll().Where(u => u.Id == user.Id).Include(u => u.Role).SingleAsync(); //aşağıda role kullandığım için roleid ile eşlemiyordu.
 
 
             foreach (var interestId in request.InterestIdList)
@@ -118,7 +118,7 @@ namespace Communify_Backend.Services
 
         public async Task SetPassword(SetPasswordRequest request)
         {
-            var user = await _userRepository.GetAll().Where(a => a.Id == _httpContextService.GetCurrentUserID()).Include(a => a.Role).SingleAsync();
+            var user = await _userRepository.GetAll().Where(a => a.Id == _httpContextService.GetCurrentUserID()).SingleAsync();
 
             //Hashing the password for security
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);

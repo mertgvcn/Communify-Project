@@ -1,6 +1,7 @@
 ﻿using Communify_Backend.Services;
 using Communify_Backend.Services.Interfaces;
 using CommunifyLibrary.Repository;
+using CommunifyLibrary.Repository.MockRepository;
 using LethalCompany_Backend.Services;
 using LethalCompany_Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -38,15 +39,21 @@ namespace Communify_Backend
             collection.AddScoped<IHttpContextService, HttpContextService>();
             collection.AddScoped<IAuthenticationService, AuthenticationService>();
             collection.AddScoped<ITokenService, TokenService>();
-            collection.AddSingleton<IEmailSender, EmailSender>();
+            collection.AddScoped<IEmailSender, EmailSender>();
         }
 
-        public static void ConfigureRepositories(this IServiceCollection collection)
+        public static void ConfigureRepositories(this IServiceCollection collection, IConfiguration configuration)
         {
-            collection.AddScoped<IUserRepository, UserRepository>();
-            collection.AddScoped<IRoleRepository, RoleRepository>();
-            collection.AddScoped<IInterestRepository, InterestRepository>();
-            //if (appsettings[isMock]) collection.AddScoped<IUserRepository, MockUserRepository>();
+            if (Convert.ToBoolean(configuration["isMock"]))
+            {
+                collection.AddScoped<IUserRepository, MockUserRepository>();
+            }
+            else
+            {
+                collection.AddScoped<IUserRepository, UserRepository>();
+                collection.AddScoped<IRoleRepository, RoleRepository>();
+                collection.AddScoped<IInterestRepository, InterestRepository>();
+            }
         }
 
         public static void ConfigureAuthorization(this WebApplicationBuilder builder)

@@ -1,11 +1,10 @@
 ﻿using CommunifyLibrary.Models;
 
-namespace CommunifyLibrary.Repository
+namespace CommunifyLibrary.Repository;
+
+public interface IInterestRepository
 {
-    public interface IInterestRepository
-    {
-        IQueryable<Interest> GetAll();
-        Task<Interest> GetByIdAsync(long id);
-        Task<Interest> AddAsync(Interest Entity);
-    }
+    IQueryable<Interest> GetAll();
+    Task<Interest> GetByIdAsync(long id);
+    Task<Interest> AddAsync(Interest Entity);
 }

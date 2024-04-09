@@ -4,22 +4,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CommunifyLibrary.Repository
 {
-    public abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
+    public abstract class BaseRepository<T>(CommunifyContext _context) : IBaseRepository<T> where T : BaseEntity
     {
-        private readonly CommunifyContext _context;
-
-        public BaseRepository(CommunifyContext context)
-        {
-            _context = context;
-        }
-
         public IQueryable<T> GetAll() => _context.Set<T>().AsQueryable(); //shorter code for single line return function
 
         public async Task<T> GetByIdAsync(long id) => await GetAll().Where(a => a.Id == id).SingleAsync(); //if there is no object with given id, it will return an exception
 
         public async Task DeleteAsync(long id)
         {
-            _context.Remove(await GetByIdAsync(id)); //if error occurs on delete, change to _context.Set<T>().Remove...
+            await DeleteAsync(await GetByIdAsync(id));
+        }
+
+        public async Task DeleteAsync(T Entity)
+        {
+            _context.Remove(Entity);
             await _context.SaveChangesAsync();
         }
 
