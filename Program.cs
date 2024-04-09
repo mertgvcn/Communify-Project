@@ -39,7 +39,7 @@ if (app.Environment.IsDevelopment())
 }
 
 else
-    app.UseHttpsRedirection(); //only in production env.
+    app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
