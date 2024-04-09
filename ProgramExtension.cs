@@ -46,6 +46,7 @@ namespace Communify_Backend
             if (Convert.ToBoolean(configuration["isMock"]))
             {
                 collection.AddScoped<IUserRepository, UserRepository>();
+                collection.AddScoped<IRoleRepository, RoleRepository>();
             }
             else
             {
