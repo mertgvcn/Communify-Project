@@ -21,7 +21,7 @@ namespace Communify_Backend.Services
         {
             SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["AppSettings:Secret"]));
 
-            var expireDate = DateTime.UtcNow.Add(TimeSpan.FromMinutes(500));
+            var expireDate = request.ExpireDate;
             var claims = PrepareClaims(request.UserID, request.Role);
 
             JwtSecurityToken jwt = new JwtSecurityToken(
@@ -31,6 +31,7 @@ namespace Communify_Backend.Services
                     notBefore: DateTime.UtcNow,
                     expires: expireDate,
                     signingCredentials: new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256)
+
                 );
 
             return Task.FromResult(new GenerateTokenResponse

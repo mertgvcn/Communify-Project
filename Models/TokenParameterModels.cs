@@ -8,6 +8,7 @@ namespace Communify_Backend.Models
         {
             public string UserID { get; set; }
             public Role Role { get; set; }
+            public DateTime ExpireDate { get; set; }
         }
 
         public class GenerateTokenResponse

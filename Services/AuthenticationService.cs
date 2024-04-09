@@ -11,7 +11,6 @@ namespace Communify_Backend.Services
     public class AuthenticationService : IAuthenticationService
     {
         private readonly IUserRepository _userRepository;
-        private readonly IRoleRepository _roleRepository;
         private readonly IInterestRepository _interestRepository;
         private readonly ITokenService _tokenService;
         private readonly IEmailSender _emailSender;
@@ -19,7 +18,6 @@ namespace Communify_Backend.Services
 
         public AuthenticationService(
             IUserRepository userRepository,
-            IRoleRepository roleRepository,
             IInterestRepository interestRepository,
             ITokenService tokenService,
             IEmailSender emailSender,
@@ -27,7 +25,6 @@ namespace Communify_Backend.Services
             )
         {
             _userRepository = userRepository;
-            _roleRepository = roleRepository;
             _interestRepository = interestRepository;
             _tokenService = tokenService;
             _emailSender = emailSender;
@@ -36,7 +33,7 @@ namespace Communify_Backend.Services
 
         public async Task<long> GetIdByEmail(string email) => (await _userRepository.GetByEmail(email).SingleAsync()).Id;
 
-        public async Task<bool> isEmailAvailable(isEmailAvailableRequest request) => _userRepository.GetByEmail(request.Email).Any(); //thanks to .Any(), if it finds a email it will return true, otherwise false
+        public async Task<bool> isEmailAvailable(isEmailAvailableRequest request) => !_userRepository.GetByEmail(request.Email).Any(); //thanks to .Any(), if it finds a email it will return true, otherwise false
 
         public async Task<UserLoginResponse> LoginUserAsync(UserLoginRequest request)
         {
@@ -58,6 +55,7 @@ namespace Communify_Backend.Services
                 {
                     UserID = user.Id.ToString(),
                     Role = user.Role,
+                    ExpireDate = DateTime.UtcNow.Add(TimeSpan.FromHours(6))
                 });
 
                 response.AuthenticateResult = true;
@@ -91,6 +89,8 @@ namespace Communify_Backend.Services
             };
 
             var user = await _userRepository.AddAsync(newUser);
+            user = await _userRepository.GetAll().Where(u => u.Id == user.Id).Include(u => u.Role).SingleAsync();
+
 
             foreach (var interestId in request.InterestIdList)
             {
@@ -103,6 +103,7 @@ namespace Communify_Backend.Services
             {
                 UserID = user.Id.ToString(),
                 Role = user.Role,
+                ExpireDate = DateTime.UtcNow.Add(TimeSpan.FromMinutes(5))
             });
 
             await _emailSender.SendEmailAsync(newUser.Email);
@@ -111,7 +112,7 @@ namespace Communify_Backend.Services
             {
                 isSuccess = true,
                 Token = generatedToken.Token,
-                TokenExpireDate = DateTime.UtcNow.Add(TimeSpan.FromMinutes(5)),
+                TokenExpireDate = generatedToken.TokenExpireDate
             };
         }
 

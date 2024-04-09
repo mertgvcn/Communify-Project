@@ -33,13 +33,12 @@ namespace Communify_Backend
             });
         }
 
-        public static void ConfigureServices(this WebApplicationBuilder builder)
+        public static void ConfigureServices(this IServiceCollection collection)
         {
-            builder.Services.AddTransient<IUserService, HttpContextService>();
-            builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
-            builder.Services.AddTransient<ITokenService, TokenService>();
-            builder.Services.AddSingleton<IEmailSender, EmailSender>();
-
+            collection.AddScoped<IHttpContextService, HttpContextService>();
+            collection.AddScoped<IAuthenticationService, AuthenticationService>();
+            collection.AddScoped<ITokenService, TokenService>();
+            collection.AddSingleton<IEmailSender, EmailSender>();
         }
 
         public static void ConfigureRepositories(this IServiceCollection collection)
@@ -47,6 +46,7 @@ namespace Communify_Backend
             collection.AddScoped<IUserRepository, UserRepository>();
             collection.AddScoped<IRoleRepository, RoleRepository>();
             collection.AddScoped<IInterestRepository, InterestRepository>();
+            //if (appsettings[isMock]) collection.AddScoped<IUserRepository, MockUserRepository>();
         }
 
         public static void ConfigureAuthorization(this WebApplicationBuilder builder)

@@ -8,7 +8,12 @@ namespace CommunifyLibrary.Repository
 
         public async Task AddInterest(long userId, Interest interest)
         {
-            (await GetByIdAsync(userId)).Interests.Add(interest);
+            var user = await GetByIdAsync(userId);
+
+            if (user.Interests == null)
+                user.Interests = new List<Interest>();
+
+            user.Interests.Add(interest);
             await context.SaveChangesAsync();
         }
     }

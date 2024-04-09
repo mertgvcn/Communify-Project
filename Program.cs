@@ -9,10 +9,10 @@ builder.Services.AddDbContext<CommunifyContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("default"), b => b.MigrationsAssembly("CommunifyLibrary")));
 
 
-// Add services to the container.
+//Add builder configurations
 builder.AddAPI();
-builder.ConfigureServices();
 builder.ConfigureAuthorization();
+builder.Services.ConfigureServices();
 builder.Services.ConfigureRepositories();
 
 
