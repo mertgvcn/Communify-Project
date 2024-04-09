@@ -32,14 +32,14 @@ app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment()) //fuk
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
 else
-    app.UseHttpsRedirection(); //only in production env.
+    app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
