@@ -1,4 +1,17 @@
-﻿namespace Communify_Backend
+﻿
+using Communify_Backend.Services;
+using Communify_Backend.Services.Interfaces;
+using CommunifyLibrary.Repository;
+using CommunifyLibrary.Repository.MockRepository;
+using LethalCompany_Backend.Services;
+using LethalCompany_Backend.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
+using System.Text;
+
+namespace Communify_Backend
 {
     public static class ProgramExtension
     {
@@ -34,9 +47,8 @@
         {
             if (Convert.ToBoolean(configuration["isMock"]))
             {
-                collection.AddScoped<IInterestRepository, InterestRepository>();
-                collection.AddScoped<IUserRepository, UserRepository>();
-                collection.AddScoped<IRoleRepository, RoleRepository>();
+                collection.AddScoped<IUserRepository, MockUserRepository>();
+
             }
             else
             {
