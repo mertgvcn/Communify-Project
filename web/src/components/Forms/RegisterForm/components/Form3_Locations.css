@@ -1,0 +1,36 @@
+#register-form3 {
+    position: absolute;
+    height: 100%;
+    width: inherit;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    transition: 0.5s;
+
+    padding: 10px 20px;
+    padding-bottom: 10px;
+    box-sizing: border-box;
+}
+
+#register-form3 .inputs {
+    display: flex;
+    flex-direction: column;
+    max-height: 240px;
+    overflow-y: scroll;
+}
+
+#register-form3 .inputs .row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#register-form3  .buttons {
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

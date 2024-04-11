@@ -1,0 +1,29 @@
+.secondary-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: rgb(245,245,245);
+    background-clip: padding-box;
+
+    border: 1px solid #2c9ba6;
+    border-radius: .25rem;
+    box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+    box-sizing: border-box;
+
+    color: #2c9ba6;
+    font-size: 16px;
+    font-weight: 600;
+    
+    cursor: pointer;
+  }
+  
+  .secondary-button:hover {
+    color: #175a60;
+    border-color: #175a60;
+  }
+  
+  .secondary-button:active {
+    background-color: #edecec;
+    box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
+  }

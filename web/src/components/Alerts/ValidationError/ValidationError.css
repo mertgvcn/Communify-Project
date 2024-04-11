@@ -1,0 +1,21 @@
+.validation-error-wrapper {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.validation-error-wrapper.show {
+    display: flex;
+    padding: 4px 8px;
+    box-sizing: border-box;
+
+    border-radius: 2px;
+    border: 1px solid rgb(170, 40, 40);
+    color: rgb(170, 40, 40);
+
+    font-size: 10px;
+    opacity: 1;
+}
+
+.error-message {
+    text-align: center;
+}

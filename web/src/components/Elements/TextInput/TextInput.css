@@ -1,0 +1,35 @@
+.input-wrapper {
+    position: relative;
+    margin-bottom: 5px;
+}
+
+.text-input {
+    border: none;
+    border-bottom: 1px solid #18403c; 
+    border-radius: 2px;
+
+    color: #18403c;
+
+    background-color: rgb(245,245,245);
+    padding: 2px 30px;
+    box-sizing: border-box;
+}
+
+.text-input:focus {
+    outline: none;
+}
+
+.text-input-icon {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+
+    width: 30px;
+    height: 100%;
+    
+    color: #18403c;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

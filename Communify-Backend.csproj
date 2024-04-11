@@ -9,9 +9,13 @@
 
   <ItemGroup>
     <Compile Remove="CommunifyLibrary\**" />
+    <Compile Remove="web\**" />
     <Content Remove="CommunifyLibrary\**" />
+    <Content Remove="web\**" />
     <EmbeddedResource Remove="CommunifyLibrary\**" />
+    <EmbeddedResource Remove="web\**" />
     <None Remove="CommunifyLibrary\**" />
+    <None Remove="web\**" />
   </ItemGroup>
 
   <ItemGroup>

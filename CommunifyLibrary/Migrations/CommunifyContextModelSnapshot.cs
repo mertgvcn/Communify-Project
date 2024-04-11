@@ -47,7 +47,7 @@ namespace CommunifyLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Interests");
+                    b.ToTable("Interests", (string)null);
                 });
 
             modelBuilder.Entity("CommunifyLibrary.Models.Role", b =>
@@ -75,7 +75,7 @@ namespace CommunifyLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("CommunifyLibrary.Models.User", b =>
@@ -149,7 +149,7 @@ namespace CommunifyLibrary.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("InterestUser", b =>
@@ -164,7 +164,7 @@ namespace CommunifyLibrary.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("InterestUser");
+                    b.ToTable("InterestUser", (string)null);
                 });
 
             modelBuilder.Entity("CommunifyLibrary.Models.User", b =>

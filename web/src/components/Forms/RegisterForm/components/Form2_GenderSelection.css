@@ -1,0 +1,56 @@
+#register-form2 {
+    position: absolute;
+    height: 100%;
+    width: inherit;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    transition: 0.5s;
+
+    padding: 10px 20px;
+    padding-bottom: 10px;
+    box-sizing: border-box;
+}
+
+#register-form2 .gender-types {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#register-form2 .gender-types input {
+    width: 60%;
+    height: 36px;
+
+    color: #18403c;
+    background-color: rgb(245, 245, 245);
+
+    border: 1px solid #18403c;
+    border-radius: 10px;
+
+    margin-bottom: 0.75rem;
+    cursor: pointer;
+}
+
+#register-form2 .gender-types input:hover {
+    background-color: rgb(240, 240, 240);
+    color: #1c9185;
+    border-color: #1c9185;
+}
+
+#register-form2 .gender-types #selected {
+    background-color: rgb(222, 232, 230);
+    color: #2c9ba6;
+    border-color: #2c9ba6;
+}
+
+#register-form2 .buttons {
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

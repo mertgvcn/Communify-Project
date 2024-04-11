@@ -1,0 +1,45 @@
+#register-form1 {
+    position: absolute;
+    height: 100%;
+    width: inherit;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    transition: 0.5s;
+
+    padding: 10px 20px;
+    padding-bottom: 10px;
+    box-sizing: border-box;
+}
+
+.form-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    font-size: 22px;
+    margin-bottom: 0.75rem;
+}
+
+#register-form1 .inputs {
+    display: flex;
+    flex-direction: column;
+    max-height: 240px;
+    overflow-y: scroll;
+}
+
+#register-form1 .birthdate {
+    margin-top: 0.75rem;
+    width: 200px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
