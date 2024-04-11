@@ -1,4 +1,9 @@
-﻿namespace LethalCompany_Backend.Controllers
+﻿using CommunifyLibrary;
+using LethalCompany_Backend.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace LethalCompany_Backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -23,7 +28,6 @@
             }).ToList();
 
             return new JsonResult(interests);
-            */
         }
     }
 }
