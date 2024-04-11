@@ -8,11 +8,10 @@ export class SetPasswordValidator extends Validator<SetPasswordFormData> {
         super();
 
         this.ruleFor("password")
-            .notEmpty().withMessage("Required")
+            .notEmpty().withMessage("Password is required")
             .matches(this.passwordPattern).withMessage("Password must contain at least 8 characters, 1 capital letter and 1 number")
 
         this.ruleFor("confirmPassword")
-            .notEmpty().withMessage("Required")
-            .must((value, context) => value === context.password).withMessage("Passwords do not match")
+            .must((value, context) => value === context.password).withMessage("Confirm your password")
     }
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 //css
 import './LoginForm.css'
 //types
@@ -11,6 +11,7 @@ import { GetInterests } from '../../../utils/apis/InterestAPI';
 import { login } from '../../../utils/apis/AuthenticationAPI';
 import { setCookie } from '../../../utils/Cookie';
 import { LoginValidator } from '../../../validators/LoginValidator/LoginValidator';
+import useDynamicValidation from '../../../hooks/useDynamicValidation';
 //icons
 import { RiLockPasswordLine } from "react-icons/ri";
 import { IoCloseCircleOutline } from "react-icons/io5";
@@ -40,7 +41,7 @@ const LoginForm = (props: LoginFormType) => {
         email: "",
         password: ""
     });
-    const [validationErrors, setValidationErrors] = useState<any>({})
+    const { validationErrors, errorList } = useDynamicValidation(formData, formValidator, [formData.email, formData.password])
 
     //functions
     const handleChange = (e: any) => {
@@ -52,10 +53,7 @@ const LoginForm = (props: LoginFormType) => {
     }
     
     const handleLogin = async () => {
-        const errors = formValidator.validate(formData)
-        setValidationErrors(errors)
-
-        if (Object.keys(errors).length === 0) {
+        if (Object.keys(errorList).length === 0) {
             const loginRequest: LoginRequest = {
                 email: formData.email,
                 password: formData.password
