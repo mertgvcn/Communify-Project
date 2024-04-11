@@ -6,10 +6,10 @@ export class LoginValidator extends Validator<FormDataType> {
         super();
 
         this.ruleFor("email")
-        .notEmpty().withMessage("Required")
+        .notEmpty().withMessage("Email is required")
         .emailAddress().withMessage("Not a valid email")
 
         this.ruleFor("password")
-        .notEmpty().withMessage("Required")
+        .notEmpty().withMessage("Password is required")
     }
 }

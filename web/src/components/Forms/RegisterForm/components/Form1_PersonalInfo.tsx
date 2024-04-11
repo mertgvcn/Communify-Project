@@ -7,6 +7,7 @@ import { FormDataType } from '../types/FormDataType'
 //helpers
 import { isEmailAvailable } from '../../../../utils/apis/AuthenticationAPI'
 import { Form1Validator } from '../../../../validators/RegisterValidators/Form1Validator'
+import useDynamicValidation from '../../../../hooks/useDynamicValidation'
 //icons
 import { GrPhone } from 'react-icons/gr'
 import { MdOutlineMail } from 'react-icons/md'
@@ -26,7 +27,7 @@ type Form1Type = {
 
 const Form1 = (props: Form1Type) => {
     const formValidator = new Form1Validator()
-    const [validationErrors, setValidationErrors] = useState<any>({})
+    const { validationErrors, errorList } = useDynamicValidation(props.formData, formValidator, [props.formData.firstName, props.formData.lastName, props.formData.phoneNumber, props.formData.birthDate, props.formData.email])
 
     const handleChange = (e: any) => {
         const { name, value } = e.target
@@ -37,10 +38,7 @@ const Form1 = (props: Form1Type) => {
     }
 
     const handleNext = async () => {
-        const errors = formValidator.validate(props.formData)
-        setValidationErrors(errors)
-
-        if (Object.keys(errors).length === 0) {
+        if (Object.keys(errorList).length === 0) {
             if (await isEmailAvailable(props.formData.email)) {
                 props.setRegisterPages({
                     Form1: -650,
@@ -49,9 +47,6 @@ const Form1 = (props: Form1Type) => {
                     Form4: 650,
                     Form5: 650,
                 })
-            }
-            else {
-                setValidationErrors({...errors, email: "This email is not available"})
             }
         }
     }

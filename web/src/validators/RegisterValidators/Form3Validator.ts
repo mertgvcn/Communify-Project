@@ -6,18 +6,18 @@ export class Form3Validator extends Validator<FormDataType> {
         super();
 
         this.ruleFor('birthCountry')
-            .notEmpty().withMessage("Required")
+            .notEmpty().withMessage("Birth country is required")
 
         this.ruleFor('birthCity')
-            .notEmpty().withMessage("Required")
+            .notEmpty().withMessage("Birth city is required")
 
         this.ruleFor('currentCountry')
-            .notEmpty().withMessage("Required")
+            .notEmpty().withMessage("Current country is required")
 
         this.ruleFor('currentCity')
-            .notEmpty().withMessage("Required")
+            .notEmpty().withMessage("Current city is required")
 
         this.ruleFor('address')
-            .notEmpty().withMessage("Required")
+            .notEmpty().withMessage("Address is required")
     }
 }

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { deleteCookie } from '../../utils/Cookie';
 import { setPassword } from '../../utils/apis/AuthenticationAPI';
 import { SetPasswordValidator } from '../../validators/RegisterValidators/SetPasswordValidator';
+import useDynamicValidation from '../../hooks/useDynamicValidation';
 //icons
 import { RiLockPasswordLine } from "react-icons/ri";
 //components
@@ -26,7 +27,7 @@ const SetPasswordPage = () => {
         password: "",
         confirmPassword: "",
     })
-    const [validationErrors, setValidationErrors] = useState<any>({})
+    const { validationErrors, errorList } = useDynamicValidation(formData, formValidator, [formData.password, formData.confirmPassword])
 
     //functions
     const handleChange = (e: any) => {
@@ -38,10 +39,7 @@ const SetPasswordPage = () => {
     }
 
     const handleSubmit = async () => {
-        const errors = formValidator.validate(formData)
-        setValidationErrors(errors)
-
-        if (Object.keys(errors).length === 0) {
+        if (Object.keys(errorList).length === 0) {
             await setPassword(formData.password)
 
             navigate("/", { state: { loginFormState: true } })

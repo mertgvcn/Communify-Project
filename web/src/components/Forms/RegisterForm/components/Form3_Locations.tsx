@@ -6,6 +6,7 @@ import { FormDataType } from '../types/FormDataType';
 import { FormLocationsType } from '../types/FormLocationsType';
 //helpers
 import { Form3Validator } from '../../../../validators/RegisterValidators/Form3Validator';
+import useDynamicValidation from '../../../../hooks/useDynamicValidation';
 //icons
 import { FiFlag } from "react-icons/fi";
 import { TbBuildingCommunity } from "react-icons/tb";
@@ -25,7 +26,7 @@ type Form3Type = {
 
 const Form3 = (props: Form3Type) => {
     const formValidator = new Form3Validator()
-    const [validationErrors, setValidationErrors] = useState<any>({})
+    const { validationErrors, errorList } = useDynamicValidation(props.formData, formValidator, [props.formData.currentCountry, props.formData.currentCity, props.formData.birthCountry, props.formData.birthCity, props.formData.address])
 
     const handleChange = (e: any) => {
         const { name, value } = e.target
@@ -36,10 +37,7 @@ const Form3 = (props: Form3Type) => {
     }
 
     const handleNext = () => {
-        const errors = formValidator.validate(props.formData)
-        setValidationErrors(errors)
-
-        if (Object.keys(errors).length === 0) {
+        if (Object.keys(errorList).length === 0) {
             props.setRegisterPages({
                 Form1: -650,
                 Form2: -650,
