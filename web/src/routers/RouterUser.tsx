@@ -12,7 +12,7 @@ const RouterUser = () => {
     const Layout = () => {
         return (
             <>
-                <Navbar isLogin={true}/>
+                <Navbar role={Roles.User}/>
                 <Outlet />
             </>
         )

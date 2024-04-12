@@ -20,7 +20,6 @@ import Form5_DoneNotification from './components/Form5_DoneNotification'
 
 
 type RegisterFormType = {
-    formState: FormStateType
     setFormState: React.Dispatch<React.SetStateAction<FormStateType>>,
 
     interestList: InterestViewModel[]
@@ -54,7 +53,7 @@ const RegisterForm = (props: RegisterFormType) => {
     const [genderState, setGenderState] = useState<Gender | null>(null)
     const [selectedInterests, setSelectedInterests] = useState<InterestViewModel[]>([])
 
-    return props.formState.registerFormState ? (
+    return (
         <div className='register-form-background'>
             <div className='register-form-wrapper'>
 
@@ -140,8 +139,6 @@ const RegisterForm = (props: RegisterFormType) => {
             </div>
         </div>
     )
-        :
-        null
 }
 
 export default RegisterForm

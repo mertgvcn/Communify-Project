@@ -1,5 +1,7 @@
 import React from 'react'
 import { Routes, Route, Outlet } from 'react-router-dom'
+//models
+import { Roles } from '../models/entityModels/Token'
 //components
 import Navbar from '../components/Navbar/Navbar'
 //pages
@@ -11,7 +13,7 @@ const RouterUnAuthorizedUser = () => {
     const Layout = () => {
         return (
             <>
-                <Navbar isLogin={true} />
+                <Navbar role={Roles.unAuthorizedUser} />
                 <Outlet />
             </>
         )
