@@ -19,6 +19,7 @@ import { MdOutlineMail } from "react-icons/md";
 //components
 import PrimaryButton from '../../Elements/Buttons/PrimaryButton/PrimaryButton';
 import SecondaryButton from '../../Elements/Buttons/SecondaryButton/SecondaryButton';
+import TextButton from '../../Elements/Buttons/TextButton/TextButton';
 import TextInput from '../../Elements/TextInput/TextInput';
 
 export type FormDataType = {
@@ -103,7 +104,8 @@ const LoginForm = (props: LoginFormType) => {
                         icon={RiLockPasswordLine} onChangeFunction={handleChange}
                         errorMessage={validationErrors.password} />
 
-                    <div style={{ marginTop: '1rem' }}>
+                    <div style={{ marginTop: '0.5rem' }}>
+                        <TextButton value={'Forgot password?'} width={280} height={40} fontSize={16} onClickFunction={() => {}}/>
                         <PrimaryButton value={'Log In'} width={280} height={40} fontSize={16} onClickFunction={handleLogin} />
                     </div>
                 </div>
