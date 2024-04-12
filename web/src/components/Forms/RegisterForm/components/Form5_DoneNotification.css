@@ -2,9 +2,7 @@
     position: absolute;
     height: 100%;
     width: inherit;
-
     transition: 0.5s;
-    
     padding: 10px 20px;
     box-sizing: border-box;
 }

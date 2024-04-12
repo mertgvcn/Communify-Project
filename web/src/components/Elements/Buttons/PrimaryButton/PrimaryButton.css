@@ -2,19 +2,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
     background-color: #2c9ba6;
     background-clip: padding-box;
-
     border: 1px solid transparent;
     border-radius: .25rem;
     box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
     box-sizing: border-box;
-
     color: #fff;
     font-size: 16px;
     font-weight: 600;
-    
     cursor: pointer;
   }
   
