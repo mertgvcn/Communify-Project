@@ -2,13 +2,10 @@
     position: absolute;
     height: 100%;
     width: inherit;
-
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-
     transition: 0.5s;
-
     padding: 10px 20px;
     padding-bottom: 10px;
     box-sizing: border-box;
@@ -19,15 +16,11 @@
     flex-direction: row;
     align-content: flex-start;
     justify-content: center;
-
     flex-wrap: wrap;
     overflow-y: scroll;
-
     border: 1px solid #18403c0f;
-
     padding: 10px 10px;
     box-sizing: border-box;
-
     width: 100%;
     height: 180px;
 }
@@ -36,20 +29,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
     width: fit-content;
     height: 30px;
-
     margin: 5px 5px;
     padding: 5px 8px;
     box-sizing: border-box;
-
     color: #18403c;
     background-color: rgb(245, 245, 245);
-
     border: 1px solid #18403c;
     border-radius: 10px;
-
     cursor: pointer;
 }
 
@@ -67,7 +55,6 @@
 
 #register-form4  .buttons {
     width: 100%;
-
     display: flex;
     flex-direction: row;
     justify-content: space-between;
