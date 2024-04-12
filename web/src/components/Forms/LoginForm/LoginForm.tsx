@@ -27,7 +27,6 @@ export type FormDataType = {
 }
 
 type LoginFormType = {
-    formState: FormStateType,
     setFormState: React.Dispatch<React.SetStateAction<FormStateType>>,
 
     setInterestList: React.Dispatch<React.SetStateAction<InterestViewModel[]>>
@@ -83,7 +82,7 @@ const LoginForm = (props: LoginFormType) => {
         props.setInterestList(response)
     }
 
-    return props.formState.loginFormState ? (
+    return (
         <div className='login-form-background'>
             <div className='login-form-wrapper'>
 
@@ -133,7 +132,6 @@ const LoginForm = (props: LoginFormType) => {
             </div>
         </div>
     )
-        : null;
 };
 
 export default LoginForm;

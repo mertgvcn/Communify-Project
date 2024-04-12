@@ -4,6 +4,8 @@ import { Link, } from 'react-router-dom'
 import './Navbar.css'
 //types
 import { FormStateType } from '../Forms/RegisterForm/types/FormStateType'
+//icons
+import { FaUserCircle } from "react-icons/fa";
 //helpers
 import { Roles } from '../../models/entityModels/Token'
 import { GetInterests } from '../../utils/apis/InterestAPI'
@@ -14,9 +16,10 @@ import PrimaryButton from '../Elements/Buttons/PrimaryButton/PrimaryButton'
 import SecondaryButton from '../Elements/Buttons/SecondaryButton/SecondaryButton'
 import LoginForm from '../Forms/LoginForm/LoginForm'
 import RegisterForm from '../Forms/RegisterForm/RegisterForm'
+import DropDownProfile from './components/DropDownProfile/DropDownProfile'
 
 type NavbarType = {
-  isLogin: boolean,
+  role: Roles,
   loginFormState?: boolean
 }
 
@@ -25,6 +28,7 @@ const Navbar = (props: NavbarType) => {
     loginFormState: props.loginFormState ? props.loginFormState : false,
     registerFormState: false
   })
+  const [isDropDownProfile, setDropDownProfile] = useState<boolean>(false)
 
   const [interestList, setInterestList] = useState<InterestViewModel[]>([])
 
@@ -62,21 +66,25 @@ const Navbar = (props: NavbarType) => {
             </Link>
           </div>
 
-          <div className='navbar-buttons'>
-            {!props.isLogin &&
-              <>
-                <PrimaryButton value='Login' fontSize={16} width="120px" height="40px" onClickFunction={handleLoginForm} />
-                <SecondaryButton value='Sign Up' fontSize={16} width="120px" height="40px" onClickFunction={handleRegisterForm} />
-              </>
-            }
-          </div>
+          {props.role == Roles.Guest.valueOf() &&
+            <div className='navbar-buttons'>
+              <PrimaryButton value='Login' fontSize={16} width="120px" height="40px" onClickFunction={handleLoginForm} />
+              <SecondaryButton value='Sign Up' fontSize={16} width="120px" height="40px" onClickFunction={handleRegisterForm} />
+            </div>
+          }
+
+          {props.role == Roles.User.valueOf() &&
+            <div className="user" onClick={() => { setDropDownProfile((prev) => !prev) }}>
+              <FaUserCircle />
+            </div>
+          }
 
         </div>
       </nav >
 
-      <LoginForm formState={formState} setFormState={setFormState} setInterestList={setInterestList}/>
-      <RegisterForm formState={formState} setFormState={setFormState} interestList={interestList} />
-
+      {formState.loginFormState && <LoginForm setFormState={setFormState} setInterestList={setInterestList} />}
+      {formState.registerFormState && <RegisterForm setFormState={setFormState} interestList={interestList} />}
+      {isDropDownProfile && <DropDownProfile />}
     </>
   )
 }

@@ -13,7 +13,7 @@ const RouterGuest = () => {
     const Layout = () => {
         return (
             <>
-                <Navbar isLogin={false} loginFormState={location.state?.loginFormState}/>
+                <Navbar role={Roles.Guest} loginFormState={location.state?.loginFormState}/>
                 <Outlet />
             </>
         )

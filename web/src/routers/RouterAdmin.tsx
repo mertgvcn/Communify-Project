@@ -1,4 +1,6 @@
 import { Outlet, Route, Routes } from 'react-router-dom'
+//models
+import { Roles } from '../models/entityModels/Token'
 //components
 import Navbar from '../components/Navbar/Navbar'
 //pages
@@ -10,7 +12,7 @@ const RouterAdmin = () => {
     const Layout = () => {
         return (
             <>
-                <Navbar isLogin={true}/>
+                <Navbar role={Roles.Admin}/>
                 <Outlet />
             </>
         )
