@@ -29,7 +29,7 @@ export type FormDataType = {
 
 type LoginFormType = {
     setFormState: React.Dispatch<React.SetStateAction<FormStateType>>,
-
+    setForgotPasswordState: React.Dispatch<React.SetStateAction<boolean>>,
     setInterestList: React.Dispatch<React.SetStateAction<InterestViewModel[]>>
 }
 
@@ -51,7 +51,7 @@ const LoginForm = (props: LoginFormType) => {
             ...formData, [name]: value
         })
     }
-    
+
     const handleLogin = async () => {
         if (Object.keys(errorList).length === 0) {
             const loginRequest: LoginRequest = {
@@ -66,6 +66,15 @@ const LoginForm = (props: LoginFormType) => {
                 window.location.href = "/"
             }
         }
+    }
+
+    const handleForgotPassword = () => {
+        props.setFormState({
+            loginFormState:false,
+            registerFormState: false
+        })
+
+        props.setForgotPasswordState(true)
     }
 
     const handleRegisterForm = async () => {
@@ -105,7 +114,7 @@ const LoginForm = (props: LoginFormType) => {
                         errorMessage={validationErrors.password} />
 
                     <div style={{ marginTop: '0.5rem' }}>
-                        <TextButton value={'Forgot password?'} width={280} height={40} fontSize={16} onClickFunction={() => {}}/>
+                        <TextButton value={'Forgot password?'} width={280} height={40} fontSize={16} onClickFunction={handleForgotPassword} />
                         <PrimaryButton value={'Log In'} width={280} height={40} fontSize={16} onClickFunction={handleLogin} />
                     </div>
                 </div>
