@@ -9,7 +9,7 @@ builder.Services.AddDbContext<CommunifyContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("default"), b => b.MigrationsAssembly("CommunifyLibrary")));
 
 
-//Add builder configuration 
+//Add builder configuration
 builder.AddAPI();
 builder.ConfigureAuthorization();
 builder.Services.ConfigureServices();
