@@ -16,7 +16,7 @@ export const isEmailAvailable = async (email: string): Promise<boolean> => {
 }
 
 export const login = async (request: LoginRequest): Promise<LoginResponse> => {
-    const response = await axios.post(baseUrl + '/api/Authentication/login', {
+    const response = await axios.post(baseUrl + '/api/Authentication/Login', {
         email: request.email,
         password: request.password
     })
@@ -39,7 +39,7 @@ export const register = async (request: RegisterRequest): Promise<RegisterRespon
         interestIdList.push(interest.id)
     });
 
-    const response = await axios.post(baseUrl + '/api/Authentication/register', {
+    const response = await axios.post(baseUrl + '/api/Authentication/Register', {
         firstName: request.firstName,
         lastName: request.lastName,
         phoneNumber: request.phoneNumber,
@@ -58,7 +58,7 @@ export const register = async (request: RegisterRequest): Promise<RegisterRespon
 }
 
 export const setPassword = async (password: string): Promise<boolean> => {
-    const response = await axios.post(baseUrl + '/api/Authentication/setPassword', {
+    const response = await axios.post(baseUrl + '/api/Authentication/SetPassword', {
         password: password
     }, {
         headers: {
