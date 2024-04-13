@@ -51,6 +51,8 @@ const ForgotPassword = (props: ForgotPasswordType) => {
           setCookie("jwt", response.token, response.tokenExpireDate)
 
         props.setForgotPasswordState(false)
+
+        //toast notification ile mail gönderildi bilgisi ver
       }
       else {
         //toast notification eklenecek

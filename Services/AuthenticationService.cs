@@ -79,8 +79,8 @@ public class AuthenticationService : IAuthenticationService
         user.RoleId = 3;
         await _userRepository.UpdateAsync(user);
 
-        //Get updated user
-        user = await _userRepository.GetByIdAsync(user.Id);
+        //Get updated user by adding the role
+        user = await _userRepository.GetAll().Where(u => u.Id == user.Id).Include(u => u.Role).SingleAsync();
 
         var generatedToken = await _tokenService.GenerateTokenAsync(new GenerateTokenRequest
         {
