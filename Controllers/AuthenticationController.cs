@@ -17,10 +17,10 @@ public class AuthenticationController : Controller
     }
 
     [AllowAnonymous]
-    [HttpPost("isEmailAvailable")]
-    public async Task<bool> isEmailAvailable([FromBody] isEmailAvailableRequest request)
+    [HttpPost("isEmailExists")]
+    public async Task<bool> isEmailExists([FromBody] isEmailExistsRequest request)
     {
-        return await authenticationService.isEmailAvailableAsync(request);
+        return await authenticationService.isEmailExistsAsync(request);
     }
 
     [AllowAnonymous]

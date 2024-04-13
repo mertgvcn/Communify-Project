@@ -34,7 +34,7 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task<long> GetIdByEmailAsync(string email) => (await _userRepository.GetByEmail(email).SingleAsync()).Id;
 
-    public async Task<bool> isEmailAvailableAsync(isEmailAvailableRequest request) => !await _userRepository.GetByEmail(request.Email).AnyAsync(); //thanks to .Any(), if it finds a email it will return true, otherwise false
+    public async Task<bool> isEmailExistsAsync(isEmailExistsRequest request) => await _userRepository.GetByEmail(request.Email).AnyAsync(); //thanks to .Any(), if it finds a email it will return true, otherwise false
 
     public async Task<UserLoginResponse> LoginUserAsync(UserLoginRequest request)
     {
@@ -132,7 +132,7 @@ public class AuthenticationService : IAuthenticationService
         }
 
         //Create token for password
-        var generatedToken = await _tokenService.GenerateToken(new GenerateTokenRequest
+        var generatedToken = await _tokenService.GenerateTokenAsync(new GenerateTokenRequest
         {
             UserID = user.Id.ToString(),
             Role = user.Role,

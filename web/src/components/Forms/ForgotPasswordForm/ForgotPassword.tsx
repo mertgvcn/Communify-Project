@@ -8,8 +8,9 @@ import { IoMdArrowBack } from "react-icons/io";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { MdOutlineMail } from "react-icons/md";
 //helpers
+import { setCookie } from '../../../utils/Cookie';
 import { ForgotPasswordValidator } from '../../../validators/RegisterValidators/ForgotPasswordValidator';
-import { isEmailAvailable } from '../../../utils/apis/AuthenticationAPI';
+import { forgotPassword, isEmailAvailable } from '../../../utils/apis/AuthenticationAPI';
 import useDynamicValidation from '../../../hooks/useDynamicValidation';
 //components
 import TextInput from '../../Elements/TextInput/TextInput';
@@ -43,8 +44,13 @@ const ForgotPassword = (props: ForgotPasswordType) => {
 
   const handleSendEmail = async () => {
     if (Object.keys(errorList).length === 0) {
-      if (await isEmailAvailable(formData.email)) {
+      if (!await isEmailAvailable(formData.email)) {
+        const response = await forgotPassword(formData.email)
         
+        if (response.isSuccess)
+          setCookie("jwt", response.token, response.tokenExpireDate)
+
+        props.setForgotPasswordState(false)
       }
       else {
         //toast notification eklenecek
