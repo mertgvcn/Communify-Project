@@ -29,7 +29,6 @@ type Form4Type = {
 
 const Form4 = (props: Form4Type) => {
 
-
     const handleRegistration = async () => {
         const registerRequest: RegisterRequest = {
             firstName: props.formData.firstName,

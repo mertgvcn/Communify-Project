@@ -17,7 +17,7 @@ namespace Communify_Backend.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("login")]
+        [HttpPost("Login")]
         public async Task<ActionResult<UserLoginResponse>> Login([FromBody] UserLoginRequest request)
         {
             var result = await authenticationService.LoginUserAsync(request);
@@ -26,7 +26,7 @@ namespace Communify_Backend.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("register")]
+        [HttpPost("Register")]
         public async Task<UserRegisterResponse> Register([FromBody] UserRegisterRequest user)
         {
             return await authenticationService.RegisterUserAsync(user);
@@ -40,8 +40,8 @@ namespace Communify_Backend.Controllers
         }
 
         [Authorize(Roles = "unAuthorizedUser")]
-        [HttpPost("setPassword")]
-        public async Task setPassword([FromBody] SetPasswordRequest request)
+        [HttpPost("SetPassword")]
+        public async Task SetPassword([FromBody] SetPasswordRequest request)
         {
             await authenticationService.SetPassword(request);
         }
