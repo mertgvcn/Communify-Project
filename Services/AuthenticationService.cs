@@ -1,6 +1,7 @@
 ﻿using Communify_Backend.Services.Interfaces;
 using CommunifyLibrary.Models;
 using CommunifyLibrary.Repository;
+using LethalCompany_Backend.Models;
 using LethalCompany_Backend.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using static Communify_Backend.Models.AuthenticationModels;
@@ -106,7 +107,11 @@ namespace Communify_Backend.Services
                 ExpireDate = DateTime.UtcNow.Add(TimeSpan.FromMinutes(5))
             });
 
-            await _emailSender.SendEmailAsync(newUser.Email);
+            await _emailSender.SendEmailAsync(new SendEmailRequest
+            {
+                ReceiverMail = newUser.Email,
+                MailType = MailType.SetPasswordMail
+            });
 
             return new UserRegisterResponse()
             {
