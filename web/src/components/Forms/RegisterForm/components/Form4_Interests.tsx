@@ -1,6 +1,6 @@
 import React from 'react'
 //css
-import './Form4_Interests.css'
+import './styles/Form4_Interests.css'
 //types
 import { FormDataType } from '../types/FormDataType'
 import { FormLocationsType } from '../types/FormLocationsType'

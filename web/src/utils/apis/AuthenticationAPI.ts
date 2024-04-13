@@ -2,7 +2,7 @@ import axios from "axios"
 //helpers
 import { getCookie } from "../Cookie"
 //models
-import { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from "../../models/parameterModels/AuthenticationParameterModels"
+import { ForgotPasswordResponse, LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from "../../models/parameterModels/AuthenticationParameterModels"
 
 const baseUrl = process.env.REACT_APP_BASEURL
 const API_KEY = 'bearer ' + getCookie("jwt")
@@ -19,6 +19,14 @@ export const login = async (request: LoginRequest): Promise<LoginResponse> => {
     const response = await axios.post(baseUrl + '/api/Authentication/Login', {
         email: request.email,
         password: request.password
+    })
+
+    return response.data
+}
+
+export const forgotPassword = async (email: string): Promise<ForgotPasswordResponse> => {
+    const response = await axios.post(baseUrl + '/api/Authentication/ForgotPassword', {
+        email: email
     })
 
     return response.data

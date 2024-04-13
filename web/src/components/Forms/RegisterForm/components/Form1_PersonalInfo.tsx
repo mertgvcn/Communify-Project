@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 //css
-import './Form1_PersonalInfo.css'
+import './styles/Form1_PersonalInfo.css'
 //types
 import { FormLocationsType } from '../types/FormLocationsType'
 import { FormDataType } from '../types/FormDataType'

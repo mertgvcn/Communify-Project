@@ -14,6 +14,12 @@ export type LoginResponse = {
     role: string
 }
 
+export type ForgotPasswordResponse = {
+    isSuccess: boolean,
+    token: string,
+    tokenExpireDate: Date
+}
+
 export type RegisterRequest = {
     firstName: string,
     lastName: string,

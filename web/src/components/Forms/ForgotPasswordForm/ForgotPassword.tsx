@@ -44,7 +44,7 @@ const ForgotPassword = (props: ForgotPasswordType) => {
   const handleSendEmail = async () => {
     if (Object.keys(errorList).length === 0) {
       if (await isEmailAvailable(formData.email)) {
-
+        
       }
       else {
         //toast notification eklenecek

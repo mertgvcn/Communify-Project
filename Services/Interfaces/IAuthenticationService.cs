@@ -1,5 +1,4 @@
 ﻿using static Communify_Backend.Models.AuthenticationModels;
-using static Communify_Backend.Models.TokenModels;
 
 namespace Communify_Backend.Services.Interfaces
 {
@@ -9,7 +8,7 @@ namespace Communify_Backend.Services.Interfaces
 
         Task<UserLoginResponse> LoginUserAsync(UserLoginRequest request);
 
-        Task<GenerateTokenResponse> ForgotPasswordAsync(ForgotPasswordRequest request);
+        Task<ForgotPasswordResponse> ForgotPasswordAsync(ForgotPasswordRequest request);
 
         Task<UserRegisterResponse> RegisterUserAsync(UserRegisterRequest user);
 

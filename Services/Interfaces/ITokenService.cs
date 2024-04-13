@@ -6,7 +6,7 @@ namespace Communify_Backend.Services.Interfaces
 {
     public interface ITokenService
     {
-        Task<GenerateTokenResponse> GenerateToken(GenerateTokenRequest request);
+        Task<GenerateTokenResponse> GenerateTokenAsync(GenerateTokenRequest request);
 
         List<Claim> PrepareClaims(string userID, Role role);
 

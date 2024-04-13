@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static Communify_Backend.Models.AuthenticationModels;
-using static Communify_Backend.Models.TokenModels;
 
 namespace Communify_Backend.Controllers;
 
@@ -35,7 +34,7 @@ public class AuthenticationController : Controller
 
     [AllowAnonymous]
     [HttpPost("ForgotPassword")]
-    public async Task<GenerateTokenResponse> ForgotPassword([FromBody] ForgotPasswordRequest request)
+    public async Task<ForgotPasswordResponse> ForgotPassword([FromBody] ForgotPasswordRequest request)
     {
         return await authenticationService.ForgotPasswordAsync(request);
     }

@@ -52,7 +52,7 @@ public class AuthenticationService : IAuthenticationService
         if (user is not null && BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
         {
             //Login success
-            var generatedToken = await _tokenService.GenerateToken(new GenerateTokenRequest
+            var generatedToken = await _tokenService.GenerateTokenAsync(new GenerateTokenRequest
             {
                 UserID = user.Id.ToString(),
                 Role = user.Role,
@@ -71,7 +71,7 @@ public class AuthenticationService : IAuthenticationService
         return await Task.FromResult(response);
     }
 
-    public async Task<GenerateTokenResponse> ForgotPasswordAsync(ForgotPasswordRequest request)
+    public async Task<ForgotPasswordResponse> ForgotPasswordAsync(ForgotPasswordRequest request)
     {
         //Get and update user information to enable forgot password
         var user = await _userRepository.GetByEmail(request.Email).SingleAsync();
@@ -82,7 +82,7 @@ public class AuthenticationService : IAuthenticationService
         //Get updated user
         user = await _userRepository.GetByIdAsync(user.Id);
 
-        var generatedToken = _tokenService.GenerateToken(new GenerateTokenRequest
+        var generatedToken = await _tokenService.GenerateTokenAsync(new GenerateTokenRequest
         {
             UserID = user.Id.ToString(),
             ExpireDate = DateTime.UtcNow.Add(TimeSpan.FromMinutes(5)),
@@ -95,7 +95,12 @@ public class AuthenticationService : IAuthenticationService
             MailType = MailType.ForgotPasswordMail
         });
 
-        return await generatedToken;
+        return new ForgotPasswordResponse()
+        {
+            isSuccess = true,
+            Token = generatedToken.Token,
+            TokenExpireDate = generatedToken.TokenExpireDate
+        };
     }
 
     public async Task<UserRegisterResponse> RegisterUserAsync(UserRegisterRequest request)

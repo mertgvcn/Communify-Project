@@ -17,7 +17,7 @@ namespace Communify_Backend.Services
             this.configuration = configuration;
         }
 
-        public Task<GenerateTokenResponse> GenerateToken(GenerateTokenRequest request)
+        public Task<GenerateTokenResponse> GenerateTokenAsync(GenerateTokenRequest request)
         {
             SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["AppSettings:Secret"]));
 

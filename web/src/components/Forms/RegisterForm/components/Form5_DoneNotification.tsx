@@ -1,6 +1,6 @@
 import React from 'react'
 //css
-import './Form5_DoneNotification.css'
+import './styles/Form5_DoneNotification.css'
 //types
 import { FormLocationsType } from '../types/FormLocationsType';
 import { FormStateType } from '../types/FormStateType';
