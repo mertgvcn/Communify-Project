@@ -59,6 +59,11 @@ namespace Communify_Backend.Models
             public string Email { get; set; }
         }
 
+        public class ForgotPasswordRequest
+        {
+            public string Email { get; set; }
+        }
+
         public class SetPasswordRequest
         {
             public string Password { get; set; }

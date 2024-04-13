@@ -2,48 +2,56 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static Communify_Backend.Models.AuthenticationModels;
+using static Communify_Backend.Models.TokenModels;
 
-namespace Communify_Backend.Controllers
+namespace Communify_Backend.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class AuthenticationController : Controller
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class AuthenticationController : Controller
+    private readonly IAuthenticationService authenticationService;
+
+    public AuthenticationController(IAuthenticationService authenticationService)
     {
-        private readonly IAuthenticationService authenticationService;
+        this.authenticationService = authenticationService;
+    }
 
-        public AuthenticationController(IAuthenticationService authenticationService)
-        {
-            this.authenticationService = authenticationService;
-        }
+    [AllowAnonymous]
+    [HttpPost("isEmailAvailable")]
+    public async Task<bool> isEmailAvailable([FromBody] isEmailAvailableRequest request)
+    {
+        return await authenticationService.isEmailAvailableAsync(request);
+    }
 
-        [AllowAnonymous]
-        [HttpPost("Login")]
-        public async Task<ActionResult<UserLoginResponse>> Login([FromBody] UserLoginRequest request)
-        {
-            var result = await authenticationService.LoginUserAsync(request);
+    [AllowAnonymous]
+    [HttpPost("Login")]
+    public async Task<ActionResult<UserLoginResponse>> Login([FromBody] UserLoginRequest request)
+    {
+        var result = await authenticationService.LoginUserAsync(request);
 
-            return result;
-        }
+        return result;
+    }
 
-        [AllowAnonymous]
-        [HttpPost("Register")]
-        public async Task<UserRegisterResponse> Register([FromBody] UserRegisterRequest user)
-        {
-            return await authenticationService.RegisterUserAsync(user);
-        }
+    [AllowAnonymous]
+    [HttpPost("ForgotPassword")]
+    public async Task<GenerateTokenResponse> ForgotPassword([FromBody] ForgotPasswordRequest request)
+    {
+        return await authenticationService.ForgotPasswordAsync(request);
+    }
 
-        [AllowAnonymous]
-        [HttpPost("isEmailAvailable")]
-        public async Task<bool> isEmailAvailable([FromBody] isEmailAvailableRequest request)
-        {
-            return await authenticationService.isEmailAvailable(request);
-        }
+    [AllowAnonymous]
+    [HttpPost("Register")]
+    public async Task<UserRegisterResponse> Register([FromBody] UserRegisterRequest user)
+    {
+        return await authenticationService.RegisterUserAsync(user);
+    }
 
-        [Authorize(Roles = "unAuthorizedUser")]
-        [HttpPost("SetPassword")]
-        public async Task SetPassword([FromBody] SetPasswordRequest request)
-        {
-            await authenticationService.SetPassword(request);
-        }
+    [Authorize(Roles = "unAuthorizedUser")]
+    [HttpPost("SetPassword")]
+    public async Task SetPassword([FromBody] SetPasswordRequest request)
+    {
+        await authenticationService.SetPasswordAsync(request);
     }
 }
+
