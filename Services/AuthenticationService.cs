@@ -34,7 +34,7 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task<long> GetIdByEmailAsync(string email) => (await _userRepository.GetByEmail(email).SingleAsync()).Id;
 
-    public async Task<bool> isEmailExistsAsync(isEmailExistsRequest request) => await _userRepository.GetByEmail(request.Email).AnyAsync(); //thanks to .Any(), if it finds a email it will return true, otherwise false
+    public async Task<bool> isEmailExistingAsync(isEmailExistingRequest request) => await _userRepository.GetByEmail(request.Email).AnyAsync(); //thanks to .Any(), if it finds a email it will return true, otherwise false
 
     public async Task<UserLoginResponse> LoginUserAsync(UserLoginRequest request)
     {

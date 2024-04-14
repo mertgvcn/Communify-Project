@@ -5,7 +5,7 @@ import './styles/Form1_PersonalInfo.css'
 import { FormLocationsType } from '../types/FormLocationsType'
 import { FormDataType } from '../types/FormDataType'
 //helpers
-import { isEmailExists } from '../../../../utils/apis/AuthenticationAPI'
+import { isEmailExisting } from '../../../../utils/apis/AuthenticationAPI'
 import { Form1Validator } from '../../../../validators/RegisterValidators/Form1Validator'
 import useDynamicValidation from '../../../../hooks/useDynamicValidation'
 //icons
@@ -39,7 +39,7 @@ const Form1 = (props: Form1Type) => {
 
     const handleNext = async () => {
         if (Object.keys(errorList).length === 0) {
-            if (!await isEmailExists(props.formData.email)) {
+            if (!await isEmailExisting(props.formData.email)) {
                 props.setRegisterPages({
                     Form1: -650,
                     Form2: 0,

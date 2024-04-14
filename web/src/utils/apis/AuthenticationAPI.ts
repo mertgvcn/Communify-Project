@@ -7,8 +7,8 @@ import { ForgotPasswordResponse, LoginRequest, LoginResponse, RegisterRequest, R
 const baseUrl = process.env.REACT_APP_BASEURL
 const API_KEY = 'bearer ' + getCookie("jwt")
 
-export const isEmailExists = async (email: string): Promise<boolean> => {
-    const response = await axios.post(baseUrl + '/api/Authentication/isEmailExists', {
+export const isEmailExisting = async (email: string): Promise<boolean> => {
+    const response = await axios.post(baseUrl + '/api/Authentication/isEmailExisting', {
         email: email
     })
 
