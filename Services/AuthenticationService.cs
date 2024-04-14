@@ -34,7 +34,7 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task<long> GetIdByEmailAsync(string email) => (await _userRepository.GetByEmail(email).SingleAsync()).Id;
 
-    public async Task<bool> isEmailExistingAsync(isEmailExistingRequest request) => await _userRepository.GetByEmail(request.Email).AnyAsync(); //thanks to .Any(), if it finds a email it will return true, otherwise false
+    public async Task<bool> EmailExistsAsync(EmailExistsRequest request) => await _userRepository.GetByEmail(request.Email).AnyAsync(); //thanks to .Any(), if it finds a email it will return true, otherwise false
 
     public async Task<UserLoginResponse> LoginUserAsync(UserLoginRequest request)
     {
@@ -51,7 +51,6 @@ public class AuthenticationService : IAuthenticationService
 
         if (user is not null && BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
         {
-            //Login success
             var generatedToken = await _tokenService.GenerateTokenAsync(new GenerateTokenRequest
             {
                 UserID = user.Id.ToString(),
@@ -73,13 +72,11 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task<ForgotPasswordResponse> ForgotPasswordAsync(ForgotPasswordRequest request)
     {
-        //Get and update user information to enable forgot password
         var user = await _userRepository.GetByEmail(request.Email).SingleAsync();
         user.Password = null;
         user.RoleId = 3;
         await _userRepository.UpdateAsync(user);
 
-        //Get updated user by adding the role
         user = await _userRepository.GetAll().Where(u => u.Id == user.Id).Include(u => u.Role).SingleAsync();
 
         var generatedToken = await _tokenService.GenerateTokenAsync(new GenerateTokenRequest
@@ -122,7 +119,7 @@ public class AuthenticationService : IAuthenticationService
         };
 
         var user = await _userRepository.AddAsync(newUser);
-        user = await _userRepository.GetAll().Where(u => u.Id == user.Id).Include(u => u.Role).SingleAsync(); //aşağıda role kullandığım için roleid ile eşlemiyordu.
+        user = await _userRepository.GetAll().Where(u => u.Id == user.Id).Include(u => u.Role).SingleAsync();
 
 
         foreach (var interestId in request.InterestIdList)
@@ -131,7 +128,6 @@ public class AuthenticationService : IAuthenticationService
             await _userRepository.AddInterest(user.Id, interest);
         }
 
-        //Create token for password
         var generatedToken = await _tokenService.GenerateTokenAsync(new GenerateTokenRequest
         {
             UserID = user.Id.ToString(),
@@ -157,7 +153,6 @@ public class AuthenticationService : IAuthenticationService
     {
         var user = await _userRepository.GetAll().Where(a => a.Id == _httpContextService.GetCurrentUserID()).SingleAsync();
 
-        //Hashing the password for security
         string hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
         user.RoleId = 2;

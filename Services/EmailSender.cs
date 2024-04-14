@@ -32,7 +32,6 @@ namespace LethalCompany_Backend.Services
                 Body = ""
             };
 
-            //Setting mail subject and body according to mail type
             if (request.MailType == MailType.SetPasswordMail)
             {
                 mailContent.Subject = _configuration["MailService:MailContent:SetPasswordMail:Subject"]!;
@@ -44,21 +43,18 @@ namespace LethalCompany_Backend.Services
                 mailContent.Body = _configuration["MailService:MailContent:ForgotPasswordMail:Body"]!;
             }
 
-            //From-To Configuration
             MailboxAddress mailboxAddressFrom = new MailboxAddress(mailConfig.SenderName, mailConfig.SenderMail);
             MailboxAddress mailboxAddressTo = new MailboxAddress("You", request.ReceiverMail);
 
             mimeMessage.From.Add(mailboxAddressFrom);
             mimeMessage.To.Add(mailboxAddressTo);
 
-            //Mail Content
             mimeMessage.Subject = mailContent.Subject;
 
             var bodyBuilder = new BodyBuilder();
             bodyBuilder.HtmlBody = mailContent.Body;
             mimeMessage.Body = bodyBuilder.ToMessageBody();
 
-            //Sending
             SmtpClient client = new SmtpClient();
             client.Connect(mailConfig.Host, mailConfig.Port, false);
             client.Authenticate(mailConfig.SenderMail, mailConfig.SenderPassword);

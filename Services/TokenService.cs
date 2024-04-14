@@ -43,7 +43,6 @@ namespace Communify_Backend.Services
 
         public List<Claim> PrepareClaims(string userID, Role role)
         {
-            //Always need ID
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.NameIdentifier, userID),

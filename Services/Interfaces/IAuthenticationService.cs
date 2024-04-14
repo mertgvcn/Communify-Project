@@ -4,7 +4,7 @@ namespace Communify_Backend.Services.Interfaces
 {
     public interface IAuthenticationService
     {
-        Task<bool> isEmailExistingAsync(isEmailExistingRequest request);
+        Task<bool> EmailExistsAsync(EmailExistsRequest request);
 
         Task<UserLoginResponse> LoginUserAsync(UserLoginRequest request);
 

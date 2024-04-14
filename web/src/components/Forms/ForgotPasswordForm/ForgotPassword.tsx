@@ -10,7 +10,7 @@ import { MdOutlineMail } from "react-icons/md";
 //helpers
 import { setCookie } from '../../../utils/Cookie';
 import { ForgotPasswordValidator } from '../../../validators/RegisterValidators/ForgotPasswordValidator';
-import { forgotPassword, isEmailExisting } from '../../../utils/apis/AuthenticationAPI';
+import { forgotPassword, EmailExists } from '../../../utils/apis/AuthenticationAPI';
 import useDynamicValidation from '../../../hooks/useDynamicValidation';
 //components
 import TextInput from '../../Elements/TextInput/TextInput';
@@ -44,7 +44,7 @@ const ForgotPassword = (props: ForgotPasswordType) => {
 
   const handleSendEmail = async () => {
     if (Object.keys(errorList).length === 0) {
-      if (await isEmailExisting(formData.email)) {
+      if (await EmailExists(formData.email)) {
         const response = await forgotPassword(formData.email)
         
         if (response.isSuccess)

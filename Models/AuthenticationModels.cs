@@ -4,7 +4,7 @@ namespace Communify_Backend.Models;
 
 public class AuthenticationModels
 {
-    public class isEmailExistingRequest
+    public class EmailExistsRequest
     {
         public string Email { get; set; }
     }
