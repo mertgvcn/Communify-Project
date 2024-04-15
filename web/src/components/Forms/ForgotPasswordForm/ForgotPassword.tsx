@@ -83,7 +83,7 @@ const ForgotPassword = (props: ForgotPasswordType) => {
 
           <div className="forgot-password-body">
             <span className='title'>Reset your password</span>
-            <span className='information-message'>Please enter your email address below. We will send you a link to reset your password. Once you receive the email, click on the link to create your new password.</span>
+            <span className='information-message'>Please enter your email address below. If we find the account you will recieve an email to reset your password. Once you receive the email, click on the link to change your password.</span>
 
             <TextInput width={460} height={40} fontSize={16} isPassword={false}
               name='email' placeholder='Please enter your email'
