@@ -52,10 +52,10 @@ const ForgotPassword = (props: ForgotPasswordType) => {
 
         props.setForgotPasswordState(false)
 
-        //toast notification ile mail gönderildi bilgisi ver
+        //TODO: toast notification ile mail gönderildi bilgisi ver
       }
       else {
-        //toast notification eklenecek
+        //TODO: toast notification eklenecek
       }
     }
   }
