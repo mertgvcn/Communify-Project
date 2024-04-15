@@ -1,4 +1,4 @@
-﻿using LethalCompany_Backend.Models;
+﻿using LethalCompany_Backend.Models.MailSenderModel;
 using LethalCompany_Backend.Services.Interfaces;
 using MailKit.Net.Smtp;
 using MimeKit;

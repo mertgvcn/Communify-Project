@@ -1,4 +1,5 @@
-﻿using LethalCompany_Backend.Models;
+﻿
+using LethalCompany_Backend.Models.MailSenderModel;
 
 namespace LethalCompany_Backend.Services.Interfaces
 {

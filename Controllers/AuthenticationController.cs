@@ -1,7 +1,7 @@
 ﻿using Communify_Backend.Services.Interfaces;
+using LethalCompany_Backend.Models.AuthenticationModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using static Communify_Backend.Models.AuthenticationModels;
 
 namespace Communify_Backend.Controllers;
 

@@ -1,4 +1,5 @@
-﻿using static Communify_Backend.Models.AuthenticationModels;
+﻿
+using LethalCompany_Backend.Models.AuthenticationModels;
 
 namespace Communify_Backend.Services.Interfaces
 {

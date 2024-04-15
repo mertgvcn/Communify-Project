@@ -1,5 +1,5 @@
 ﻿using CommunifyLibrary;
-using LethalCompany_Backend.Models;
+using LethalCompany_Backend.Models.InterestModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
