@@ -4,7 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using static Communify_Backend.Models.TokenParameterModels;
+using static Communify_Backend.Models.TokenModels;
 
 namespace Communify_Backend.Services
 {
@@ -17,7 +17,7 @@ namespace Communify_Backend.Services
             this.configuration = configuration;
         }
 
-        public Task<GenerateTokenResponse> GenerateToken(GenerateTokenRequest request)
+        public Task<GenerateTokenResponse> GenerateTokenAsync(GenerateTokenRequest request)
         {
             SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["AppSettings:Secret"]));
 
@@ -43,7 +43,6 @@ namespace Communify_Backend.Services
 
         public List<Claim> PrepareClaims(string userID, Role role)
         {
-            //Always need ID
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.NameIdentifier, userID),

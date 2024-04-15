@@ -64,10 +64,10 @@ const RegisterForm = (props: RegisterFormType) => {
                     }
                 }>
                     <div className="go-login-body">
-                        <p style={{ fontSize: 22 }}  >Do you already have an account?</p>
-                        <span style={{ fontSize: 14, opacity: 0.9 }}>Login to your account and continue communifying with our active communities.</span>
+                        <p className='title'>Do you already have an account?</p>
+                        <span className='body'>Login to your account and continue communifying with our active communities.</span>
 
-                        <div style={{ marginTop: 25 }}>
+                        <div className='signin-button-wrapper'>
                             <SecondaryButton value={'Sign in'} width={120} height={40} fontSize={16}
                                 onClickFunction={() => {
                                     props.setFormState({ loginFormState: true, registerFormState: false })

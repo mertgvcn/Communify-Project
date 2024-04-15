@@ -1,0 +1,14 @@
+.text-button {
+    display: flex;
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+    color: #2c9ba6;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.text-button:hover {
+    color: #145157;
+}

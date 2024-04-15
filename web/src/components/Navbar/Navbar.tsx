@@ -17,6 +17,7 @@ import SecondaryButton from '../Elements/Buttons/SecondaryButton/SecondaryButton
 import LoginForm from '../Forms/LoginForm/LoginForm'
 import RegisterForm from '../Forms/RegisterForm/RegisterForm'
 import DropDownProfile from './components/DropDownProfile/DropDownProfile'
+import ForgotPassword from '../Forms/ForgotPasswordForm/ForgotPassword';
 
 type NavbarType = {
   role: Roles,
@@ -28,6 +29,7 @@ const Navbar = (props: NavbarType) => {
     loginFormState: props.loginFormState ? props.loginFormState : false,
     registerFormState: false
   })
+  const [forgotPasswordState, setForgotPasswordState] = useState<boolean>(false)
   const [isDropDownProfile, setDropDownProfile] = useState<boolean>(false)
 
   const [interestList, setInterestList] = useState<InterestViewModel[]>([])
@@ -82,8 +84,9 @@ const Navbar = (props: NavbarType) => {
         </div>
       </nav >
 
-      {formState.loginFormState && <LoginForm setFormState={setFormState} setInterestList={setInterestList} />}
+      {formState.loginFormState && <LoginForm setFormState={setFormState} setForgotPasswordState={setForgotPasswordState} setInterestList={setInterestList} />}
       {formState.registerFormState && <RegisterForm setFormState={setFormState} interestList={interestList} />}
+      {forgotPasswordState && <ForgotPassword setFormState={setFormState} setForgotPasswordState={setForgotPasswordState}/>}
       {isDropDownProfile && <DropDownProfile />}
     </>
   )

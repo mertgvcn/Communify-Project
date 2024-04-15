@@ -1,6 +1,6 @@
 import React from 'react'
 //css
-import './Form4_Interests.css'
+import './styles/Form4_Interests.css'
 //types
 import { FormDataType } from '../types/FormDataType'
 import { FormLocationsType } from '../types/FormLocationsType'
@@ -28,7 +28,6 @@ type Form4Type = {
 }
 
 const Form4 = (props: Form4Type) => {
-
 
     const handleRegistration = async () => {
         const registerRequest: RegisterRequest = {

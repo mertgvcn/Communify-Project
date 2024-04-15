@@ -1,6 +1,6 @@
 import React from 'react'
 //css
-import './Form2_GenderSelection.css'
+import './styles/Form2_GenderSelection.css'
 //types
 import { FormLocationsType } from '../types/FormLocationsType'
 import { Gender } from '../../../../models/entityModels/User'

@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 //css
-import './Form1_PersonalInfo.css'
+import './styles/Form1_PersonalInfo.css'
 //types
 import { FormLocationsType } from '../types/FormLocationsType'
 import { FormDataType } from '../types/FormDataType'
 //helpers
-import { isEmailAvailable } from '../../../../utils/apis/AuthenticationAPI'
+import { EmailExists } from '../../../../utils/apis/AuthenticationAPI'
 import { Form1Validator } from '../../../../validators/RegisterValidators/Form1Validator'
 import useDynamicValidation from '../../../../hooks/useDynamicValidation'
 //icons
@@ -39,7 +39,7 @@ const Form1 = (props: Form1Type) => {
 
     const handleNext = async () => {
         if (Object.keys(errorList).length === 0) {
-            if (await isEmailAvailable(props.formData.email)) {
+            if (!await EmailExists(props.formData.email)) {
                 props.setRegisterPages({
                     Form1: -650,
                     Form2: 0,

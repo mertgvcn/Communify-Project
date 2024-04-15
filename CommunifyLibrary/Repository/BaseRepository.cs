@@ -6,9 +6,9 @@ namespace CommunifyLibrary.Repository
 {
     public abstract class BaseRepository<T>(CommunifyContext _context) : IBaseRepository<T> where T : BaseEntity
     {
-        public IQueryable<T> GetAll() => _context.Set<T>().AsQueryable(); //shorter code for single line return function
+        public IQueryable<T> GetAll() => _context.Set<T>().AsQueryable();
 
-        public async Task<T> GetByIdAsync(long id) => await GetAll().Where(a => a.Id == id).SingleAsync(); //if there is no object with given id, it will return an exception
+        public async Task<T> GetByIdAsync(long id) => await GetAll().Where(a => a.Id == id).SingleAsync();
 
         public async Task DeleteAsync(long id)
         {

@@ -2,13 +2,13 @@ import axios from "axios"
 //helpers
 import { getCookie } from "../Cookie"
 //models
-import { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from "../../models/parameterModels/AuthenticationParameterModels"
+import { ForgotPasswordResponse, LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from "../../models/parameterModels/AuthenticationParameterModels"
 
 const baseUrl = process.env.REACT_APP_BASEURL
 const API_KEY = 'bearer ' + getCookie("jwt")
 
-export const isEmailAvailable = async (email: string): Promise<boolean> => {
-    const response = await axios.post(baseUrl + '/api/Authentication/isEmailAvailable', {
+export const EmailExists = async (email: string): Promise<boolean> => {
+    const response = await axios.post(baseUrl + '/api/Authentication/EmailExists', {
         email: email
     })
 
@@ -16,9 +16,17 @@ export const isEmailAvailable = async (email: string): Promise<boolean> => {
 }
 
 export const login = async (request: LoginRequest): Promise<LoginResponse> => {
-    const response = await axios.post(baseUrl + '/api/Authentication/login', {
+    const response = await axios.post(baseUrl + '/api/Authentication/Login', {
         email: request.email,
         password: request.password
+    })
+
+    return response.data
+}
+
+export const forgotPassword = async (email: string): Promise<ForgotPasswordResponse> => {
+    const response = await axios.post(baseUrl + '/api/Authentication/ForgotPassword', {
+        email: email
     })
 
     return response.data
@@ -39,7 +47,7 @@ export const register = async (request: RegisterRequest): Promise<RegisterRespon
         interestIdList.push(interest.id)
     });
 
-    const response = await axios.post(baseUrl + '/api/Authentication/register', {
+    const response = await axios.post(baseUrl + '/api/Authentication/Register', {
         firstName: request.firstName,
         lastName: request.lastName,
         phoneNumber: request.phoneNumber,
@@ -58,7 +66,7 @@ export const register = async (request: RegisterRequest): Promise<RegisterRespon
 }
 
 export const setPassword = async (password: string): Promise<boolean> => {
-    const response = await axios.post(baseUrl + '/api/Authentication/setPassword', {
+    const response = await axios.post(baseUrl + '/api/Authentication/SetPassword', {
         password: password
     }, {
         headers: {
