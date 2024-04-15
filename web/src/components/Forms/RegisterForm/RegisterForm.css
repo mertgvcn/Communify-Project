@@ -41,6 +41,18 @@
     box-sizing: border-box;
 }
 
+.register-form-wrapper .go-login .go-login-body .title {
+    font-size: 22px;
+}
+.register-form-wrapper .go-login .go-login-body .body {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.register-form-wrapper .go-login .go-login-body .signin-button-wrapper {
+    margin-top: 25px;
+}
+
 /**Register Side*/
 .register-form-wrapper .register-form {
     display: flex;

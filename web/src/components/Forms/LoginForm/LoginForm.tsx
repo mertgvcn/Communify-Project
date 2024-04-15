@@ -124,16 +124,16 @@ const LoginForm = (props: LoginFormType) => {
                         backgroundImage: `url(${require("../../../assets/images/login-form-pic.png")}`,
                     }
                 }>
-                    <div className='close-button'>
+                    <div className='close-button-wrapper'>
                         <IoCloseCircleOutline style={{ float: 'right', cursor: 'pointer' }}
                             onClick={() => props.setFormState({ loginFormState: false, registerFormState: false })} />
                     </div>
 
                     <div className="go-register-body">
-                        <p style={{ fontSize: 22 }}  >Hello Communifier!</p>
-                        <span style={{ fontSize: 14, opacity: 0.9 }}>Join our community and unlock a world of sharing. Sign up now to connect and communify!</span>
+                        <p className='title'  >Hello Communifier!</p>
+                        <span className='body'>Join our community and unlock a world of sharing. Sign up now to connect and communify!</span>
 
-                        <div style={{ marginTop: 25 }}>
+                        <div className='signup-button-wrapper'>
                             <SecondaryButton value={'Sign Up'} width={120} height={40} fontSize={16}
                                 onClickFunction={handleRegisterForm} />
                         </div>
