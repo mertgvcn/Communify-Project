@@ -1,6 +1,8 @@
 import axios from "axios"
 //helpers
 import { getCookie } from "../Cookie"
+//helpers
+import { Encrypt } from "../Cryption"
 //models
 import { ForgotPasswordResponse, LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from "../../models/parameterModels/AuthenticationParameterModels"
 
@@ -16,9 +18,11 @@ export const EmailExists = async (email: string): Promise<boolean> => {
 }
 
 export const login = async (request: LoginRequest): Promise<LoginResponse> => {
+    const encryptedPassword = Encrypt(request.password)
+
     const response = await axios.post(baseUrl + '/api/Authentication/Login', {
         email: request.email,
-        password: request.password
+        password: encryptedPassword
     })
 
     return response.data
@@ -35,10 +39,6 @@ export const forgotPassword = async (email: string): Promise<ForgotPasswordRespo
 export const register = async (request: RegisterRequest): Promise<RegisterResponse> => {
     //Convert string to date Type 
     const dateParts = request.birthDate.split("/");
-    const day = parseInt(dateParts[0], 10)
-    const month = parseInt(dateParts[1], 10)
-    const year = parseInt(dateParts[2], 10)
-
     const date = new Date(Number(dateParts[2]), Number(dateParts[1])-1, Number(dateParts[0]), 12)
 
     //Convert interestViewModel to interestIdList
@@ -66,8 +66,10 @@ export const register = async (request: RegisterRequest): Promise<RegisterRespon
 }
 
 export const setPassword = async (password: string): Promise<boolean> => {
+    const encryptedPassword = Encrypt(password)
+
     const response = await axios.post(baseUrl + '/api/Authentication/SetPassword', {
-        password: password
+        password: encryptedPassword
     }, {
         headers: {
             'Authorization': API_KEY

@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 //css
 import './SetPasswordPage.css'
+//hooks
+import useDynamicValidation from '../../hooks/useDynamicValidation';
 //helpers
 import { useNavigate } from 'react-router-dom';
 import { deleteCookie } from '../../utils/Cookie';
 import { setPassword } from '../../utils/apis/AuthenticationAPI';
 import { SetPasswordValidator } from '../../validators/RegisterValidators/SetPasswordValidator';
-import useDynamicValidation from '../../hooks/useDynamicValidation';
 //icons
 import { RiLockPasswordLine } from "react-icons/ri";
 //components

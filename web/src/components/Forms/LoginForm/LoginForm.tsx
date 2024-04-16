@@ -1,8 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 //css
 import './LoginForm.css'
 //types
 import { FormStateType } from '../RegisterForm/types/FormStateType';
+//hooks
+import useDynamicValidation from '../../../hooks/useDynamicValidation';
 //models
 import { InterestViewModel } from '../../../models/viewModels/InterestModels';
 import { LoginRequest, LoginResponse } from '../../../models/parameterModels/AuthenticationParameterModels';
@@ -11,7 +13,6 @@ import { GetInterests } from '../../../utils/apis/InterestAPI';
 import { login } from '../../../utils/apis/AuthenticationAPI';
 import { setCookie } from '../../../utils/Cookie';
 import { LoginValidator } from '../../../validators/LoginValidator/LoginValidator';
-import useDynamicValidation from '../../../hooks/useDynamicValidation';
 //icons
 import { RiLockPasswordLine } from "react-icons/ri";
 import { IoCloseCircleOutline } from "react-icons/io5";
