@@ -4,10 +4,12 @@ namespace LethalCompany_Backend.Models.AuthenticationModels;
 
 public class ForgotPasswordResponse
 {
+    [Required]
     public bool isSuccess { get; set; }
 
-    [MaxLength(256)]
+    [MaxLength(256), Required]
     public string Token { get; set; }
 
+    [Required]
     public DateTime TokenExpireDate { get; set; }
 }

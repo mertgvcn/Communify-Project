@@ -10,8 +10,9 @@ public enum MailType
 
 public class SendEmailRequest
 {
-    [MaxLength(64)]
+    [MaxLength(64), Required]
     public string ReceiverMail { get; set; }
 
+    [Required]
     public MailType MailType { get; set; }
 }
