@@ -11,7 +11,7 @@ namespace CommunifyLibrary.Configurations
 
             builder.Property(x => x.Name)
                 .IsRequired(true)
-                .HasMaxLength(128);
+                .HasMaxLength(32);
         }
     }
 }

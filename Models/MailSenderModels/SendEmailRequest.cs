@@ -1,4 +1,6 @@
-﻿namespace LethalCompany_Backend.Models.MailSenderModel;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LethalCompany_Backend.Models.MailSenderModel;
 
 public enum MailType
 {
@@ -8,6 +10,8 @@ public enum MailType
 
 public class SendEmailRequest
 {
+    [MaxLength(64)]
     public string ReceiverMail { get; set; }
+
     public MailType MailType { get; set; }
 }
