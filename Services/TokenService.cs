@@ -1,10 +1,10 @@
 ﻿using Communify_Backend.Services.Interfaces;
 using CommunifyLibrary.Models;
+using LethalCompany_Backend.Models.TokenModels;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using static Communify_Backend.Models.TokenModels;
 
 namespace Communify_Backend.Services
 {

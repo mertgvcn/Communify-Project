@@ -1,11 +1,11 @@
 ﻿using Communify_Backend.Services.Interfaces;
 using CommunifyLibrary.Models;
 using CommunifyLibrary.Repository;
-using LethalCompany_Backend.Models;
+using LethalCompany_Backend.Models.AuthenticationModels;
+using LethalCompany_Backend.Models.MailSenderModel;
+using LethalCompany_Backend.Models.TokenModels;
 using LethalCompany_Backend.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using static Communify_Backend.Models.AuthenticationModels;
-using static Communify_Backend.Models.TokenModels;
 
 namespace Communify_Backend.Services;
 

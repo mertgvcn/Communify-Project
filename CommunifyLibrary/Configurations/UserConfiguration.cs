@@ -45,7 +45,7 @@ namespace CommunifyLibrary.Configurations
 
             builder.Property(x => x.PhoneNumber)
                 .IsRequired(true)
-                .HasMaxLength(32);
+                .HasMaxLength(16);
 
             builder.Property(x => x.Email)
                 .IsRequired(true)
@@ -53,7 +53,7 @@ namespace CommunifyLibrary.Configurations
 
             builder.Property(x => x.Password)
                 .IsRequired(false)
-                .HasMaxLength(64);
+                .HasMaxLength(256);
         }
     }
 }
