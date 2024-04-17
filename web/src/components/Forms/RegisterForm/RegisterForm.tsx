@@ -10,6 +10,8 @@ import { Gender } from '../../../models/entityModels/User'
 import { InterestViewModel } from '../../../models/viewModels/InterestModels'
 //icons
 import { IoCloseCircleOutline } from 'react-icons/io5'
+//helpers
+import { Toaster } from 'react-hot-toast'
 //components
 import SecondaryButton from '../../Elements/Buttons/SecondaryButton/SecondaryButton'
 import Form1_PersonalInfo from './components/Form1_PersonalInfo'
@@ -55,6 +57,8 @@ const RegisterForm = (props: RegisterFormType) => {
 
     return (
         <div className='register-form-background'>
+            <Toaster toastOptions={{style:{fontSize: 14}}}/>
+
             <div className='register-form-wrapper'>
 
                 {/* GO LOGIN SIDE */}

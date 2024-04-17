@@ -13,6 +13,7 @@ import { GetInterests } from '../../../utils/apis/InterestAPI';
 import { login } from '../../../utils/apis/AuthenticationAPI';
 import { setCookie } from '../../../utils/Cookie';
 import { LoginValidator } from '../../../validators/LoginValidator/LoginValidator';
+import toast, { Toaster } from 'react-hot-toast';
 //icons
 import { RiLockPasswordLine } from "react-icons/ri";
 import { IoCloseCircleOutline } from "react-icons/io5";
@@ -64,14 +65,24 @@ const LoginForm = (props: LoginFormType) => {
 
             if (response.authenticateResult) {
                 setCookie("jwt", response.authToken, response.accessTokenExpireDate)
-                window.location.href = "/"
+                toast.success("Login successful.")
+
+                setTimeout(() => {
+                    window.location.href = "/"
+                }, 1000)
             }
+            else {
+                toast.error("Email or password is wrong.")
+            }
+        }
+        else {
+            toast.error("Please enter a valid email and password.")
         }
     }
 
     const handleForgotPassword = () => {
         props.setFormState({
-            loginFormState:false,
+            loginFormState: false,
             registerFormState: false
         })
 
@@ -95,6 +106,8 @@ const LoginForm = (props: LoginFormType) => {
 
     return (
         <div className='login-form-background'>
+            <Toaster toastOptions={{ style: { fontSize: 14 } }} />
+
             <div className='login-form-wrapper'>
 
                 <div className="login-form">

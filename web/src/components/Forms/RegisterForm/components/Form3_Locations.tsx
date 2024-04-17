@@ -4,13 +4,15 @@ import './styles/Form3_Locations.css'
 //types
 import { FormDataType } from '../types/FormDataType';
 import { FormLocationsType } from '../types/FormLocationsType';
-//helpers
-import { Form3Validator } from '../../../../validators/RegisterValidators/Form3Validator';
-import useDynamicValidation from '../../../../hooks/useDynamicValidation';
 //icons
 import { FiFlag } from "react-icons/fi";
 import { TbBuildingCommunity } from "react-icons/tb";
 import { IoLocationOutline } from "react-icons/io5";
+//hooks
+import useDynamicValidation from '../../../../hooks/useDynamicValidation';
+//helpers
+import { Form3Validator } from '../../../../validators/RegisterValidators/Form3Validator';
+import {toast} from 'react-hot-toast'
 //components
 import SecondaryButton from '../../../Elements/Buttons/SecondaryButton/SecondaryButton'
 import PrimaryButton from '../../../Elements/Buttons/PrimaryButton/PrimaryButton'
@@ -45,6 +47,9 @@ const Form3 = (props: Form3Type) => {
                 Form4: 0,
                 Form5: 650,
             })
+        }
+        else {
+            toast.error("Please enter valid informations")
         }
     }
 

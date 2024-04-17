@@ -4,15 +4,17 @@ import './styles/Form1_PersonalInfo.css'
 //types
 import { FormLocationsType } from '../types/FormLocationsType'
 import { FormDataType } from '../types/FormDataType'
-//helpers
-import { EmailExists } from '../../../../utils/apis/AuthenticationAPI'
-import { Form1Validator } from '../../../../validators/RegisterValidators/Form1Validator'
-import useDynamicValidation from '../../../../hooks/useDynamicValidation'
 //icons
 import { GrPhone } from 'react-icons/gr'
 import { MdOutlineMail } from 'react-icons/md'
 import { PiUserBold } from 'react-icons/pi'
 import { TbCalendar } from 'react-icons/tb'
+//hooks
+import useDynamicValidation from '../../../../hooks/useDynamicValidation'
+//helpers
+import { EmailExists } from '../../../../utils/apis/AuthenticationAPI'
+import { Form1Validator } from '../../../../validators/RegisterValidators/Form1Validator'
+import toast from 'react-hot-toast';
 //components
 import PrimaryButton from '../../../Elements/Buttons/PrimaryButton/PrimaryButton'
 import TextInput from '../../../Elements/TextInput/TextInput'
@@ -48,6 +50,12 @@ const Form1 = (props: Form1Type) => {
                     Form5: 650,
                 })
             }
+            else {
+                toast.error("This email is not available")
+            }
+        }
+        else {
+            toast.error("Please enter valid informations")
         }
     }
 

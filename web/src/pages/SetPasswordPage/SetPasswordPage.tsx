@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 //css
 import './SetPasswordPage.css'
+//icons
+import { RiLockPasswordLine } from "react-icons/ri";
 //hooks
 import useDynamicValidation from '../../hooks/useDynamicValidation';
 //helpers
@@ -8,8 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { deleteCookie } from '../../utils/Cookie';
 import { setPassword } from '../../utils/apis/AuthenticationAPI';
 import { SetPasswordValidator } from '../../validators/RegisterValidators/SetPasswordValidator';
-//icons
-import { RiLockPasswordLine } from "react-icons/ri";
+import toast, { Toaster } from 'react-hot-toast';
 //components
 import TextInput from '../../components/Elements/TextInput/TextInput'
 import PrimaryButton from '../../components/Elements/Buttons/PrimaryButton/PrimaryButton';
@@ -43,17 +44,23 @@ const SetPasswordPage = () => {
         if (Object.keys(errorList).length === 0) {
             await setPassword(formData.password)
 
-            navigate("/", { state: { loginFormState: true } })
             deleteCookie("jwt")
-
+            toast.success("Password set successfully")
+            navigate("/", { state: { loginFormState: true } })
+            
             setTimeout(() => {
                 window.location.reload()
-            }, 300)
+            }, 1000)
+        }
+        else {
+            toast.error("Please enter valid password")
         }
     }
 
     return (
         <div className="set-password-wrapper">
+            <Toaster toastOptions={{style: {fontSize: 14}}}/>
+
             <div className='set-password-container'>
                 <span className='set-password-title'>Please Set Your Password</span>
 

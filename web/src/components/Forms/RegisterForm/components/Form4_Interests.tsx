@@ -5,9 +5,10 @@ import './styles/Form4_Interests.css'
 import { FormDataType } from '../types/FormDataType'
 import { FormLocationsType } from '../types/FormLocationsType'
 //helpers
-import { RegisterRequest } from '../../../../models/parameterModels/AuthenticationParameterModels'
+import { RegisterRequest, RegisterResponse } from '../../../../models/parameterModels/AuthenticationParameterModels'
 import { register } from '../../../../utils/apis/AuthenticationAPI'
 import { setCookie } from '../../../../utils/Cookie'
+import { toast } from 'react-hot-toast'
 //models
 import { Gender } from '../../../../models/entityModels/User'
 import { InterestViewModel } from '../../../../models/viewModels/InterestModels'
@@ -29,6 +30,33 @@ type Form4Type = {
 
 const Form4 = (props: Form4Type) => {
 
+    const handleBack = () => {
+        props.setRegisterPages({
+            Form1: -650,
+            Form2: -650,
+            Form3: 0,
+            Form4: 650,
+            Form5: 650,
+        })
+    }
+
+    const handleNext = async () => {
+        if (props.selectedInterests.length <= 5) {
+            await handleRegistration()
+
+            props.setRegisterPages({
+                Form1: -650,
+                Form2: -650,
+                Form3: -650,
+                Form4: -650,
+                Form5: 0,
+            })
+        }
+        else {
+            toast.error("Please select up to 5 interests")
+        }
+    }
+
     const handleRegistration = async () => {
         const registerRequest: RegisterRequest = {
             firstName: props.formData.firstName,
@@ -45,10 +73,21 @@ const Form4 = (props: Form4Type) => {
             interests: props.selectedInterests
         }
 
-        const response = await register(registerRequest)
+        const response = register(registerRequest)
 
-        if (response.isSuccess)
-            setCookie("jwt", response.token, response.tokenExpireDate)
+        toast.promise(
+            response,
+            {
+                loading: 'Registration in progress...',
+                success: <b>Registration successful.</b>,
+                error: <b>Registration failed!</b>,
+            }
+        )
+
+        const data: RegisterResponse = await response
+
+        if (data.isSuccess)
+            setCookie("jwt", data.token, data.tokenExpireDate)
     }
 
     return (
@@ -86,31 +125,8 @@ const Form4 = (props: Form4Type) => {
             </div>
 
             <div className='buttons'>
-                <SecondaryButton value='Back' width={100} height={40} fontSize={16}
-                    onClickFunction={() => {
-                        props.setRegisterPages({
-                            Form1: -650,
-                            Form2: -650,
-                            Form3: 0,
-                            Form4: 650,
-                            Form5: 650,
-                        })
-                    }} />
-                <PrimaryButton value='Next' width={100} height={40} fontSize={16}
-                    onClickFunction={async () => {
-                        if (props.selectedInterests.length <= 5) {
-                            props.setRegisterPages({
-                                Form1: -650,
-                                Form2: -650,
-                                Form3: -650,
-                                Form4: -650,
-                                Form5: 0,
-                            })
-
-                            await handleRegistration()
-                        }
-                        {/* Else için hata eklicez */ }
-                    }} />
+                <SecondaryButton value='Back' width={100} height={40} fontSize={16} onClickFunction={handleBack} />
+                <PrimaryButton value='Next' width={100} height={40} fontSize={16} onClickFunction={handleNext} />
             </div>
 
         </form>

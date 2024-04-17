@@ -3,15 +3,18 @@ import React, { useState } from 'react'
 import './ForgotPassword.css'
 //types
 import { FormStateType } from '../RegisterForm/types/FormStateType';
+import { ForgotPasswordResponse } from '../../../models/parameterModels/AuthenticationParameterModels';
 //icons
 import { IoMdArrowBack } from "react-icons/io";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { MdOutlineMail } from "react-icons/md";
+//hooks
+import useDynamicValidation from '../../../hooks/useDynamicValidation';
 //helpers
 import { setCookie } from '../../../utils/Cookie';
 import { ForgotPasswordValidator } from '../../../validators/RegisterValidators/ForgotPasswordValidator';
 import { forgotPassword, EmailExists } from '../../../utils/apis/AuthenticationAPI';
-import useDynamicValidation from '../../../hooks/useDynamicValidation';
+import toast, { Toaster } from 'react-hot-toast';
 //components
 import TextInput from '../../Elements/TextInput/TextInput';
 import PrimaryButton from '../../Elements/Buttons/PrimaryButton/PrimaryButton';
@@ -45,23 +48,40 @@ const ForgotPassword = (props: ForgotPasswordType) => {
   const handleSendEmail = async () => {
     if (Object.keys(errorList).length === 0) {
       if (await EmailExists(formData.email)) {
-        const response = await forgotPassword(formData.email)
-        
-        if (response.isSuccess)
-          setCookie("jwt", response.token, response.tokenExpireDate)
+        const response = forgotPassword(formData.email)
 
-        props.setForgotPasswordState(false)
+        toast.promise(
+          response,
+          {
+            loading: 'Email sending...',
+            success: <b>Email successfully sent.</b>,
+            error: <b>Email could not sent!</b>,
+          }
+        )
 
-        //TODO: toast notification ile mail gönderildi bilgisi ver
+        const data: ForgotPasswordResponse = (await response)
+
+        if (data.isSuccess) {
+          setCookie("jwt", data.token, data.tokenExpireDate)
+
+          setTimeout(() => {
+            props.setForgotPasswordState(false)
+          }, 1000)
+        }
       }
       else {
-        //TODO: toast notification eklenecek
+        toast.error("This email does not exist!")
       }
+    }
+    else {
+      toast.error("Please enter a valid email.")
     }
   }
 
   return (
     <div className='forgot-password-background'>
+      <Toaster toastOptions={{ style: { fontSize: 14 } }} />
+
       <div className="forgot-password-wrapper">
 
         <div className="row">
