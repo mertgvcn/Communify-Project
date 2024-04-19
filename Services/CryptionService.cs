@@ -7,7 +7,7 @@ namespace LethalCompany_Backend.Services;
 public class CryptionService(IConfiguration _configuration) : ICryptionService
 {
 
-    public string Decrypt(string key)
+    public async Task<string> Decrypt(string key)
     {
         string _key = _configuration["Crypto:key"];
         string privatekey = _configuration["Crypto:privateKey"];

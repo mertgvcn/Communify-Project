@@ -18,7 +18,7 @@ export const EmailExists = async (email: string): Promise<boolean> => {
 }
 
 export const login = async (request: LoginRequest): Promise<LoginResponse> => {
-    const encryptedPassword = Encrypt(request.password)
+    const encryptedPassword = await Encrypt(request.password)
 
     const response = await axios.post(baseUrl + '/api/Authentication/Login', {
         email: request.email,
@@ -66,7 +66,7 @@ export const register = async (request: RegisterRequest): Promise<RegisterRespon
 }
 
 export const setPassword = async (password: string): Promise<boolean> => {
-    const encryptedPassword = Encrypt(password)
+    const encryptedPassword = await Encrypt(password)
 
     const response = await axios.post(baseUrl + '/api/Authentication/SetPassword', {
         password: encryptedPassword

@@ -2,5 +2,5 @@
 
 public interface ICryptionService
 {
-    string Decrypt(string key);
+    Task<string> Decrypt(string key);
 }

@@ -51,7 +51,7 @@ public class AuthenticationService : IAuthenticationService
         };
 
         var user = _userRepository.GetByEmail(request.Email).Include(user => user.Role).FirstOrDefault();
-        var plainPassword = _cryptionService.Decrypt(request.Password);
+        var plainPassword = await _cryptionService.Decrypt(request.Password);
 
         if (user is not null && BCrypt.Net.BCrypt.Verify(plainPassword, user.Password))
         {
@@ -156,7 +156,7 @@ public class AuthenticationService : IAuthenticationService
     public async Task SetPasswordAsync(SetPasswordRequest request)
     {
         var user = await _userRepository.GetAll().Where(a => a.Id == _httpContextService.GetCurrentUserID()).SingleAsync();
-        var plainPassword = _cryptionService.Decrypt(request.Password);
+        var plainPassword = await _cryptionService.Decrypt(request.Password);
 
         string hashedPassword = BCrypt.Net.BCrypt.HashPassword(plainPassword);
 
