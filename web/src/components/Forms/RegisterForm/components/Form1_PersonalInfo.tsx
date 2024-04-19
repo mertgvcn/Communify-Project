@@ -54,9 +54,6 @@ const Form1 = (props: Form1Type) => {
                 toast.error("This email is not available")
             }
         }
-        else {
-            toast.error("Please enter valid informations")
-        }
     }
 
     return (

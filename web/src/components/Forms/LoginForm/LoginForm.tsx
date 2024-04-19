@@ -75,9 +75,6 @@ const LoginForm = (props: LoginFormType) => {
                 toast.error("Email or password is wrong.")
             }
         }
-        else {
-            toast.error("Please enter a valid email and password.")
-        }
     }
 
     const handleForgotPassword = () => {

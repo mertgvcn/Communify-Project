@@ -52,9 +52,6 @@ const SetPasswordPage = () => {
                 window.location.reload()
             }, 1000)
         }
-        else {
-            toast.error("Please enter valid password")
-        }
     }
 
     return (

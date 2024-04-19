@@ -29,7 +29,6 @@ type RegisterFormType = {
 
 
 const RegisterForm = (props: RegisterFormType) => {
-
     //States
     const [registerPages, setRegisterPages] = useState<FormLocationsType>({
         Form1: 0,
@@ -55,9 +54,40 @@ const RegisterForm = (props: RegisterFormType) => {
     const [genderState, setGenderState] = useState<Gender | null>(null)
     const [selectedInterests, setSelectedInterests] = useState<InterestViewModel[]>([])
 
+    const handleSignIn = () => {
+        props.setFormState({ loginFormState: true, registerFormState: false })
+        setGenderState(null)
+        setSelectedInterests([])
+    }
+
+    const handleClose = () => {
+        setRegisterPages({
+            Form1: 0,
+            Form2: 650,
+            Form3: 650,
+            Form4: 650,
+            Form5: 650
+        })
+        props.setFormState({ loginFormState: false, registerFormState: false })
+        setFormData({
+            firstName: "",
+            lastName: "",
+            phoneNumber: "",
+            birthDate: "",
+            email: "",
+            birthCountry: "",
+            birthCity: "",
+            currentCountry: "",
+            currentCity: "",
+            address: "",
+        })
+        setGenderState(null)
+        setSelectedInterests([])
+    }
+
     return (
         <div className='register-form-background'>
-            <Toaster toastOptions={{style:{fontSize: 14}}}/>
+            <Toaster toastOptions={{ style: { fontSize: 14 } }} />
 
             <div className='register-form-wrapper'>
 
@@ -72,12 +102,7 @@ const RegisterForm = (props: RegisterFormType) => {
                         <span className='body'>Login to your account and continue communifying with our active communities.</span>
 
                         <div className='signin-button-wrapper'>
-                            <SecondaryButton value={'Sign in'} width={120} height={40} fontSize={16}
-                                onClickFunction={() => {
-                                    props.setFormState({ loginFormState: true, registerFormState: false })
-                                    setGenderState(null)
-                                    setSelectedInterests([])
-                                }} />
+                            <SecondaryButton value={'Sign in'} width={120} height={40} fontSize={16} onClickFunction={handleSignIn} />
                         </div>
                     </div>
                 </div>
@@ -85,31 +110,7 @@ const RegisterForm = (props: RegisterFormType) => {
                 {/* REGISTRATION SIDE */}
                 <div className="register-form">
                     <div className='close-button'>
-                        <IoCloseCircleOutline style={{ float: 'right', cursor: 'pointer' }}
-                            onClick={() => {
-                                setRegisterPages({
-                                    Form1: 0,
-                                    Form2: 650,
-                                    Form3: 650,
-                                    Form4: 650,
-                                    Form5: 650
-                                })
-                                props.setFormState({ loginFormState: false, registerFormState: false })
-                                setFormData({
-                                    firstName: "",
-                                    lastName: "",
-                                    phoneNumber: "",
-                                    birthDate: "",
-                                    email: "",
-                                    birthCountry: "",
-                                    birthCity: "",
-                                    currentCountry: "",
-                                    currentCity: "",
-                                    address: "",
-                                })
-                                setGenderState(null)
-                                setSelectedInterests([])
-                            }} />
+                        <IoCloseCircleOutline style={{ float: 'right', cursor: 'pointer' }} onClick={handleClose} />
                     </div>
 
                     <div className='register-form-logo-container'>

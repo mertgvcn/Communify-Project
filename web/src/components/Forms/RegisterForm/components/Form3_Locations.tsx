@@ -48,9 +48,6 @@ const Form3 = (props: Form3Type) => {
                 Form5: 650,
             })
         }
-        else {
-            toast.error("Please enter valid informations")
-        }
     }
 
     return (
