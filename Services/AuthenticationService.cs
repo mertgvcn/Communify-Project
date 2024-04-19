@@ -76,6 +76,15 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task<ForgotPasswordResponse> ForgotPasswordAsync(ForgotPasswordRequest request)
     {
+        var emailExists = await EmailExistsAsync(new EmailExistsRequest() { Email = request.Email });
+        if (!emailExists)
+            return new ForgotPasswordResponse()
+            {
+                isSuccess = false,
+                Token = null,
+                TokenExpireDate = null
+            };
+
         var user = await _userRepository.GetByEmail(request.Email).SingleAsync();
         user.Password = null;
         user.RoleId = 3;

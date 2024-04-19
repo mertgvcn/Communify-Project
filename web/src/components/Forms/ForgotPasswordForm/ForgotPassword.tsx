@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 //css
 import './ForgotPassword.css'
 //types
@@ -13,7 +13,7 @@ import useDynamicValidation from '../../../hooks/useDynamicValidation';
 //helpers
 import { setCookie } from '../../../utils/Cookie';
 import { ForgotPasswordValidator } from '../../../validators/RegisterValidators/ForgotPasswordValidator';
-import { forgotPassword, EmailExists } from '../../../utils/apis/AuthenticationAPI';
+import { forgotPassword } from '../../../utils/apis/AuthenticationAPI';
 import toast, { Toaster } from 'react-hot-toast';
 //components
 import TextInput from '../../Elements/TextInput/TextInput';
@@ -35,6 +35,7 @@ const ForgotPassword = (props: ForgotPasswordType) => {
     email: ""
   })
   const { validationErrors, errorList } = useDynamicValidation(formData, formValidator, [formData.email])
+  const [buttonBlocker, setButtonBlocker] = useState(false)
 
   //functions
   const handleChange = (e: any) => {
@@ -47,35 +48,32 @@ const ForgotPassword = (props: ForgotPasswordType) => {
 
   const handleSendEmail = async () => {
     if (Object.keys(errorList).length === 0) {
-      if (await EmailExists(formData.email)) {
-        const response = forgotPassword(formData.email)
+      setButtonBlocker(true)
+      const response = forgotPassword(formData.email)
 
-        toast.promise(
-          response,
-          {
-            loading: 'Email sending...',
-            success: <b>Email successfully sent.</b>,
-            error: <b>Email could not sent!</b>,
-          }
-        )
-
-        const data: ForgotPasswordResponse = (await response)
-
-        if (data.isSuccess) {
-          setCookie("jwt", data.token, data.tokenExpireDate)
-
-          setTimeout(() => {
-            props.setForgotPasswordState(false)
-          }, 1000)
+      toast.promise(
+        response,
+        {
+          loading: 'Email sending...',
+          success: <b>Email successfully sent.</b>,
+          error: <b>Email could not sent!</b>,
         }
-      }
-      else {
-        toast.error("This email does not exist!")
+      )
+
+      const data: ForgotPasswordResponse = (await response)
+
+      if (data.isSuccess) {
+        setCookie("jwt", data.token, data.tokenExpireDate)
+
+        setTimeout(() => {
+          props.setForgotPasswordState(false)
+        }, 1000)
       }
     }
-    else {
-      toast.error("Please enter a valid email.")
-    }
+
+    setTimeout(() => {
+      setButtonBlocker(false)
+    }, 1000)
   }
 
   return (
@@ -114,7 +112,7 @@ const ForgotPassword = (props: ForgotPasswordType) => {
         </div>
 
         <div className='confirm-button'>
-          <PrimaryButton width={460} height={36} value='Send an email' onClickFunction={handleSendEmail} />
+          <PrimaryButton width={460} height={36} value='Send an email' onClickFunction={handleSendEmail} disabled={buttonBlocker} />
         </div>
 
       </div>
