@@ -56,7 +56,7 @@ const ForgotPassword = (props: ForgotPasswordType) => {
         {
           loading: 'Email sending...',
           success: <b>Email successfully sent.</b>,
-          error: <b>Email could not sent!</b>,
+          error: null
         }
       )
 
