@@ -11,4 +11,6 @@ public class SendEmailRequest
     public string ReceiverMail { get; set; }
 
     public MailType MailType { get; set; }
+
+    public string? UrlExtension { get; set; }
 }

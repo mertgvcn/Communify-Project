@@ -35,8 +35,6 @@ public class AuthenticationService : IAuthenticationService
         _httpContextService = httpContextService;
     }
 
-    public async Task<long> GetIdByEmailAsync(string email) => (await _userRepository.GetByEmail(email).SingleAsync()).Id;
-
     public async Task<bool> EmailExistsAsync(EmailExistsRequest request) => await _userRepository.GetByEmail(request.Email).AnyAsync(); //thanks to .Any(), if it finds a email it will return true, otherwise false
 
     public async Task<UserLoginResponse> LoginUserAsync(UserLoginRequest request)
@@ -85,24 +83,14 @@ public class AuthenticationService : IAuthenticationService
                 TokenExpireDate = null
             };
 
-        var user = await _userRepository.GetByEmail(request.Email).SingleAsync();
-        user.Password = null;
-        user.RoleId = 3;
-        await _userRepository.UpdateAsync(user);
-
-        user = await _userRepository.GetAll().Where(u => u.Id == user.Id).Include(u => u.Role).SingleAsync();
-
-        var generatedToken = await _tokenService.GenerateTokenAsync(new GenerateTokenRequest
-        {
-            UserID = user.Id.ToString(),
-            ExpireDate = DateTime.UtcNow.Add(TimeSpan.FromMinutes(5)),
-            Role = user.Role
-        });
+        var userId = await _userRepository.GetIdByEmailAsync(request.Email);
+        var generatedToken = await _tokenService.CreatePasswordTokenAsync(userId);
 
         await _emailSender.SendEmailAsync(new SendEmailRequest
         {
             ReceiverMail = request.Email,
-            MailType = MailType.ForgotPasswordMail
+            MailType = MailType.ForgotPasswordMail,
+            UrlExtension = "setpassword?token=" + generatedToken.Token
         });
 
         return new ForgotPasswordResponse()

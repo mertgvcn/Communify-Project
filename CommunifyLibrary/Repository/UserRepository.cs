@@ -1,10 +1,12 @@
 ﻿using CommunifyLibrary.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CommunifyLibrary.Repository;
 
 public class UserRepository(CommunifyContext context) : BaseRepository<User>(context), IUserRepository
 {
     public IQueryable<User> GetByEmail(string email) => context.Users.Where(a => a.Email == email);
+    public async Task<long> GetIdByEmailAsync(string email) => (await GetByEmail(email).SingleAsync()).Id;
 
     public async Task AddInterest(long userId, Interest interest)
     {

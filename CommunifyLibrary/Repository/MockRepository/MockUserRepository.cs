@@ -93,5 +93,10 @@ namespace CommunifyLibrary.Repository.MockRepository
             existingUser.PhoneNumber = user.PhoneNumber;
             existingUser.RoleId = user.RoleId;
         }
+
+        public Task<long> GetIdByEmailAsync(string email)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -61,7 +61,7 @@ public class TokenService : ITokenService
         return claims;
     }
 
-    public async Task CreatePasswordTokenAsync(long userId)
+    public async Task<GenerateTokenResponse> CreatePasswordTokenAsync(long userId)
     {
         var token = await GenerateTokenAsync(new GenerateTokenRequest
         {
@@ -75,5 +75,11 @@ public class TokenService : ITokenService
             ExpireDate = token.TokenExpireDate,
             UserId = userId,
         });
+
+        return new GenerateTokenResponse
+        {
+            Token = token.Token,
+            TokenExpireDate = token.TokenExpireDate,
+        };
     }
 }

@@ -40,7 +40,7 @@ namespace LethalCompany_Backend.Services
             else if (request.MailType == MailType.ForgotPasswordMail)
             {
                 mailContent.Subject = _configuration["MailService:MailContent:ForgotPasswordMail:Subject"]!;
-                mailContent.Body = _configuration["MailService:MailContent:ForgotPasswordMail:Body"]!;
+                mailContent.Body = _configuration["MailService:MailContent:ForgotPasswordMail:Body"]!.Replace("{UrlExtension}", request.UrlExtension);
             }
 
             MailboxAddress mailboxAddressFrom = new MailboxAddress(mailConfig.SenderName, mailConfig.SenderMail);
