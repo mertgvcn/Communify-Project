@@ -73,7 +73,17 @@ const ForgotPassword = (props: ForgotPasswordType) => {
 
     setTimeout(() => {
       setButtonBlocker(false)
-    }, 1000)
+    }, 2000)
+  }
+
+  const handleBack = () => {
+    toast.dismiss() //tam olarak çalışamadı
+    props.setForgotPasswordState(false)
+    props.setFormState({ loginFormState: true, registerFormState: false })
+  }
+
+  const handleClose = () => {
+    props.setForgotPasswordState(false)
   }
 
   return (
@@ -86,16 +96,11 @@ const ForgotPassword = (props: ForgotPasswordType) => {
 
           <div className="navigation-buttons">
             <div className='back-button'>
-              <IoMdArrowBack style={{ cursor: 'pointer' }}
-                onClick={() => {
-                  props.setForgotPasswordState(false)
-                  props.setFormState({ loginFormState: true, registerFormState: false })
-                }} />
+              <IoMdArrowBack style={{ cursor: 'pointer' }} onClick={handleBack} />
             </div>
 
             <div className='close-button'>
-              <IoCloseCircleOutline style={{ cursor: 'pointer' }}
-                onClick={() => props.setForgotPasswordState(false)} />
+              <IoCloseCircleOutline style={{ cursor: 'pointer' }} onClick={handleClose} />
             </div>
           </div>
 

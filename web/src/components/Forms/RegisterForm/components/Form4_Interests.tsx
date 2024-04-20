@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 //css
 import './styles/Form4_Interests.css'
 //types
@@ -29,6 +29,7 @@ type Form4Type = {
 }
 
 const Form4 = (props: Form4Type) => {
+    const [buttonBlocker, setButtonBlocker] = useState(false)
 
     const handleBack = () => {
         props.setRegisterPages({
@@ -41,6 +42,8 @@ const Form4 = (props: Form4Type) => {
     }
 
     const handleNext = async () => {
+        setButtonBlocker(true)
+
         if (props.selectedInterests.length <= 5) {
             await handleRegistration()
 
@@ -53,8 +56,12 @@ const Form4 = (props: Form4Type) => {
             })
         }
         else {
-            toast.error("Please select up to 5 interests")
+            toast.error("Please select up to 5 interests", {duration: 2000})
         }
+
+        setTimeout(() => {
+            setButtonBlocker(false)
+        }, 2000)
     }
 
     const handleRegistration = async () => {
@@ -126,7 +133,7 @@ const Form4 = (props: Form4Type) => {
 
             <div className='buttons'>
                 <SecondaryButton value='Back' width={100} height={40} fontSize={16} onClickFunction={handleBack} />
-                <PrimaryButton value='Next' width={100} height={40} fontSize={16} onClickFunction={handleNext} />
+                <PrimaryButton value='Next' width={100} height={40} fontSize={16} disabled={buttonBlocker} onClickFunction={handleNext} />
             </div>
 
         </form>

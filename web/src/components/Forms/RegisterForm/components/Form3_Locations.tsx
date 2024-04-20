@@ -12,7 +12,7 @@ import { IoLocationOutline } from "react-icons/io5";
 import useDynamicValidation from '../../../../hooks/useDynamicValidation';
 //helpers
 import { Form3Validator } from '../../../../validators/RegisterValidators/Form3Validator';
-import {toast} from 'react-hot-toast'
+import { toast } from 'react-hot-toast'
 //components
 import SecondaryButton from '../../../Elements/Buttons/SecondaryButton/SecondaryButton'
 import PrimaryButton from '../../../Elements/Buttons/PrimaryButton/PrimaryButton'
@@ -35,6 +35,16 @@ const Form3 = (props: Form3Type) => {
 
         props.setFormData({
             ...props.formData, [name]: value
+        })
+    }
+
+    const handleBack = () => {
+        props.setRegisterPages({
+            Form1: -650,
+            Form2: 0,
+            Form3: 650,
+            Form4: 650,
+            Form5: 650,
         })
     }
 
@@ -96,18 +106,8 @@ const Form3 = (props: Form3Type) => {
             </div>
 
             <div className='buttons'>
-                <SecondaryButton value='Back' width={100} height={40} fontSize={16}
-                    onClickFunction={() => {
-                        props.setRegisterPages({
-                            Form1: -650,
-                            Form2: 0,
-                            Form3: 650,
-                            Form4: 650,
-                            Form5: 650,
-                        })
-                    }} />
-                <PrimaryButton value='Next' width={100} height={40} fontSize={16}
-                    onClickFunction={handleNext} />
+                <SecondaryButton value='Back' width={100} height={40} fontSize={16} onClickFunction={handleBack} />
+                <PrimaryButton value='Next' width={100} height={40} fontSize={16} onClickFunction={handleNext} />
             </div>
 
         </form>

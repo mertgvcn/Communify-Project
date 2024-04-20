@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 //css
 import './styles/Form1_PersonalInfo.css'
 //types
@@ -30,6 +30,7 @@ type Form1Type = {
 const Form1 = (props: Form1Type) => {
     const formValidator = new Form1Validator()
     const { validationErrors, errorList } = useDynamicValidation(props.formData, formValidator, [props.formData.firstName, props.formData.lastName, props.formData.phoneNumber, props.formData.birthDate, props.formData.email])
+    const [buttonBlocker, setButtonBlocker] = useState(false)
 
     const handleChange = (e: any) => {
         const { name, value } = e.target
@@ -41,6 +42,8 @@ const Form1 = (props: Form1Type) => {
 
     const handleNext = async () => {
         if (Object.keys(errorList).length === 0) {
+            setButtonBlocker(true)
+
             if (!await EmailExists(props.formData.email)) {
                 props.setRegisterPages({
                     Form1: -650,
@@ -51,9 +54,13 @@ const Form1 = (props: Form1Type) => {
                 })
             }
             else {
-                toast.error("This email is not available")
+                toast.error("This email is not available", {duration: 2000})
             }
         }
+
+        setTimeout(() => {
+            setButtonBlocker(false)
+        }, 2000)
     }
 
     return (
@@ -106,8 +113,7 @@ const Form1 = (props: Form1Type) => {
 
             <div className="buttons">
                 <div style={{ float: 'right' }}>
-                    <PrimaryButton value={'Next'} width={100} height={40} fontSize={16}
-                        onClickFunction={handleNext} />
+                    <PrimaryButton value={'Next'} width={100} height={40} fontSize={16} disabled={buttonBlocker} onClickFunction={handleNext} />
                 </div>
             </div>
         </form>

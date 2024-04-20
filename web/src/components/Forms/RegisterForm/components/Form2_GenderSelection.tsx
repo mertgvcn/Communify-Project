@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 //css
 import './styles/Form2_GenderSelection.css'
 //types
@@ -19,12 +19,15 @@ type Form2Type = {
 }
 
 const Form2 = (props: Form2Type) => {
+    const [buttonBlocker, setButtonBlocker] = useState(false)
 
     const genderSelection = (selectedValue: Gender) => {
         props.setGenderState(selectedValue);
     }
 
     const handleNext = () => {
+        setButtonBlocker(true)
+
         if (props.genderState != null) {
             props.setRegisterPages({
                 Form1: -650,
@@ -35,8 +38,12 @@ const Form2 = (props: Form2Type) => {
             })
         }
         else {
-            toast.error("Please select your identity")
+            toast.error("Please select your identity", {duration: 2000})
         }
+
+        setTimeout(() => {
+            setButtonBlocker(false)
+        }, 2000)
     }
 
     const handleBack = () => {
@@ -80,7 +87,7 @@ const Form2 = (props: Form2Type) => {
 
             <div className='buttons'>
                 <SecondaryButton value='Back' width={100} height={40} fontSize={16} onClickFunction={handleBack}/>
-                <PrimaryButton value='Next' width={100} height={40} fontSize={16} onClickFunction={handleNext}/>
+                <PrimaryButton value='Next' width={100} height={40} fontSize={16} disabled={buttonBlocker} onClickFunction={handleNext}/>
             </div>
         </form>
     )

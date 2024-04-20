@@ -30,6 +30,7 @@ const SetPasswordPage = () => {
         confirmPassword: "",
     })
     const { validationErrors, errorList } = useDynamicValidation(formData, formValidator, [formData.password, formData.confirmPassword])
+    const [buttonBlocker, setButtonBlocker] = useState(false)
 
     //functions
     const handleChange = (e: any) => {
@@ -42,6 +43,8 @@ const SetPasswordPage = () => {
 
     const handleSubmit = async () => {
         if (Object.keys(errorList).length === 0) {
+            setButtonBlocker(true)
+
             await setPassword(formData.password)
 
             deleteCookie("jwt")
@@ -49,6 +52,7 @@ const SetPasswordPage = () => {
             navigate("/", { state: { loginFormState: true } })
             
             setTimeout(() => {
+                setButtonBlocker(false)
                 window.location.reload()
             }, 1000)
         }
@@ -73,8 +77,7 @@ const SetPasswordPage = () => {
                         errorMessage={validationErrors.confirmPassword} />
                 </div>
 
-                <PrimaryButton value={'Submit'} width={440} height={40} fontSize={16}
-                    onClickFunction={handleSubmit} />
+                <PrimaryButton value={'Submit'} width={440} height={40} fontSize={16} disabled={buttonBlocker} onClickFunction={handleSubmit} />
             </div>
         </div>
     )
