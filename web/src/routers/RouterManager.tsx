@@ -5,7 +5,6 @@ import { Roles } from "../models/entityModels/Token"
 import RouterGuest from "./RouterGuest"
 import RouterAdmin from "./RouterAdmin"
 import RouterUser from "./RouterUser"
-import RouterUnAuthorizedUser from "./RouterUnAuthorizedUser"
 
 
 type RouterManagerPropType = {
@@ -21,8 +20,6 @@ export default function RouterManager({ isLogin, userRole }: RouterManagerPropTy
             return <RouterUser />
         else if(userRole == Roles.Admin.valueOf()) 
             return <RouterAdmin />
-        else if(userRole == Roles.unAuthorizedUser.valueOf())
-            return <RouterUnAuthorizedUser />
     }
 
     return (

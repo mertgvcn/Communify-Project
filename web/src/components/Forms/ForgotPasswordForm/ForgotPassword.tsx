@@ -63,8 +63,6 @@ const ForgotPassword = (props: ForgotPasswordType) => {
       const data: ForgotPasswordResponse = (await response)
 
       if (data.isSuccess) {
-        setCookie("jwt", data.token, data.tokenExpireDate)
-
         setTimeout(() => {
           props.setForgotPasswordState(false)
         }, 1000)

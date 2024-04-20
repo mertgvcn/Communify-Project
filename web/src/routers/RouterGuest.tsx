@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar/Navbar';
 //pages
 import HomePage from '../pages/HomePage/HomePage';
 import ErrorPage from '../pages/ErrorPage/ErrorPage';
+import SetPasswordPage from '../pages/SetPasswordPage/SetPasswordPage';
 
 const RouterGuest = () => {
     const location = useLocation()
@@ -25,6 +26,7 @@ const RouterGuest = () => {
                 <Route path='/' element={<Layout />}>
                     <Route path="/" element={<HomePage role={Roles.Guest}/>} />
                     <Route path="/home" element={<HomePage role={Roles.Guest}/>} />
+                    <Route path="/setpassword" element={<SetPasswordPage />} />
                     <Route path="*" element={<ErrorPage />} />
                 </Route>
             </Routes>

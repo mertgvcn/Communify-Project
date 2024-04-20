@@ -46,7 +46,7 @@ public class AuthenticationController : Controller
         return await authenticationService.RegisterUserAsync(user);
     }
 
-    [Authorize(Roles = "unAuthorizedUser")]
+    [AllowAnonymous]
     [HttpPost("SetPassword")]
     public async Task SetPassword([FromBody] SetPasswordRequest request)
     {
