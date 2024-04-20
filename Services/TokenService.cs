@@ -1,56 +1,79 @@
 ﻿using Communify_Backend.Services.Interfaces;
 using CommunifyLibrary.Models;
+using CommunifyLibrary.Repository.Interfaces;
 using LethalCompany_Backend.Models.TokenModels;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Communify_Backend.Services
+namespace Communify_Backend.Services;
+
+public class TokenService : ITokenService
 {
-    public class TokenService : ITokenService
+    private readonly IConfiguration _configuration;
+    private readonly IPasswordTokenRepository _passwordTokenRepository;
+
+    public TokenService(IConfiguration configuration, IPasswordTokenRepository passwordTokenRepository)
     {
-        private readonly IConfiguration configuration;
+        _configuration = configuration;
+        _passwordTokenRepository = passwordTokenRepository;
+    }
 
-        public TokenService(IConfiguration configuration)
+    public Task<GenerateTokenResponse> GenerateTokenAsync(GenerateTokenRequest request)
+    {
+        SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["AppSettings:Secret"]));
+
+        var expireDate = request.ExpireDate;
+        List<Claim>? claims = null;
+
+        if (request.Role is not null)
         {
-            this.configuration = configuration;
+            claims = PrepareClaims(request.UserID, request.Role);
         }
 
-        public Task<GenerateTokenResponse> GenerateTokenAsync(GenerateTokenRequest request)
+        JwtSecurityToken jwt = new JwtSecurityToken(
+                issuer: _configuration["AppSettings:ValidIssuer"],
+                audience: _configuration["AppSettings:ValidAudience"],
+                claims: claims,
+                notBefore: DateTime.UtcNow,
+                expires: expireDate,
+                signingCredentials: new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256)
+
+            );
+
+        return Task.FromResult(new GenerateTokenResponse
         {
-            SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["AppSettings:Secret"]));
+            Token = new JwtSecurityTokenHandler().WriteToken(jwt),
+            TokenExpireDate = expireDate
+        });
+    }
 
-            var expireDate = request.ExpireDate;
-            var claims = PrepareClaims(request.UserID, request.Role);
-
-            JwtSecurityToken jwt = new JwtSecurityToken(
-                    issuer: configuration["AppSettings:ValidIssuer"],
-                    audience: configuration["AppSettings:ValidAudience"],
-                    claims: claims,
-                    notBefore: DateTime.UtcNow,
-                    expires: expireDate,
-                    signingCredentials: new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256)
-
-                );
-
-            return Task.FromResult(new GenerateTokenResponse
-            {
-                Token = new JwtSecurityTokenHandler().WriteToken(jwt),
-                TokenExpireDate = expireDate
-            });
-        }
-
-        public List<Claim> PrepareClaims(string userID, Role role)
+    public List<Claim> PrepareClaims(string userID, Role role)
+    {
+        var claims = new List<Claim>()
         {
-            var claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.NameIdentifier, userID),
-                new Claim(ClaimTypes.Role, role.Name),
-                new Claim("role", role.Name)
-            };
+            new Claim(ClaimTypes.NameIdentifier, userID),
+            new Claim(ClaimTypes.Role, role.Name),
+            new Claim("role", role.Name)
+        };
 
-            return claims;
-        }
+        return claims;
+    }
+
+    public async Task CreatePasswordTokenAsync(long userId)
+    {
+        var token = await GenerateTokenAsync(new GenerateTokenRequest
+        {
+            UserID = userId.ToString(),
+            ExpireDate = DateTime.UtcNow.Add(TimeSpan.FromMinutes(5))
+        });
+
+        await _passwordTokenRepository.AddAsync(new PasswordToken
+        {
+            Token = token.Token,
+            ExpireDate = token.TokenExpireDate,
+            UserId = userId,
+        });
     }
 }

@@ -12,7 +12,10 @@ public class PasswordTokenConfiguration : BaseEntityConfiguration<PasswordToken>
             .IsRequired(true)
             .HasMaxLength(65);
 
+        builder.Property(x => x.ExpireDate)
+            .IsRequired(true);
+
         builder.Property(x => x.UserId)
-            .IsRequired(false);
+            .IsRequired(true);
     }
 }

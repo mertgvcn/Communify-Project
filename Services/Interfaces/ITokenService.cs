@@ -10,6 +10,6 @@ namespace Communify_Backend.Services.Interfaces
 
         List<Claim> PrepareClaims(string userID, Role role);
 
-
+        Task CreatePasswordTokenAsync(long userId);
     }
 }
