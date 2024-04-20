@@ -31,6 +31,8 @@ app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(
 //Database'e DateTime gönderirken sýkýntý çýkarmasýn diye eklendi
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
+app.MigrateDatabaseOnStart();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
