@@ -15,6 +15,21 @@ type Form5Type = {
 }
 
 const Form5 = (props: Form5Type) => {
+    
+    const handleDone = () => {
+        props.setRegisterPages({
+            Form1: 0,
+            Form2: 650,
+            Form3: 650,
+            Form4: 650,
+            Form5: 650
+        })
+        props.setFormState({
+            loginFormState: false,
+            registerFormState: false
+        })
+    }
+
     return (
         <form id='register-form5' style={{ left: props.registerPages.Form5 }}>
 
@@ -27,20 +42,7 @@ const Form5 = (props: Form5Type) => {
             </span>
 
             <div className='button' style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 40 }}>
-                <PrimaryButton value='Done' width={100} height={40} fontSize={16}
-                    onClickFunction={() => {
-                        props.setRegisterPages({
-                            Form1: 0,
-                            Form2: 650,
-                            Form3: 650,
-                            Form4: 650,
-                            Form5: 650
-                        })
-                        props.setFormState({
-                            loginFormState: false,
-                            registerFormState: false
-                        })
-                    }} />
+                <PrimaryButton value='Done' width={100} height={40} fontSize={16} onClickFunction={handleDone} />
             </div>
 
         </form>

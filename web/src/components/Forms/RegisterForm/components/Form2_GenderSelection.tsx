@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 //css
 import './styles/Form2_GenderSelection.css'
 //types
 import { FormLocationsType } from '../types/FormLocationsType'
 import { Gender } from '../../../../models/entityModels/User'
+//helpers
+import toast from 'react-hot-toast';
 //components
 import SecondaryButton from '../../../Elements/Buttons/SecondaryButton/SecondaryButton'
 import PrimaryButton from '../../../Elements/Buttons/PrimaryButton/PrimaryButton'
@@ -17,9 +19,41 @@ type Form2Type = {
 }
 
 const Form2 = (props: Form2Type) => {
+    const [buttonBlocker, setButtonBlocker] = useState(false)
 
     const genderSelection = (selectedValue: Gender) => {
         props.setGenderState(selectedValue);
+    }
+
+    const handleNext = () => {
+        setButtonBlocker(true)
+
+        if (props.genderState != null) {
+            props.setRegisterPages({
+                Form1: -650,
+                Form2: -650,
+                Form3: 0,
+                Form4: 650,
+                Form5: 650,
+            })
+        }
+        else {
+            toast.error("Please select your identity", {duration: 2000})
+        }
+
+        setTimeout(() => {
+            setButtonBlocker(false)
+        }, 2000)
+    }
+
+    const handleBack = () => {
+        props.setRegisterPages({
+            Form1: 0,
+            Form2: 650,
+            Form3: 650,
+            Form4: 650,
+            Form5: 650,
+        })
     }
 
     return (
@@ -52,29 +86,8 @@ const Form2 = (props: Form2Type) => {
             </div>
 
             <div className='buttons'>
-                <SecondaryButton value='Back' width={100} height={40} fontSize={16}
-                    onClickFunction={() => {
-                        props.setRegisterPages({
-                            Form1: 0,
-                            Form2: 650,
-                            Form3: 650,
-                            Form4: 650,
-                            Form5: 650,
-                        })
-                    }} />
-                <PrimaryButton value='Next' width={100} height={40} fontSize={16}
-                    onClickFunction={() => {
-                        if (props.genderState != null) {
-                            props.setRegisterPages({
-                                Form1: -650,
-                                Form2: -650,
-                                Form3: 0,
-                                Form4: 650,
-                                Form5: 650,
-                            })
-                        }
-                        {/* Else için hata eklicez */ }
-                    }} />
+                <SecondaryButton value='Back' width={100} height={40} fontSize={16} onClickFunction={handleBack}/>
+                <PrimaryButton value='Next' width={100} height={40} fontSize={16} disabled={buttonBlocker} onClickFunction={handleNext}/>
             </div>
         </form>
     )

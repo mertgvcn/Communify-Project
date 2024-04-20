@@ -40,6 +40,7 @@ namespace Communify_Backend
             collection.AddScoped<IHttpContextService, HttpContextService>();
             collection.AddScoped<IAuthenticationService, AuthenticationService>();
             collection.AddScoped<ITokenService, TokenService>();
+            collection.AddScoped<ICryptionService, CryptionService>();
             collection.AddScoped<IEmailSender, EmailSender>();
         }
 

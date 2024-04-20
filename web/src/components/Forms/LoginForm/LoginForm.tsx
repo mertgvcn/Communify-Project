@@ -1,8 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 //css
 import './LoginForm.css'
 //types
 import { FormStateType } from '../RegisterForm/types/FormStateType';
+//hooks
+import useDynamicValidation from '../../../hooks/useDynamicValidation';
 //models
 import { InterestViewModel } from '../../../models/viewModels/InterestModels';
 import { LoginRequest, LoginResponse } from '../../../models/parameterModels/AuthenticationParameterModels';
@@ -11,7 +13,7 @@ import { GetInterests } from '../../../utils/apis/InterestAPI';
 import { login } from '../../../utils/apis/AuthenticationAPI';
 import { setCookie } from '../../../utils/Cookie';
 import { LoginValidator } from '../../../validators/LoginValidator/LoginValidator';
-import useDynamicValidation from '../../../hooks/useDynamicValidation';
+import toast, { Toaster } from 'react-hot-toast';
 //icons
 import { RiLockPasswordLine } from "react-icons/ri";
 import { IoCloseCircleOutline } from "react-icons/io5";
@@ -42,6 +44,7 @@ const LoginForm = (props: LoginFormType) => {
         password: ""
     });
     const { validationErrors, errorList } = useDynamicValidation(formData, formValidator, [formData.email, formData.password])
+    const [buttonBlocker, setButtonBlocker] = useState(false)
 
     //functions
     const handleChange = (e: any) => {
@@ -54,6 +57,8 @@ const LoginForm = (props: LoginFormType) => {
 
     const handleLogin = async () => {
         if (Object.keys(errorList).length === 0) {
+            setButtonBlocker(true)
+
             const loginRequest: LoginRequest = {
                 email: formData.email,
                 password: formData.password
@@ -63,14 +68,27 @@ const LoginForm = (props: LoginFormType) => {
 
             if (response.authenticateResult) {
                 setCookie("jwt", response.authToken, response.accessTokenExpireDate)
-                window.location.href = "/"
+                toast.success("Login successful.")
+
+                setTimeout(() => {
+                    window.location.href = "/"
+                }, 1000)
+            }
+            else {
+                toast.error("Email or password is wrong.", {duration: 2000})
             }
         }
+
+        setTimeout(() => {
+            setButtonBlocker(false)
+        }, 2000)
     }
 
     const handleForgotPassword = () => {
+        toast.dismiss()
+
         props.setFormState({
-            loginFormState:false,
+            loginFormState: false,
             registerFormState: false
         })
 
@@ -78,12 +96,20 @@ const LoginForm = (props: LoginFormType) => {
     }
 
     const handleRegisterForm = async () => {
+        toast.dismiss()
+
         await fetchInterestList()
 
         props.setFormState({
             loginFormState: false,
             registerFormState: true
         })
+    }
+
+    const handleClose = () => {
+        toast.dismiss()
+
+        props.setFormState({ loginFormState: false, registerFormState: false })
     }
 
     const fetchInterestList = async () => {
@@ -94,6 +120,8 @@ const LoginForm = (props: LoginFormType) => {
 
     return (
         <div className='login-form-background'>
+            <Toaster toastOptions={{ style: { fontSize: 14 } }} />
+
             <div className='login-form-wrapper'>
 
                 <div className="login-form">
@@ -115,7 +143,7 @@ const LoginForm = (props: LoginFormType) => {
 
                     <div style={{ marginTop: '0.5rem' }}>
                         <TextButton value={'Forgot password?'} width={280} height={40} fontSize={16} onClickFunction={handleForgotPassword} />
-                        <PrimaryButton value={'Log In'} width={280} height={40} fontSize={16} onClickFunction={handleLogin} />
+                        <PrimaryButton value={'Log In'} width={280} height={40} fontSize={16} disabled={buttonBlocker} onClickFunction={handleLogin} />
                     </div>
                 </div>
 
@@ -125,8 +153,7 @@ const LoginForm = (props: LoginFormType) => {
                     }
                 }>
                     <div className='close-button-wrapper'>
-                        <IoCloseCircleOutline style={{ float: 'right', cursor: 'pointer' }}
-                            onClick={() => props.setFormState({ loginFormState: false, registerFormState: false })} />
+                        <IoCloseCircleOutline style={{ float: 'right', cursor: 'pointer' }} onClick={handleClose} />
                     </div>
 
                     <div className="go-register-body">
@@ -134,8 +161,7 @@ const LoginForm = (props: LoginFormType) => {
                         <span className='body'>Join our community and unlock a world of sharing. Sign up now to connect and communify!</span>
 
                         <div className='signup-button-wrapper'>
-                            <SecondaryButton value={'Sign Up'} width={120} height={40} fontSize={16}
-                                onClickFunction={handleRegisterForm} />
+                            <SecondaryButton value={'Sign Up'} width={120} height={40} fontSize={16} onClickFunction={handleRegisterForm} />
                         </div>
                     </div>
                 </div>

@@ -14,6 +14,7 @@ public class AuthenticationService : IAuthenticationService
     private readonly IUserRepository _userRepository;
     private readonly IInterestRepository _interestRepository;
     private readonly ITokenService _tokenService;
+    private readonly ICryptionService _cryptionService;
     private readonly IEmailSender _emailSender;
     private readonly IHttpContextService _httpContextService;
 
@@ -21,6 +22,7 @@ public class AuthenticationService : IAuthenticationService
         IUserRepository userRepository,
         IInterestRepository interestRepository,
         ITokenService tokenService,
+        ICryptionService cryptionService,
         IEmailSender emailSender,
         IHttpContextService httpContextService
         )
@@ -28,6 +30,7 @@ public class AuthenticationService : IAuthenticationService
         _userRepository = userRepository;
         _interestRepository = interestRepository;
         _tokenService = tokenService;
+        _cryptionService = cryptionService;
         _emailSender = emailSender;
         _httpContextService = httpContextService;
     }
@@ -48,8 +51,9 @@ public class AuthenticationService : IAuthenticationService
         };
 
         var user = _userRepository.GetByEmail(request.Email).Include(user => user.Role).FirstOrDefault();
+        var plainPassword = await _cryptionService.Decrypt(request.Password);
 
-        if (user is not null && BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
+        if (user is not null && BCrypt.Net.BCrypt.Verify(plainPassword, user.Password))
         {
             var generatedToken = await _tokenService.GenerateTokenAsync(new GenerateTokenRequest
             {
@@ -72,6 +76,15 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task<ForgotPasswordResponse> ForgotPasswordAsync(ForgotPasswordRequest request)
     {
+        var emailExists = await EmailExistsAsync(new EmailExistsRequest() { Email = request.Email });
+        if (!emailExists)
+            return new ForgotPasswordResponse()
+            {
+                isSuccess = false,
+                Token = null,
+                TokenExpireDate = null
+            };
+
         var user = await _userRepository.GetByEmail(request.Email).SingleAsync();
         user.Password = null;
         user.RoleId = 3;
@@ -152,8 +165,9 @@ public class AuthenticationService : IAuthenticationService
     public async Task SetPasswordAsync(SetPasswordRequest request)
     {
         var user = await _userRepository.GetAll().Where(a => a.Id == _httpContextService.GetCurrentUserID()).SingleAsync();
+        var plainPassword = await _cryptionService.Decrypt(request.Password);
 
-        string hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
+        string hashedPassword = BCrypt.Net.BCrypt.HashPassword(plainPassword);
 
         user.RoleId = 2;
         user.Password = hashedPassword;

@@ -3,5 +3,6 @@ export type ButtonType = {
     width: number|string,
     height: number|string,
     fontSize?: number,
+    disabled?: boolean,
     onClickFunction: any
 }

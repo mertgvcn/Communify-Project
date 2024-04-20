@@ -1,17 +1,20 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 //css
 import './ForgotPassword.css'
 //types
 import { FormStateType } from '../RegisterForm/types/FormStateType';
+import { ForgotPasswordResponse } from '../../../models/parameterModels/AuthenticationParameterModels';
 //icons
 import { IoMdArrowBack } from "react-icons/io";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { MdOutlineMail } from "react-icons/md";
+//hooks
+import useDynamicValidation from '../../../hooks/useDynamicValidation';
 //helpers
 import { setCookie } from '../../../utils/Cookie';
 import { ForgotPasswordValidator } from '../../../validators/RegisterValidators/ForgotPasswordValidator';
-import { forgotPassword, EmailExists } from '../../../utils/apis/AuthenticationAPI';
-import useDynamicValidation from '../../../hooks/useDynamicValidation';
+import { forgotPassword } from '../../../utils/apis/AuthenticationAPI';
+import toast, { Toaster } from 'react-hot-toast';
 //components
 import TextInput from '../../Elements/TextInput/TextInput';
 import PrimaryButton from '../../Elements/Buttons/PrimaryButton/PrimaryButton';
@@ -32,6 +35,7 @@ const ForgotPassword = (props: ForgotPasswordType) => {
     email: ""
   })
   const { validationErrors, errorList } = useDynamicValidation(formData, formValidator, [formData.email])
+  const [buttonBlocker, setButtonBlocker] = useState(false)
 
   //functions
   const handleChange = (e: any) => {
@@ -44,40 +48,59 @@ const ForgotPassword = (props: ForgotPasswordType) => {
 
   const handleSendEmail = async () => {
     if (Object.keys(errorList).length === 0) {
-      if (await EmailExists(formData.email)) {
-        const response = await forgotPassword(formData.email)
-        
-        if (response.isSuccess)
-          setCookie("jwt", response.token, response.tokenExpireDate)
+      setButtonBlocker(true)
+      const response = forgotPassword(formData.email)
 
-        props.setForgotPasswordState(false)
+      toast.promise(
+        response,
+        {
+          loading: 'Email sending...',
+          success: <b>Email successfully sent.</b>,
+          error: null
+        }
+      )
 
-        //TODO: toast notification ile mail gönderildi bilgisi ver
-      }
-      else {
-        //TODO: toast notification eklenecek
+      const data: ForgotPasswordResponse = (await response)
+
+      if (data.isSuccess) {
+        setCookie("jwt", data.token, data.tokenExpireDate)
+
+        setTimeout(() => {
+          props.setForgotPasswordState(false)
+        }, 1000)
       }
     }
+
+    setTimeout(() => {
+      setButtonBlocker(false)
+    }, 2000)
+  }
+
+  const handleBack = () => {
+    toast.dismiss() //tam olarak çalışamadı
+    props.setForgotPasswordState(false)
+    props.setFormState({ loginFormState: true, registerFormState: false })
+  }
+
+  const handleClose = () => {
+    props.setForgotPasswordState(false)
   }
 
   return (
     <div className='forgot-password-background'>
+      <Toaster toastOptions={{ style: { fontSize: 14 } }} />
+
       <div className="forgot-password-wrapper">
 
         <div className="row">
 
           <div className="navigation-buttons">
             <div className='back-button'>
-              <IoMdArrowBack style={{ cursor: 'pointer' }}
-                onClick={() => {
-                  props.setForgotPasswordState(false)
-                  props.setFormState({ loginFormState: true, registerFormState: false })
-                }} />
+              <IoMdArrowBack style={{ cursor: 'pointer' }} onClick={handleBack} />
             </div>
 
             <div className='close-button'>
-              <IoCloseCircleOutline style={{ cursor: 'pointer' }}
-                onClick={() => props.setForgotPasswordState(false)} />
+              <IoCloseCircleOutline style={{ cursor: 'pointer' }} onClick={handleClose} />
             </div>
           </div>
 
@@ -94,7 +117,7 @@ const ForgotPassword = (props: ForgotPasswordType) => {
         </div>
 
         <div className='confirm-button'>
-          <PrimaryButton width={460} height={36} value='Send an email' onClickFunction={handleSendEmail} />
+          <PrimaryButton width={460} height={36} value='Send an email' onClickFunction={handleSendEmail} disabled={buttonBlocker} />
         </div>
 
       </div>
