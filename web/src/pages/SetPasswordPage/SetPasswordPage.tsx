@@ -77,7 +77,7 @@ const SetPasswordPage = () => {
     }
 
     const fetchPasswordTokenByTokenAsync = async (token: string) => {
-        const response = await GetPasswordTokenByToken(token!)
+        const response = await GetPasswordTokenByToken(token)
         if(response != null)
             setPasswordToken(response)
     }
