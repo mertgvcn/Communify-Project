@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 //css
 import './SetPasswordPage.css'
+//models
+import { PasswordToken } from '../../models/entityModels/Token';
 //icons
 import { RiLockPasswordLine } from "react-icons/ri";
 //hooks
@@ -14,6 +16,8 @@ import toast, { Toaster } from 'react-hot-toast';
 //components
 import TextInput from '../../components/Elements/TextInput/TextInput'
 import PrimaryButton from '../../components/Elements/Buttons/PrimaryButton/PrimaryButton';
+import ErrorPage from '../ErrorPage/ErrorPage';
+import { GetPasswordTokenByToken } from '../../utils/apis/PasswordTokenAPI';
 
 export type SetPasswordFormData = {
     password: string,
@@ -21,20 +25,29 @@ export type SetPasswordFormData = {
 }
 
 const SetPasswordPage = () => {
-    const navigate = useNavigate()
     const formValidator = new SetPasswordValidator()
-    
+
     //states
     const [formData, setFormData] = useState<SetPasswordFormData>({
         password: "",
         confirmPassword: "",
     })
+    const [passwordToken, setPasswordToken] = useState<PasswordToken | null>(null)
+    const [buttonBlocker, setButtonBlocker] = useState(false)
+
+    //hooks
+    const navigate = useNavigate()
     const { validationErrors, errorList } = useDynamicValidation(formData, formValidator, [formData.password, formData.confirmPassword])
     const [searchParams, setSearchParams] = useSearchParams();
-    const [buttonBlocker, setButtonBlocker] = useState(false)
-    
-    console.log(searchParams.get("token"))
-    
+
+    useEffect(() => {
+        const token = searchParams.get("token")
+
+        if (token != null)
+            fetchPasswordTokenByTokenAsync(token)
+
+    }, [searchParams.get("token")])
+
     //functions
     const handleChange = (e: any) => {
         const { name, value } = e.target
@@ -61,7 +74,13 @@ const SetPasswordPage = () => {
         }
     }
 
-    return (
+    const fetchPasswordTokenByTokenAsync = async (token: string) => {
+        const response = await GetPasswordTokenByToken(token!)
+        if(response != null)
+            setPasswordToken(response)
+    }
+
+    return passwordToken ? (
         <div className="set-password-wrapper">
             <Toaster toastOptions={{ style: { fontSize: 14 } }} />
 
@@ -83,7 +102,7 @@ const SetPasswordPage = () => {
                 <PrimaryButton value={'Submit'} width={440} height={40} fontSize={16} disabled={buttonBlocker} onClickFunction={handleSubmit} />
             </div>
         </div>
-    )
+    ) : <ErrorPage />
 }
 
 export default SetPasswordPage

@@ -7,4 +7,5 @@ public interface IPasswordTokenRepository
     Task DeleteAsync(PasswordToken Entity);
     Task<PasswordToken> GetByIdAsync(long id);
     Task<PasswordToken> AddAsync(PasswordToken Entity);
+    Task<PasswordToken> GetByTokenAsync(string token);
 }

@@ -1,3 +1,11 @@
+import { IBaseEntity } from "./BaseEntity";
+
+export interface PasswordToken extends IBaseEntity {
+    token : string,
+    expireDate : Date,
+    userId : number
+}
+
 export interface Token {
     role : string;
     aud : string;

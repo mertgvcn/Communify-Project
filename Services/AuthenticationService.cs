@@ -76,12 +76,7 @@ public class AuthenticationService : IAuthenticationService
     {
         var emailExists = await EmailExistsAsync(new EmailExistsRequest() { Email = request.Email });
         if (!emailExists)
-            return new ForgotPasswordResponse()
-            {
-                isSuccess = false,
-                Token = null,
-                TokenExpireDate = null
-            };
+            return new ForgotPasswordResponse() { isSuccess = false };
 
         var userId = await _userRepository.GetIdByEmailAsync(request.Email);
         var generatedToken = await _tokenService.CreatePasswordTokenAsync(userId);
@@ -93,12 +88,7 @@ public class AuthenticationService : IAuthenticationService
             UrlExtension = "setpassword?token=" + generatedToken.Token
         });
 
-        return new ForgotPasswordResponse()
-        {
-            isSuccess = true,
-            Token = generatedToken.Token,
-            TokenExpireDate = generatedToken.TokenExpireDate
-        };
+        return new ForgotPasswordResponse() { isSuccess = true };
     }
 
     public async Task<UserRegisterResponse> RegisterUserAsync(UserRegisterRequest request)
@@ -152,7 +142,7 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task SetPasswordAsync(SetPasswordRequest request)
     {
-        var user = await _userRepository.GetAll().Where(a => a.Id == _httpContextService.GetCurrentUserID()).SingleAsync();
+        var user = await _userRepository.GetAll().Where(a => a.Id == request.UserId).SingleAsync();
         var plainPassword = await _cryptionService.Decrypt(request.Password);
 
         string hashedPassword = BCrypt.Net.BCrypt.HashPassword(plainPassword);

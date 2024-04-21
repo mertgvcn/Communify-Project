@@ -16,8 +16,6 @@ export type LoginResponse = {
 
 export type ForgotPasswordResponse = {
     isSuccess: boolean,
-    token: string,
-    tokenExpireDate: Date
 }
 
 export type RegisterRequest = {
