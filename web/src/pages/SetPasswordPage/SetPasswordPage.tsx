@@ -6,7 +6,7 @@ import { RiLockPasswordLine } from "react-icons/ri";
 //hooks
 import useDynamicValidation from '../../hooks/useDynamicValidation';
 //helpers
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { deleteCookie } from '../../utils/Cookie';
 import { setPassword } from '../../utils/apis/AuthenticationAPI';
 import { SetPasswordValidator } from '../../validators/RegisterValidators/SetPasswordValidator';
@@ -23,15 +23,18 @@ export type SetPasswordFormData = {
 const SetPasswordPage = () => {
     const navigate = useNavigate()
     const formValidator = new SetPasswordValidator()
-
+    
     //states
     const [formData, setFormData] = useState<SetPasswordFormData>({
         password: "",
         confirmPassword: "",
     })
     const { validationErrors, errorList } = useDynamicValidation(formData, formValidator, [formData.password, formData.confirmPassword])
+    const [searchParams, setSearchParams] = useSearchParams();
     const [buttonBlocker, setButtonBlocker] = useState(false)
-
+    
+    console.log(searchParams.get("token"))
+    
     //functions
     const handleChange = (e: any) => {
         const { name, value } = e.target
@@ -50,7 +53,7 @@ const SetPasswordPage = () => {
             deleteCookie("jwt")
             toast.success("Password set successfully")
             navigate("/", { state: { loginFormState: true } })
-            
+
             setTimeout(() => {
                 setButtonBlocker(false)
                 window.location.reload()
@@ -60,7 +63,7 @@ const SetPasswordPage = () => {
 
     return (
         <div className="set-password-wrapper">
-            <Toaster toastOptions={{style: {fontSize: 14}}}/>
+            <Toaster toastOptions={{ style: { fontSize: 14 } }} />
 
             <div className='set-password-container'>
                 <span className='set-password-title'>Please Set Your Password</span>
