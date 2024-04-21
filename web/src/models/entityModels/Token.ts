@@ -1,7 +1,7 @@
 import { IBaseEntity } from "./BaseEntity";
 import { User } from "./User";
 
-export interface PasswordToken extends IBaseEntity {
+export interface PasswordToken extends IBaseEntity { //view model oluştur ve, token ve expireDate olsun
     token : string,
     expireDate : Date,
     userId : number,

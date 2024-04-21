@@ -143,21 +143,25 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task SetPasswordAsync(SetPasswordRequest request)
     {
-        if (DateTime.UtcNow > request.PasswordToken.ExpireDate)
+        var passwordToken = await _passwordTokenRepository.GetByTokenAsync(request.Token);
+
+        if (passwordToken != null)
         {
-            await _passwordTokenRepository.DeleteAsync(request.PasswordToken);
-            return;
+            if (DateTime.UtcNow < passwordToken.ExpireDate)
+            {
+                var user = await _userRepository.GetAll().Where(a => a.Id == passwordToken.UserId).SingleAsync();
+                var plainPassword = await _cryptionService.Decrypt(request.Password);
+
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(plainPassword);
+
+                user.RoleId = 2;
+                user.Password = hashedPassword;
+
+                await _userRepository.UpdateAsync(user);
+            }
+
+            await _passwordTokenRepository.DeleteAsync(passwordToken);
         }
-
-        var user = await _userRepository.GetAll().Where(a => a.Id == request.PasswordToken.UserId).SingleAsync();
-        var plainPassword = await _cryptionService.Decrypt(request.Password);
-
-        string hashedPassword = BCrypt.Net.BCrypt.HashPassword(plainPassword);
-
-        user.RoleId = 2;
-        user.Password = hashedPassword;
-
-        await _userRepository.UpdateAsync(user);
     }
 }
 

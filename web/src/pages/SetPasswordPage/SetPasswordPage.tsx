@@ -27,6 +27,7 @@ export type SetPasswordFormData = {
 const SetPasswordPage = () => {
     const navigate = useNavigate()
     const [searchParams, setSearchParams] = useSearchParams();
+    const token = searchParams.get("token")
 
     //states
     const [formData, setFormData] = useState<SetPasswordFormData>({
@@ -39,15 +40,12 @@ const SetPasswordPage = () => {
     const formValidator = new SetPasswordValidator()
     const { validationErrors, errorList } = useDynamicValidation(formData, formValidator, [formData.password, formData.confirmPassword])
 
+    //functions
     useEffect(() => {
-        const token = searchParams.get("token")
-
         if (token != null)
             fetchPasswordTokenByTokenAsync(token)
+    }, [])
 
-    }, [searchParams.get("token")])
-
-    //functions
     const handleChange = (e: any) => {
         const { name, value } = e.target
 
@@ -61,7 +59,7 @@ const SetPasswordPage = () => {
             setButtonBlocker(true)
             
             const setPasswordRequest: SetPasswordRequest = {
-                passwordToken: passwordToken!,
+                passwordToken: passwordToken!, //password token view model gönder 
                 password: formData.password
             }
             await setPassword(setPasswordRequest)
@@ -77,7 +75,7 @@ const SetPasswordPage = () => {
     }
 
     const fetchPasswordTokenByTokenAsync = async (token: string) => {
-        const response = await GetPasswordTokenByToken(token)
+        const response = await GetPasswordTokenByToken(token) //password token dönmesin, boolean dönsün
         if(response != null)
             setPasswordToken(response)
     }
