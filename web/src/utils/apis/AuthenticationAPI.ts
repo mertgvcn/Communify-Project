@@ -4,7 +4,7 @@ import { getCookie } from "../Cookie"
 //helpers
 import { Encrypt } from "../Cryption"
 //models
-import { ForgotPasswordResponse, LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from "../../models/parameterModels/AuthenticationParameterModels"
+import { ForgotPasswordResponse, LoginRequest, LoginResponse, RegisterRequest, RegisterResponse, SetPasswordRequest } from "../../models/parameterModels/AuthenticationParameterModels"
 
 const baseUrl = process.env.REACT_APP_BASEURL
 const API_KEY = 'bearer ' + getCookie("jwt")
@@ -65,10 +65,11 @@ export const register = async (request: RegisterRequest): Promise<RegisterRespon
     return response.data
 }
 
-export const setPassword = async (password: string): Promise<boolean> => {
-    const encryptedPassword = await Encrypt(password)
+export const setPassword = async (request: SetPasswordRequest): Promise<boolean> => {
+    const encryptedPassword = await Encrypt(request.password)
 
     const response = await axios.post(baseUrl + '/api/Authentication/SetPassword', {
+        userId: request.userId,
         password: encryptedPassword
     }, {
         headers: {

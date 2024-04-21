@@ -38,3 +38,8 @@ export type RegisterResponse = {
     token: string,
     tokenExpireDate: Date
 }
+
+export type SetPasswordRequest = {
+    userId: number,
+    password: string
+}

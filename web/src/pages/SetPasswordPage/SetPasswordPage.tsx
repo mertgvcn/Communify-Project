@@ -9,7 +9,6 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import useDynamicValidation from '../../hooks/useDynamicValidation';
 //helpers
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { deleteCookie } from '../../utils/Cookie';
 import { setPassword } from '../../utils/apis/AuthenticationAPI';
 import { SetPasswordValidator } from '../../validators/RegisterValidators/SetPasswordValidator';
 import toast, { Toaster } from 'react-hot-toast';
@@ -18,6 +17,7 @@ import TextInput from '../../components/Elements/TextInput/TextInput'
 import PrimaryButton from '../../components/Elements/Buttons/PrimaryButton/PrimaryButton';
 import ErrorPage from '../ErrorPage/ErrorPage';
 import { GetPasswordTokenByToken } from '../../utils/apis/PasswordTokenAPI';
+import { SetPasswordRequest } from '../../models/parameterModels/AuthenticationParameterModels';
 
 export type SetPasswordFormData = {
     password: string,
@@ -25,7 +25,8 @@ export type SetPasswordFormData = {
 }
 
 const SetPasswordPage = () => {
-    const formValidator = new SetPasswordValidator()
+    const navigate = useNavigate()
+    const [searchParams, setSearchParams] = useSearchParams();
 
     //states
     const [formData, setFormData] = useState<SetPasswordFormData>({
@@ -34,11 +35,9 @@ const SetPasswordPage = () => {
     })
     const [passwordToken, setPasswordToken] = useState<PasswordToken | null>(null)
     const [buttonBlocker, setButtonBlocker] = useState(false)
-
-    //hooks
-    const navigate = useNavigate()
+    
+    const formValidator = new SetPasswordValidator()
     const { validationErrors, errorList } = useDynamicValidation(formData, formValidator, [formData.password, formData.confirmPassword])
-    const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
         const token = searchParams.get("token")
@@ -61,9 +60,12 @@ const SetPasswordPage = () => {
         if (Object.keys(errorList).length === 0) {
             setButtonBlocker(true)
 
-            await setPassword(formData.password)
+            const setPasswordRequest: SetPasswordRequest = {
+                userId: passwordToken!.userId,
+                password: formData.password
+            }
+            await setPassword(setPasswordRequest)
 
-            deleteCookie("jwt")
             toast.success("Password set successfully")
             navigate("/", { state: { loginFormState: true } })
 
