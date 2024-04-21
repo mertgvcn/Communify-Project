@@ -4,14 +4,14 @@ import './styles/Form4_Interests.css'
 //types
 import { FormDataType } from '../types/FormDataType'
 import { FormLocationsType } from '../types/FormLocationsType'
+//models
+import { InterestViewModel } from '../../../../models/viewModels/InterestViewModel'
+import { Genders } from '../../../../models/enums/Genders'
 //helpers
 import { RegisterRequest, RegisterResponse } from '../../../../models/parameterModels/AuthenticationParameterModels'
 import { register } from '../../../../utils/apis/AuthenticationAPI'
 import { setCookie } from '../../../../utils/Cookie'
 import { toast } from 'react-hot-toast'
-//models
-import { Gender } from '../../../../models/entityModels/User'
-import { InterestViewModel } from '../../../../models/viewModels/InterestModels'
 //components
 import SecondaryButton from '../../../Elements/Buttons/SecondaryButton/SecondaryButton'
 import PrimaryButton from '../../../Elements/Buttons/PrimaryButton/PrimaryButton'
@@ -25,7 +25,7 @@ type Form4Type = {
     setSelectedInterests: React.Dispatch<React.SetStateAction<InterestViewModel[]>>,
 
     formData: FormDataType,
-    genderState: Gender | null
+    genderState: Genders | null
 }
 
 const Form4 = (props: Form4Type) => {

@@ -6,7 +6,7 @@ import { FormStateType } from '../RegisterForm/types/FormStateType';
 //hooks
 import useDynamicValidation from '../../../hooks/useDynamicValidation';
 //models
-import { InterestViewModel } from '../../../models/viewModels/InterestModels';
+import { InterestViewModel } from '../../../models/viewModels/InterestViewModel';
 import { LoginRequest, LoginResponse } from '../../../models/parameterModels/AuthenticationParameterModels';
 //helpers
 import { GetInterests } from '../../../utils/apis/InterestAPI';

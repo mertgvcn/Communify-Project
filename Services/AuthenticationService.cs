@@ -73,11 +73,10 @@ public class AuthenticationService : IAuthenticationService
         return await Task.FromResult(response);
     }
 
-    public async Task<ForgotPasswordResponse> ForgotPasswordAsync(ForgotPasswordRequest request)
+    public async Task ForgotPasswordAsync(ForgotPasswordRequest request)
     {
         var emailExists = await EmailExistsAsync(new EmailExistsRequest() { Email = request.Email });
-        if (!emailExists)
-            return new ForgotPasswordResponse() { isSuccess = false };
+        if (!emailExists) return;
 
         var userId = await _userRepository.GetIdByEmailAsync(request.Email);
         var generatedToken = await _tokenService.CreatePasswordTokenAsync(userId);
@@ -88,8 +87,6 @@ public class AuthenticationService : IAuthenticationService
             MailType = MailType.ForgotPasswordMail,
             UrlExtension = "setpassword?token=" + generatedToken.Token
         });
-
-        return new ForgotPasswordResponse() { isSuccess = true };
     }
 
     public async Task<UserRegisterResponse> RegisterUserAsync(UserRegisterRequest request)

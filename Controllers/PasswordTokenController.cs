@@ -18,11 +18,7 @@ public class PasswordTokenController : Controller
     }
 
 
-    [HttpPost("GetPasswordTokenByToken")]
-    public async Task<JsonResult> GetPasswordTokenByToken(GetPasswordTokenByTokenRequest request)
-    {
-        var passwordToken = await _passwordTokenRepository.GetByTokenAsync(request.Token);
-
-        return new JsonResult(passwordToken);
-    }
+    [HttpPost("PasswordTokenExists")]
+    public async Task<bool> PasswordTokenExists(PasswordTokenExists request)
+        => await _passwordTokenRepository.PasswordTokenExistsAsync(request.Token);
 }

@@ -1,7 +1,8 @@
 import React from 'react'
+//models
+import { Roles } from '../../models/enums/Roles'
 //css
 import "./HomePage.css"
-import { Roles } from '../../models/entityModels/Token'
 
 type HomePageType = {
   role: Roles

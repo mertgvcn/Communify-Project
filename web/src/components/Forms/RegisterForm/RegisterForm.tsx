@@ -6,8 +6,8 @@ import { FormLocationsType } from './types/FormLocationsType'
 import { FormStateType } from './types/FormStateType'
 import { FormDataType } from './types/FormDataType'
 //models
-import { Gender } from '../../../models/entityModels/User'
-import { InterestViewModel } from '../../../models/viewModels/InterestModels'
+import { InterestViewModel } from '../../../models/viewModels/InterestViewModel'
+import { Genders } from '../../../models/enums/Genders'
 //icons
 import { IoCloseCircleOutline } from 'react-icons/io5'
 //helpers
@@ -51,7 +51,7 @@ const RegisterForm = (props: RegisterFormType) => {
         address: "",
     })
 
-    const [genderState, setGenderState] = useState<Gender | null>(null)
+    const [genderState, setGenderState] = useState<Genders | null>(null)
     const [selectedInterests, setSelectedInterests] = useState<InterestViewModel[]>([])
 
     const handleSignIn = () => {

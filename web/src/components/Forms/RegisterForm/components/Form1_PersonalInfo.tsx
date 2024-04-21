@@ -44,7 +44,7 @@ const Form1 = (props: Form1Type) => {
         if (Object.keys(errorList).length === 0) {
             setButtonBlocker(true)
 
-            if (!await EmailExists(props.formData.email)) {
+            if (!await EmailExists(props.formData.email)) { //?manipüle edilebilir mi?
                 props.setRegisterPages({
                     Form1: -650,
                     Form2: 0,

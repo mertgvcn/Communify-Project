@@ -1,6 +1,6 @@
 import { Routes, Route, Outlet, useLocation } from 'react-router-dom';
 //models
-import { Roles } from '../models/entityModels/Token';
+import { Roles } from '../models/enums/Roles';
 //components
 import Navbar from '../components/Navbar/Navbar';
 //pages

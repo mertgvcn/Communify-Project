@@ -3,7 +3,6 @@ import React, { useRef, useState } from 'react'
 import './ForgotPassword.css'
 //types
 import { FormStateType } from '../RegisterForm/types/FormStateType';
-import { ForgotPasswordResponse } from '../../../models/parameterModels/AuthenticationParameterModels';
 //icons
 import { IoMdArrowBack } from "react-icons/io";
 import { IoCloseCircleOutline } from "react-icons/io5";
@@ -60,13 +59,9 @@ const ForgotPassword = (props: ForgotPasswordType) => {
         }
       )
 
-      const data: ForgotPasswordResponse = (await response)
-
-      if (data.isSuccess) {
-        setTimeout(() => {
-          props.setForgotPasswordState(false)
-        }, 1000)
-      }
+      setTimeout(() => {
+        props.setForgotPasswordState(false)
+      }, 1000)
     }
 
     setTimeout(() => {

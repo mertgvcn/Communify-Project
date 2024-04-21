@@ -7,4 +7,7 @@ public class PasswordTokenRepository(CommunifyContext context) : BaseRepository<
 {
     public async Task<PasswordToken?> GetByTokenAsync(string token)
         => await GetAll().Where(x => x.Token == token).FirstOrDefaultAsync();
+
+    public async Task<bool> PasswordTokenExistsAsync(string token)
+        => await GetAll().Where(x => x.Token == token).AnyAsync();
 }

@@ -1,6 +1,6 @@
 import { BrowserRouter } from "react-router-dom"
-//types
-import { Roles } from "../models/entityModels/Token"
+//models
+import { Roles } from "../models/enums/Roles"
 //components
 import RouterGuest from "./RouterGuest"
 import RouterAdmin from "./RouterAdmin"

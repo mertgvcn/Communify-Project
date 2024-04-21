@@ -1,10 +1,9 @@
 import axios from "axios"
-import { PasswordToken } from "../../models/entityModels/Token"
 
 const baseUrl = process.env.REACT_APP_BASEURL
 
-export const GetPasswordTokenByToken = async (token: string): Promise<PasswordToken> => {
-    const response = await axios.post(baseUrl + "/api/PasswordToken/GetPasswordTokenByToken", {
+export const PasswordTokenExists = async (token: string): Promise<boolean> => {
+    const response = await axios.post(baseUrl + "/api/PasswordToken/PasswordTokenExists", {
         token: token
     })
 

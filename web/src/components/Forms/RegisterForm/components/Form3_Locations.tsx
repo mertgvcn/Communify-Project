@@ -12,7 +12,6 @@ import { IoLocationOutline } from "react-icons/io5";
 import useDynamicValidation from '../../../../hooks/useDynamicValidation';
 //helpers
 import { Form3Validator } from '../../../../validators/RegisterValidators/Form3Validator';
-import { toast } from 'react-hot-toast'
 //components
 import SecondaryButton from '../../../Elements/Buttons/SecondaryButton/SecondaryButton'
 import PrimaryButton from '../../../Elements/Buttons/PrimaryButton/PrimaryButton'

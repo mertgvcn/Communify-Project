@@ -3,7 +3,8 @@ import React, { useState } from 'react'
 import './styles/Form2_GenderSelection.css'
 //types
 import { FormLocationsType } from '../types/FormLocationsType'
-import { Gender } from '../../../../models/entityModels/User'
+//models
+import { Genders } from '../../../../models/enums/Genders';
 //helpers
 import toast from 'react-hot-toast';
 //components
@@ -14,14 +15,14 @@ type Form2Type = {
     registerPages: FormLocationsType,
     setRegisterPages: React.Dispatch<React.SetStateAction<FormLocationsType>>,
 
-    genderState: Gender | null,
-    setGenderState: React.Dispatch<React.SetStateAction<Gender | null>>
+    genderState: Genders | null,
+    setGenderState: React.Dispatch<React.SetStateAction<Genders | null>>
 }
 
 const Form2 = (props: Form2Type) => {
     const [buttonBlocker, setButtonBlocker] = useState(false)
 
-    const genderSelection = (selectedValue: Gender) => {
+    const genderSelection = (selectedValue: Genders) => {
         props.setGenderState(selectedValue);
     }
 
@@ -66,22 +67,22 @@ const Form2 = (props: Form2Type) => {
 
                 <div className='gender-types'>
                     <input
-                        id={props.genderState === Gender.Woman ? 'selected' : ''}
+                        id={props.genderState === Genders.Woman ? 'selected' : ''}
                         value="Woman" type='button'
-                        onClick={() => { genderSelection(Gender.Woman) }} />
+                        onClick={() => { genderSelection(Genders.Woman) }} />
                     <input
-                        id={props.genderState === Gender.Man ? 'selected' : ''}
+                        id={props.genderState === Genders.Man ? 'selected' : ''}
                         value="Man" type='button'
-                        onClick={() => { genderSelection(Gender.Man) }} />
+                        onClick={() => { genderSelection(Genders.Man) }} />
                     <input
                         title="only select this if you have psycholigical problems"
-                        id={props.genderState === Gender.NonBinary ? 'selected' : ''}
+                        id={props.genderState === Genders.NonBinary ? 'selected' : ''}
                         value="Non-Binary" type='button'
-                        onClick={() => { genderSelection(Gender.NonBinary) }} />
+                        onClick={() => { genderSelection(Genders.NonBinary) }} />
                     <input
-                        id={props.genderState === Gender.NotSpecified ? 'selected' : ''}
+                        id={props.genderState === Genders.NotSpecified ? 'selected' : ''}
                         value="I prefer not to say" type='button'
-                        onClick={() => { genderSelection(Gender.NotSpecified) }} />
+                        onClick={() => { genderSelection(Genders.NotSpecified) }} />
                 </div>
             </div>
 

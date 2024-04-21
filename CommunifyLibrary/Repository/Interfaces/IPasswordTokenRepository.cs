@@ -8,4 +8,5 @@ public interface IPasswordTokenRepository
     Task<PasswordToken> GetByIdAsync(long id);
     Task<PasswordToken> AddAsync(PasswordToken Entity);
     Task<PasswordToken?> GetByTokenAsync(string token);
+    Task<bool> PasswordTokenExistsAsync(string token);
 }
