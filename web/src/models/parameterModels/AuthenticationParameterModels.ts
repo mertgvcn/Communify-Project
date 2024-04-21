@@ -1,3 +1,4 @@
+import { PasswordToken } from "../entityModels/Token"
 import { Gender } from "../entityModels/User"
 import { InterestViewModel } from "../viewModels/InterestModels"
 
@@ -40,6 +41,6 @@ export type RegisterResponse = {
 }
 
 export type SetPasswordRequest = {
-    userId: number,
+    passwordToken: PasswordToken,
     password: string
 }

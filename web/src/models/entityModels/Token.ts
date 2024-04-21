@@ -1,9 +1,11 @@
 import { IBaseEntity } from "./BaseEntity";
+import { User } from "./User";
 
 export interface PasswordToken extends IBaseEntity {
     token : string,
     expireDate : Date,
-    userId : number
+    userId : number,
+    user: User
 }
 
 export interface Token {

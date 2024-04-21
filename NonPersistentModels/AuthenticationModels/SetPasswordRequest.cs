@@ -1,8 +1,10 @@
-﻿namespace LethalCompany_Backend.Models.AuthenticationModels;
+﻿using CommunifyLibrary.Models;
+
+namespace LethalCompany_Backend.Models.AuthenticationModels;
 
 public class SetPasswordRequest
 {
-    public long UserId { get; set; }
+    public PasswordToken PasswordToken { get; set; }
 
     public string Password { get; set; }
 }

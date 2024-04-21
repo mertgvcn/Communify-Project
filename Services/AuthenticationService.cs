@@ -1,6 +1,7 @@
 ﻿using Communify_Backend.Services.Interfaces;
 using CommunifyLibrary.Models;
 using CommunifyLibrary.Repository;
+using CommunifyLibrary.Repository.Interfaces;
 using LethalCompany_Backend.Models.AuthenticationModels;
 using LethalCompany_Backend.Models.MailSenderModel;
 using LethalCompany_Backend.Models.TokenModels;
@@ -13,26 +14,26 @@ public class AuthenticationService : IAuthenticationService
 {
     private readonly IUserRepository _userRepository;
     private readonly IInterestRepository _interestRepository;
+    private readonly IPasswordTokenRepository _passwordTokenRepository;
     private readonly ITokenService _tokenService;
     private readonly ICryptionService _cryptionService;
     private readonly IEmailSender _emailSender;
-    private readonly IHttpContextService _httpContextService;
 
     public AuthenticationService(
         IUserRepository userRepository,
         IInterestRepository interestRepository,
+        IPasswordTokenRepository passwordTokenRepository,
         ITokenService tokenService,
         ICryptionService cryptionService,
-        IEmailSender emailSender,
-        IHttpContextService httpContextService
+        IEmailSender emailSender
         )
     {
         _userRepository = userRepository;
         _interestRepository = interestRepository;
+        _passwordTokenRepository = passwordTokenRepository;
         _tokenService = tokenService;
         _cryptionService = cryptionService;
         _emailSender = emailSender;
-        _httpContextService = httpContextService;
     }
 
     public async Task<bool> EmailExistsAsync(EmailExistsRequest request) => await _userRepository.GetByEmail(request.Email).AnyAsync(); //thanks to .Any(), if it finds a email it will return true, otherwise false
@@ -142,7 +143,13 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task SetPasswordAsync(SetPasswordRequest request)
     {
-        var user = await _userRepository.GetAll().Where(a => a.Id == request.UserId).SingleAsync();
+        if (DateTime.UtcNow > request.PasswordToken.ExpireDate)
+        {
+            await _passwordTokenRepository.DeleteAsync(request.PasswordToken);
+            return;
+        }
+
+        var user = await _userRepository.GetAll().Where(a => a.Id == request.PasswordToken.UserId).SingleAsync();
         var plainPassword = await _cryptionService.Decrypt(request.Password);
 
         string hashedPassword = BCrypt.Net.BCrypt.HashPassword(plainPassword);

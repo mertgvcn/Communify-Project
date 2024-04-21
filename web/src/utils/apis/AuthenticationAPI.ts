@@ -69,7 +69,7 @@ export const setPassword = async (request: SetPasswordRequest): Promise<boolean>
     const encryptedPassword = await Encrypt(request.password)
 
     const response = await axios.post(baseUrl + '/api/Authentication/SetPassword', {
-        userId: request.userId,
+        passwordToken: request.passwordToken,
         password: encryptedPassword
     }, {
         headers: {

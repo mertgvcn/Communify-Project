@@ -59,9 +59,9 @@ const SetPasswordPage = () => {
     const handleSubmit = async () => {
         if (Object.keys(errorList).length === 0) {
             setButtonBlocker(true)
-
+            
             const setPasswordRequest: SetPasswordRequest = {
-                userId: passwordToken!.userId,
+                passwordToken: passwordToken!,
                 password: formData.password
             }
             await setPassword(setPasswordRequest)

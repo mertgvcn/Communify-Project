@@ -6,5 +6,5 @@ public class PasswordToken : BaseEntity
     public DateTime ExpireDate { get; set; }
 
     public long UserId { get; set; }
-    public User User { get; set; }
+    public User? User { get; set; }
 }
