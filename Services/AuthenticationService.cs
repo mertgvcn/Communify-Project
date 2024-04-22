@@ -36,9 +36,9 @@ public class AuthenticationService : IAuthenticationService
         _emailSender = emailSender;
     }
 
-    public async Task<bool> EmailExistsAsync(EmailExistsRequest request) => await _userRepository.GetByEmail(request.Email).AnyAsync(); //thanks to .Any(), if it finds a email it will return true, otherwise false
+    public async Task<bool> EmailExistsAsync(EmailExistsRequest request) => await _userRepository.GetByEmail(request.Email).AnyAsync();
 
-    public async Task<UserLoginResponse> LoginUserAsync(UserLoginRequest request)
+    public async Task<UserLoginResponse> LoginUserAsync(UserLoginRequest request) //nasıl daha iyi yazılabilir? Cookie yi burda oluştur ve fonksiyonu void yap??
     {
         UserLoginResponse response = new UserLoginResponse()
         {
@@ -73,7 +73,7 @@ public class AuthenticationService : IAuthenticationService
         return await Task.FromResult(response);
     }
 
-    public async Task RegisterUserAsync(UserRegisterRequest request) //?EmailExists checki burda mı yapsın?
+    public async Task RegisterUserAsync(UserRegisterRequest request) //?EmailExists checki burda yapması daha mantıklı ama frontende nasıl uyarlarız?
     {
         User newUser = new User()
         {
