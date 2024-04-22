@@ -35,7 +35,7 @@ namespace LethalCompany_Backend.Services
             if (request.MailType == MailType.SetPasswordMail)
             {
                 mailContent.Subject = _configuration["MailService:MailContent:SetPasswordMail:Subject"]!;
-                mailContent.Body = _configuration["MailService:MailContent:SetPasswordMail:Body"]!;
+                mailContent.Body = _configuration["MailService:MailContent:SetPasswordMail:Body"]!.Replace("{UrlExtension}", request.UrlExtension);
             }
             else if (request.MailType == MailType.ForgotPasswordMail)
             {

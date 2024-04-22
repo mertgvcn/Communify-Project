@@ -7,7 +7,7 @@ namespace Communify_Backend.Services.Interfaces
     {
         Task<bool> EmailExistsAsync(EmailExistsRequest request);
         Task<UserLoginResponse> LoginUserAsync(UserLoginRequest request);
-        Task<UserRegisterResponse> RegisterUserAsync(UserRegisterRequest user);
+        Task RegisterUserAsync(UserRegisterRequest user);
         Task ForgotPasswordAsync(ForgotPasswordRequest request);
         Task SetPasswordAsync(SetPasswordRequest request);
     }

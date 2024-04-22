@@ -8,9 +8,8 @@ import { FormLocationsType } from '../types/FormLocationsType'
 import { InterestViewModel } from '../../../../models/viewModels/InterestViewModel'
 import { Genders } from '../../../../models/enums/Genders'
 //helpers
-import { RegisterRequest, RegisterResponse } from '../../../../models/parameterModels/AuthenticationParameterModels'
+import { RegisterRequest } from '../../../../models/parameterModels/AuthenticationParameterModels'
 import { register } from '../../../../utils/apis/AuthenticationAPI'
-import { setCookie } from '../../../../utils/Cookie'
 import { toast } from 'react-hot-toast'
 //components
 import SecondaryButton from '../../../Elements/Buttons/SecondaryButton/SecondaryButton'
@@ -82,19 +81,14 @@ const Form4 = (props: Form4Type) => {
 
         const response = register(registerRequest)
 
-        toast.promise(
+        await toast.promise(
             response,
             {
                 loading: 'Registration in progress...',
                 success: <b>Registration successful.</b>,
-                error: <b>Registration failed!</b>,
+                error: null
             }
         )
-
-        const data: RegisterResponse = await response
-
-        if (data.isSuccess)
-            setCookie("jwt", data.token, data.tokenExpireDate)
     }
 
     return (

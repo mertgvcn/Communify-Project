@@ -2,7 +2,7 @@ import axios from "axios"
 //helpers
 import { Encrypt } from "../Cryption"
 //models
-import { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse, SetPasswordRequest } from "../../models/parameterModels/AuthenticationParameterModels"
+import { LoginRequest, LoginResponse, RegisterRequest, SetPasswordRequest } from "../../models/parameterModels/AuthenticationParameterModels"
 
 const baseUrl = process.env.REACT_APP_BASEURL
 
@@ -25,7 +25,7 @@ export const login = async (request: LoginRequest): Promise<LoginResponse> => {
     return response.data
 }
 
-export const register = async (request: RegisterRequest): Promise<RegisterResponse> => {
+export const register = async (request: RegisterRequest): Promise<void> => {
     //Convert string to date Type 
     const dateParts = request.birthDate.split("/");
     const date = new Date(Number(dateParts[2]), Number(dateParts[1])-1, Number(dateParts[0]), 12)
@@ -62,7 +62,7 @@ export const forgotPassword = async (email: string): Promise<void> => {
     return response.data
 }
 
-export const setPassword = async (request: SetPasswordRequest): Promise<boolean> => {
+export const setPassword = async (request: SetPasswordRequest): Promise<void> => {
     const encryptedPassword = await Encrypt(request.password)
     
     const response = await axios.post(baseUrl + '/api/Authentication/SetPassword', {

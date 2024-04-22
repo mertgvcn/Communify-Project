@@ -66,14 +66,20 @@ const SetPasswordPage = () => {
                 token: token!,
                 password: formData.password
             }
-            await setPassword(setPasswordRequest)
+            const response = setPassword(setPasswordRequest)
 
-            toast.success("Password set successfully")
-            navigate("/", { state: { loginFormState: true } })
+            await toast.promise(
+                response,
+                {
+                    loading: 'Please wait...',
+                    success: <b>Password set successfully.</b>,
+                    error: null
+                }
+            )
 
             setTimeout(() => {
                 setButtonBlocker(false)
-                window.location.reload()
+                navigate("/", { state: { loginFormState: true } })
             }, 1000)
         }
     }

@@ -48,9 +48,10 @@ const ForgotPassword = (props: ForgotPasswordType) => {
   const handleSendEmail = async () => {
     if (Object.keys(errorList).length === 0) {
       setButtonBlocker(true)
+      
       const response = forgotPassword(formData.email)
 
-      toast.promise(
+      await toast.promise(
         response,
         {
           loading: 'Email sending...',

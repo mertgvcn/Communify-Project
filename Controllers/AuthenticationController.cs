@@ -32,9 +32,9 @@ public class AuthenticationController : Controller
     }
 
     [HttpPost("Register")]
-    public async Task<UserRegisterResponse> Register([FromBody] UserRegisterRequest user)
+    public async Task Register([FromBody] UserRegisterRequest user)
     {
-        return await authenticationService.RegisterUserAsync(user);
+        await authenticationService.RegisterUserAsync(user);
     }
 
     [HttpPost("ForgotPassword")]

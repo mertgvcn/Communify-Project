@@ -29,12 +29,6 @@ export type RegisterRequest = {
     interests: InterestViewModel[]
 }
 
-export type RegisterResponse = {
-    isSuccess: boolean,
-    token: string,
-    tokenExpireDate: Date
-}
-
 export type SetPasswordRequest = {
     token: string,
     password: string
