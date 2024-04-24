@@ -1,7 +1,9 @@
 ﻿using Communify_Backend.Services.Interfaces;
 using CommunifyLibrary.Models;
 using CommunifyLibrary.Repository.Interfaces;
+using LethalCompany_Backend.Exceptions;
 using LethalCompany_Backend.Models.TokenModels;
+using LethalCompany_Backend.NonPersistentModels.TokenModels;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -81,5 +83,25 @@ public class TokenService : ITokenService
             Token = token.Token,
             TokenExpireDate = token.TokenExpireDate,
         };
+    }
+
+    public async Task<bool> PasswordTokenExistsAsync(PasswordTokenExists request)
+    {
+        var token = await _passwordTokenRepository.GetByTokenAsync(request.Token);
+
+        if (token is not null)
+        {
+            if (token.ExpireDate != request.ExpireDate)
+            {
+                //To Do: Add user to blacklist
+                throw new TokenManipulationException("PasswordToken expire date manipulated.");
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

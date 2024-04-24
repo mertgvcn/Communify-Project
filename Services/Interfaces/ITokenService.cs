@@ -1,5 +1,6 @@
 ﻿using CommunifyLibrary.Models;
 using LethalCompany_Backend.Models.TokenModels;
+using LethalCompany_Backend.NonPersistentModels.TokenModels;
 using System.Security.Claims;
 
 namespace Communify_Backend.Services.Interfaces
@@ -11,5 +12,7 @@ namespace Communify_Backend.Services.Interfaces
         List<Claim> PrepareClaims(string userID, Role role);
 
         Task<GenerateTokenResponse> CreatePasswordTokenAsync(long userId);
+
+        Task<bool> PasswordTokenExistsAsync(PasswordTokenExists request);
     }
 }
