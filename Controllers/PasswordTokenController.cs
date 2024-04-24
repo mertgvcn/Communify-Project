@@ -20,5 +20,5 @@ public class PasswordTokenController : Controller
 
     [HttpPost("PasswordTokenExists")]
     public async Task<bool> PasswordTokenExists(PasswordTokenExists request)
-        => await _passwordTokenRepository.PasswordTokenExistsAsync(request.Token);
+        => await _passwordTokenRepository.PasswordTokenExistsAsync(request);
 }

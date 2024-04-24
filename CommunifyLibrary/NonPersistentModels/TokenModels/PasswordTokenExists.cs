@@ -3,4 +3,6 @@
 public class PasswordTokenExists
 {
     public string Token { get; set; }
+
+    public DateTime ExpireDate { get; set; }
 }
