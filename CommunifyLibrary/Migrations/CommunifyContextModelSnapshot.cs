@@ -64,6 +64,9 @@ namespace CommunifyLibrary.Migrations
                     b.Property<DateTime?>("DateModified")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<DateTime>("ExpireDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
@@ -73,7 +76,7 @@ namespace CommunifyLibrary.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<long>("UserId")
+                    b.Property<long?>("UserId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
@@ -204,9 +207,7 @@ namespace CommunifyLibrary.Migrations
                 {
                     b.HasOne("CommunifyLibrary.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
