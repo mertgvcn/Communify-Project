@@ -63,7 +63,7 @@ public class AuthenticationService : IAuthenticationService
 
             response.AuthenticateResult = true;
             response.AuthToken = generatedToken.Token;
-            response.AccessTokenExpireDate = generatedToken.TokenExpireDate;
+            response.AccessTokenExpireDate = generatedToken.ExpireDate;
             response.ReplyMessage = "Login Successful";
             response.Role = user.Role.Name;
 

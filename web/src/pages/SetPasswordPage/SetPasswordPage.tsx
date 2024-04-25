@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import './SetPasswordPage.css'
 //models
 import { SetPasswordRequest } from '../../models/parameterModels/AuthenticationParameterModels';
+import { TokenViewModel } from '../../models/viewModels/TokenViewModel';
 //icons
 import { RiLockPasswordLine } from "react-icons/ri";
 //hooks
@@ -17,6 +18,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import TextInput from '../../components/Elements/TextInput/TextInput'
 import PrimaryButton from '../../components/Elements/Buttons/PrimaryButton/PrimaryButton';
 import ErrorPage from '../ErrorPage/ErrorPage';
+import { jwtDecode } from 'jwt-decode';
 
 export type SetPasswordFormData = {
     password: string,
@@ -46,7 +48,11 @@ const SetPasswordPage = () => {
     }, [])
 
     const CheckPasswordTokenExists = async (token: string) => {
-        const response = await PasswordTokenExists(token)
+        const tokenExpireDate = jwtDecode<TokenViewModel>(token).expireDate
+        const ExpireDate = new Date(tokenExpireDate)
+        console.log(ExpireDate)
+
+        const response = await PasswordTokenExists(token, ExpireDate)
         setValidPasswordToken(response)
     }
 
