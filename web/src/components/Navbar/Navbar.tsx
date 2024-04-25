@@ -16,8 +16,9 @@ import PrimaryButton from '../Elements/Buttons/PrimaryButton/PrimaryButton'
 import SecondaryButton from '../Elements/Buttons/SecondaryButton/SecondaryButton'
 import LoginForm from '../Forms/LoginForm/LoginForm'
 import RegisterForm from '../Forms/RegisterForm/RegisterForm'
-import DropDownProfile from './components/DropDownProfile/DropDownProfile'
 import ForgotPassword from '../Forms/ForgotPasswordForm/ForgotPassword';
+import DropDownProfile from './components/DropDownProfile/DropDownProfile'
+import Searchbar from './components/Searchbar/Searchbar';
 
 type NavbarType = {
   role: Roles,
@@ -73,7 +74,7 @@ const Navbar = (props: NavbarType) => {
 
           <div className='column'>
             <div className='search-bar'>
-
+              <Searchbar />
             </div>
           </div>
 

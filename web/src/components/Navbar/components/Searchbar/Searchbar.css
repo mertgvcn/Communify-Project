@@ -1,0 +1,38 @@
+.searchbar-wrapper {
+    position: relative;
+    width: 400px;
+    height: 36px;
+    border-radius: 16px;
+}
+
+.searchbar-wrapper .searchbar-icon {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 36px;
+    height: 100%;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #18403c;
+    border-right: 1px solid #18403c30;
+}
+
+.searchbar-wrapper .searchbar {
+    width: inherit;
+    height: inherit;
+    border-radius: inherit;
+    background-color: inherit;
+    border: none;
+    color: #18403c;
+    font-size: 16px;
+    padding: 0px 46px;
+    box-sizing: border-box;
+    border: 1px solid #18403c30;
+}
+
+.searchbar-wrapper .searchbar:focus {
+    outline: none;
+    border: 2px solid #18403c30;
+}
