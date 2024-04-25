@@ -62,31 +62,47 @@ const Navbar = (props: NavbarType) => {
       <nav className="navbar-wrapper">
         <div className="navbar-components">
 
-          <div className="navbar-logo">
-            <Link to='/' className='link'>
-              <img src={require(`../../assets/logos/large_logo.png`)} alt="img not found" />
-            </Link>
+          <div className='column'>
+            <div className="navbar-logo">
+              <Link to='/' className='link'>
+                <img src={require(`../../assets/logos/large_logo.png`)} alt="img not found" />
+              </Link>
+            </div>
           </div>
 
-          {props.role == Roles.Guest.valueOf() &&
-            <div className='navbar-buttons'>
-              <PrimaryButton value='Login' fontSize={16} width="120px" height="40px" onClickFunction={handleLoginForm} />
-              <SecondaryButton value='Sign Up' fontSize={16} width="120px" height="40px" onClickFunction={handleRegisterForm} />
-            </div>
-          }
 
-          {props.role == Roles.User.valueOf() &&
-            <div className="user" onClick={() => { setDropDownProfile((prev) => !prev) }}>
-              <FaUserCircle />
+          <div className='column'>
+            <div className='search-bar'>
+
             </div>
-          }
+          </div>
+
+
+          <div className='column'>
+            <div className='role-based-components'>
+
+              {props.role == Roles.Guest.valueOf() &&
+                <div className='navbar-buttons'>
+                  <PrimaryButton value='Login' fontSize={16} width="120px" height="40px" onClickFunction={handleLoginForm} />
+                  <SecondaryButton value='Sign Up' fontSize={16} width="120px" height="40px" onClickFunction={handleRegisterForm} />
+                </div>
+              }
+
+              {props.role == Roles.User.valueOf() &&
+                <div className="user" onClick={() => { setDropDownProfile((prev) => !prev) }}>
+                  <FaUserCircle />
+                </div>
+              }
+
+            </div>
+          </div>
 
         </div>
       </nav >
 
       {formState.loginFormState && <LoginForm setFormState={setFormState} setForgotPasswordState={setForgotPasswordState} setInterestList={setInterestList} />}
       {formState.registerFormState && <RegisterForm setFormState={setFormState} interestList={interestList} />}
-      {forgotPasswordState && <ForgotPassword setFormState={setFormState} setForgotPasswordState={setForgotPasswordState}/>}
+      {forgotPasswordState && <ForgotPassword setFormState={setFormState} setForgotPasswordState={setForgotPasswordState} />}
       {isDropDownProfile && <DropDownProfile />}
     </>
   )
