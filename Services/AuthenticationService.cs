@@ -129,23 +129,23 @@ public class AuthenticationService : IAuthenticationService
     {
         var passwordToken = await _passwordTokenRepository.GetByTokenAsync(request.Token);
 
-        if (passwordToken != null)
+        if (passwordToken is null) return;
+
+        if (DateTime.UtcNow < passwordToken.ExpireDate)
         {
-            if (DateTime.UtcNow < passwordToken.ExpireDate)
-            {
-                var user = await _userRepository.GetAll().Where(a => a.Id == passwordToken.UserId).SingleAsync();
-                var plainPassword = await _cryptionService.Decrypt(request.Password);
+            var user = await _userRepository.GetAll().Where(a => a.Id == passwordToken.UserId).SingleAsync();
+            var plainPassword = await _cryptionService.Decrypt(request.Password);
 
-                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(plainPassword);
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(plainPassword);
 
-                user.RoleId = 2;
-                user.Password = hashedPassword;
+            user.RoleId = 2;
+            user.Password = hashedPassword;
 
-                await _userRepository.UpdateAsync(user);
-            }
-
-            await _passwordTokenRepository.DeleteAsync(passwordToken);
+            await _userRepository.UpdateAsync(user);
         }
+
+        await _passwordTokenRepository.DeleteAsync(passwordToken);
+
     }
 }
 
