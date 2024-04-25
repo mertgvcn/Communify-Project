@@ -6,6 +6,7 @@ namespace CommunifyLibrary.Repository;
 public class UserRepository(CommunifyContext context) : BaseRepository<User>(context), IUserRepository
 {
     public IQueryable<User> GetByEmail(string email) => context.Users.Where(a => a.Email == email);
+    public IQueryable<User> GetByUsername(string username) => context.Users.Where(a => a.Username == username);
     public async Task<long> GetIdByEmailAsync(string email) => (await GetByEmail(email).SingleAsync()).Id;
 
     public async Task<List<User>> SearchUserAsync(string input)

@@ -26,6 +26,10 @@ export class Form1Validator extends Validator<FormDataType> {
             .notEmpty().withMessage("Birth date is required")
             .matches(this.birthDate).withMessage("Not a valid date")
 
+        this.ruleFor("username")
+            .notEmpty().withMessage("Username is required")
+            .maxLength(32).withMessage("Last name must be between 32 characters")
+
         this.ruleFor("email")
             .notEmpty().withMessage("Email is required")
             .emailAddress()

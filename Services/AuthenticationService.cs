@@ -7,6 +7,7 @@ using LethalCompany_Backend.Models.MailSenderModel;
 using LethalCompany_Backend.Models.TokenModels;
 using LethalCompany_Backend.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace Communify_Backend.Services;
 
@@ -45,11 +46,24 @@ public class AuthenticationService : IAuthenticationService
             AuthenticateResult = false,
             AuthToken = "No Token",
             AccessTokenExpireDate = DateTime.Now,
-            ReplyMessage = "Email or password is wrong",
+            ReplyMessage = "Your credentials are wrong",
             Role = "No Role",
         };
 
-        var user = _userRepository.GetByEmail(request.Email).Include(user => user.Role).FirstOrDefault();
+        Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$"); //email check regex
+        Match isEmail = regex.Match(request.Credential);
+
+        User user;
+
+        if (isEmail.Success)
+        {
+            user = await _userRepository.GetByEmail(request.Credential).Include(user => user.Role).FirstOrDefaultAsync();
+        }
+        else
+        {
+            user = await _userRepository.GetByUsername(request.Credential).Include(user => user.Role).FirstOrDefaultAsync();
+        }
+
         var plainPassword = await _cryptionService.Decrypt(request.Password);
 
         if (user is not null && BCrypt.Net.BCrypt.Verify(plainPassword, user.Password))
@@ -79,6 +93,7 @@ public class AuthenticationService : IAuthenticationService
         {
             FirstName = request.FirstName,
             LastName = request.LastName,
+            Username = request.Username,
             PhoneNumber = request.PhoneNumber,
             BirthDate = request.BirthDate,
             Email = request.Email,

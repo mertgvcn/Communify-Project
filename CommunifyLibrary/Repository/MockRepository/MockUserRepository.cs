@@ -98,5 +98,15 @@ namespace CommunifyLibrary.Repository.MockRepository
         {
             throw new NotImplementedException();
         }
+
+        public IQueryable<User> GetByUsername(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<User>> SearchUserAsync(string input)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

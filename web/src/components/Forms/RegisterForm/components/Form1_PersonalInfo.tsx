@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 //css
 import './styles/Form1_PersonalInfo.css'
 //types
@@ -9,6 +9,7 @@ import { GrPhone } from 'react-icons/gr'
 import { MdOutlineMail } from 'react-icons/md'
 import { PiUserBold } from 'react-icons/pi'
 import { TbCalendar } from 'react-icons/tb'
+import { PiIdentificationCardBold } from "react-icons/pi";
 //hooks
 import useDynamicValidation from '../../../../hooks/useDynamicValidation'
 //helpers
@@ -29,7 +30,7 @@ type Form1Type = {
 
 const Form1 = (props: Form1Type) => {
     const formValidator = new Form1Validator()
-    const { validationErrors, errorList } = useDynamicValidation(props.formData, formValidator, [props.formData.firstName, props.formData.lastName, props.formData.phoneNumber, props.formData.birthDate, props.formData.email])
+    const { validationErrors, errorList } = useDynamicValidation(props.formData, formValidator, [props.formData.firstName, props.formData.lastName, props.formData.username, props.formData.phoneNumber, props.formData.birthDate, props.formData.email])
     const [buttonBlocker, setButtonBlocker] = useState(false)
 
     const handleChange = (e: any) => {
@@ -44,7 +45,7 @@ const Form1 = (props: Form1Type) => {
         if (Object.keys(errorList).length === 0) {
             setButtonBlocker(true)
 
-            if (!await EmailExists(props.formData.email)) { //?manipüle edilebilir mi?
+            if (!await EmailExists(props.formData.email)) {
                 props.setRegisterPages({
                     Form1: -650,
                     Form2: 0,
@@ -77,12 +78,12 @@ const Form1 = (props: Form1Type) => {
                     <div className='row' style={{ display: 'flex', justifyContent: 'space-between' }}>
 
                         <TextInput name='firstName' placeholder='First Name'
-                            width={200} height={36} fontSize={16} isPassword={false}
+                            width={200} height={30} fontSize={16} isPassword={false}
                             icon={PiUserBold} onChangeFunction={handleChange}
                             errorMessage={validationErrors.firstName} />
 
                         <TextInput name='lastName' placeholder='Last Name'
-                            width={200} height={36} fontSize={16} isPassword={false}
+                            width={200} height={30} fontSize={16} isPassword={false}
                             icon={PiUserBold} onChangeFunction={handleChange}
                             errorMessage={validationErrors.lastName} />
 
@@ -91,19 +92,24 @@ const Form1 = (props: Form1Type) => {
                     <div className='row' style={{ display: 'flex', justifyContent: 'space-between' }}>
 
                         <TextInput name='phoneNumber' placeholder='Phone Number'
-                            width={200} height={36} fontSize={16} isPassword={false}
+                            width={200} height={30} fontSize={16} isPassword={false}
                             icon={GrPhone} onChangeFunction={handleChange}
                             errorMessage={validationErrors.phoneNumber} />
 
                         <TextInput name='birthDate' placeholder='Birth Date' title='dd/mm/yyyy'
-                            width={200} height={36} fontSize={16} isPassword={false}
+                            width={200} height={30} fontSize={16} isPassword={false}
                             icon={TbCalendar} onChangeFunction={handleChange}
                             errorMessage={validationErrors.birthDate} />
 
                     </div>
 
+                    <TextInput name='username' placeholder='Username'
+                        width={440} height={30} fontSize={16} isPassword={false}
+                        icon={PiIdentificationCardBold} onChangeFunction={handleChange}
+                        errorMessage={validationErrors.username} />
+
                     <TextInput name='email' placeholder='Email'
-                        width={440} height={36} fontSize={16} isPassword={false}
+                        width={440} height={30} fontSize={16} isPassword={false}
                         icon={MdOutlineMail} onChangeFunction={handleChange}
                         errorMessage={validationErrors.email} />
 

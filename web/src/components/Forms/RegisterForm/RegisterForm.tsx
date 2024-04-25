@@ -41,6 +41,7 @@ const RegisterForm = (props: RegisterFormType) => {
     const [formData, setFormData] = useState<FormDataType>({
         firstName: "",
         lastName: "",
+        username: "",
         phoneNumber: "",
         birthDate: "",
         email: "",
@@ -72,6 +73,7 @@ const RegisterForm = (props: RegisterFormType) => {
         setFormData({
             firstName: "",
             lastName: "",
+            username: "",
             phoneNumber: "",
             birthDate: "",
             email: "",

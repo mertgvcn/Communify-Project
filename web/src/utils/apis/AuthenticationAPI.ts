@@ -18,7 +18,7 @@ export const login = async (request: LoginRequest): Promise<LoginResponse> => {
     const encryptedPassword = await Encrypt(request.password)
 
     const response = await axios.post(baseUrl + '/api/Authentication/Login', {
-        email: request.email,
+        credential: request.credential,
         password: encryptedPassword
     })
 
@@ -39,6 +39,7 @@ export const register = async (request: RegisterRequest): Promise<void> => {
     const response = await axios.post(baseUrl + '/api/Authentication/Register', {
         firstName: request.firstName,
         lastName: request.lastName,
+        username: request.username,
         phoneNumber: request.phoneNumber,
         email: request.email,
         birthDate: date,

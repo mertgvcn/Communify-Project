@@ -17,7 +17,7 @@ import toast, { Toaster } from 'react-hot-toast';
 //icons
 import { RiLockPasswordLine } from "react-icons/ri";
 import { IoCloseCircleOutline } from "react-icons/io5";
-import { MdOutlineMail } from "react-icons/md";
+import { PiUserBold } from 'react-icons/pi'
 //components
 import PrimaryButton from '../../Elements/Buttons/PrimaryButton/PrimaryButton';
 import SecondaryButton from '../../Elements/Buttons/SecondaryButton/SecondaryButton';
@@ -25,7 +25,7 @@ import TextButton from '../../Elements/Buttons/TextButton/TextButton';
 import TextInput from '../../Elements/TextInput/TextInput';
 
 export type FormDataType = {
-    email: string,
+    credential: string,
     password: string
 }
 
@@ -40,10 +40,10 @@ const LoginForm = (props: LoginFormType) => {
 
     //states
     const [formData, setFormData] = useState<FormDataType>({
-        email: "",
+        credential: "",
         password: ""
     });
-    const { validationErrors, errorList } = useDynamicValidation(formData, formValidator, [formData.email, formData.password])
+    const { validationErrors, errorList } = useDynamicValidation(formData, formValidator, [formData.credential, formData.password])
     const [buttonBlocker, setButtonBlocker] = useState(false)
 
     //functions
@@ -60,7 +60,7 @@ const LoginForm = (props: LoginFormType) => {
             setButtonBlocker(true)
 
             const loginRequest: LoginRequest = {
-                email: formData.email,
+                credential: formData.credential,
                 password: formData.password
             }
 
@@ -75,7 +75,7 @@ const LoginForm = (props: LoginFormType) => {
                 }, 1000)
             }
             else {
-                toast.error("Email or password is wrong.", {duration: 2000})
+                toast.error("Your credentials are wrong.", {duration: 2000})
             }
         }
 
@@ -131,10 +131,10 @@ const LoginForm = (props: LoginFormType) => {
 
                     <span id='login-message'>Log in to Communify</span>
 
-                    <TextInput name="email" placeholder='Email'
+                    <TextInput name="credential" placeholder='Email or username'
                         width={280} height={40} fontSize={16} isPassword={false}
-                        icon={MdOutlineMail} onChangeFunction={handleChange}
-                        errorMessage={validationErrors.email} />
+                        icon={PiUserBold} onChangeFunction={handleChange}
+                        errorMessage={validationErrors.credential} />
 
                     <TextInput name="password" placeholder='Password'
                         width={280} height={40} fontSize={16} isPassword={true}
