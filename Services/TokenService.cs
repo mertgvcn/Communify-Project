@@ -2,7 +2,6 @@
 using CommunifyLibrary.Models;
 using CommunifyLibrary.Repository;
 using CommunifyLibrary.Repository.Interfaces;
-using LethalCompany_Backend.Exceptions;
 using LethalCompany_Backend.Models.TokenModels;
 using LethalCompany_Backend.NonPersistentModels.TokenModels;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +28,6 @@ public class TokenService : ITokenService
     public Task<GenerateTokenResponse> GenerateTokenAsync(GenerateTokenRequest request)
     {
         SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["AppSettings:Secret"]));
-
         List<Claim> claims = PrepareClaims(request.UserID, request.Role, request.ExpireDate);
 
         JwtSecurityToken jwt = new JwtSecurityToken(
@@ -88,22 +86,6 @@ public class TokenService : ITokenService
     }
 
     public async Task<bool> PasswordTokenExistsAsync(PasswordTokenExists request)
-    {
-        var token = await _passwordTokenRepository.GetByTokenAsync(request.Token);
+        => await _passwordTokenRepository.PasswordTokenExistsAsync(request.Token);
 
-        if (token is not null)
-        {
-            if (token.ExpireDate != request.ExpireDate)
-            {
-                //To Do: Add user to blacklist
-                throw new TokenManipulationException("PasswordToken expire date manipulated.");
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }

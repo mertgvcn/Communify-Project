@@ -48,11 +48,7 @@ const SetPasswordPage = () => {
     }, [])
 
     const CheckPasswordTokenExists = async (token: string) => {
-        const tokenExpireDate = jwtDecode<TokenViewModel>(token).expireDate
-        const ExpireDate = new Date(tokenExpireDate)
-        console.log(ExpireDate)
-
-        const response = await PasswordTokenExists(token, ExpireDate)
+        const response = await PasswordTokenExists(token)
         setValidPasswordToken(response)
     }
 
