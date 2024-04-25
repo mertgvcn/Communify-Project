@@ -1,5 +1,5 @@
-import { Gender } from "../entityModels/User"
-import { InterestViewModel } from "../viewModels/InterestModels"
+import { Genders } from "../enums/Genders"
+import { InterestViewModel } from "../viewModels/InterestViewModel"
 
 export type LoginRequest = {
     email: string,
@@ -14,19 +14,13 @@ export type LoginResponse = {
     role: string
 }
 
-export type ForgotPasswordResponse = {
-    isSuccess: boolean,
-    token: string,
-    tokenExpireDate: Date
-}
-
 export type RegisterRequest = {
     firstName: string,
     lastName: string,
     phoneNumber: string,
     email: string,
     birthDate: string,
-    gender: Gender | null,
+    gender: Genders | null,
     birthCountry: string,
     birthCity: string,
     currentCountry: string,
@@ -35,8 +29,7 @@ export type RegisterRequest = {
     interests: InterestViewModel[]
 }
 
-export type RegisterResponse = {
-    isSuccess: boolean,
+export type SetPasswordRequest = {
     token: string,
-    tokenExpireDate: Date
+    password: string
 }

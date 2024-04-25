@@ -1,6 +1,7 @@
 ﻿using Communify_Backend.Services.Interfaces;
 using CommunifyLibrary.Models;
 using CommunifyLibrary.Repository;
+using CommunifyLibrary.Repository.Interfaces;
 using LethalCompany_Backend.Models.AuthenticationModels;
 using LethalCompany_Backend.Models.MailSenderModel;
 using LethalCompany_Backend.Models.TokenModels;
@@ -13,31 +14,29 @@ public class AuthenticationService : IAuthenticationService
 {
     private readonly IUserRepository _userRepository;
     private readonly IInterestRepository _interestRepository;
+    private readonly IPasswordTokenRepository _passwordTokenRepository;
     private readonly ITokenService _tokenService;
     private readonly ICryptionService _cryptionService;
     private readonly IEmailSender _emailSender;
-    private readonly IHttpContextService _httpContextService;
 
     public AuthenticationService(
         IUserRepository userRepository,
         IInterestRepository interestRepository,
+        IPasswordTokenRepository passwordTokenRepository,
         ITokenService tokenService,
         ICryptionService cryptionService,
-        IEmailSender emailSender,
-        IHttpContextService httpContextService
+        IEmailSender emailSender
         )
     {
         _userRepository = userRepository;
         _interestRepository = interestRepository;
+        _passwordTokenRepository = passwordTokenRepository;
         _tokenService = tokenService;
         _cryptionService = cryptionService;
         _emailSender = emailSender;
-        _httpContextService = httpContextService;
     }
 
-    public async Task<long> GetIdByEmailAsync(string email) => (await _userRepository.GetByEmail(email).SingleAsync()).Id;
-
-    public async Task<bool> EmailExistsAsync(EmailExistsRequest request) => await _userRepository.GetByEmail(request.Email).AnyAsync(); //thanks to .Any(), if it finds a email it will return true, otherwise false
+    public async Task<bool> EmailExistsAsync(EmailExistsRequest request) => await _userRepository.GetByEmail(request.Email).AnyAsync();
 
     public async Task<UserLoginResponse> LoginUserAsync(UserLoginRequest request)
     {
@@ -64,7 +63,7 @@ public class AuthenticationService : IAuthenticationService
 
             response.AuthenticateResult = true;
             response.AuthToken = generatedToken.Token;
-            response.AccessTokenExpireDate = generatedToken.TokenExpireDate;
+            response.AccessTokenExpireDate = generatedToken.ExpireDate;
             response.ReplyMessage = "Login Successful";
             response.Role = user.Role.Name;
 
@@ -74,46 +73,7 @@ public class AuthenticationService : IAuthenticationService
         return await Task.FromResult(response);
     }
 
-    public async Task<ForgotPasswordResponse> ForgotPasswordAsync(ForgotPasswordRequest request)
-    {
-        var emailExists = await EmailExistsAsync(new EmailExistsRequest() { Email = request.Email });
-        if (!emailExists)
-            return new ForgotPasswordResponse()
-            {
-                isSuccess = false,
-                Token = null,
-                TokenExpireDate = null
-            };
-
-        var user = await _userRepository.GetByEmail(request.Email).SingleAsync();
-        user.Password = null;
-        user.RoleId = 3;
-        await _userRepository.UpdateAsync(user);
-
-        user = await _userRepository.GetAll().Where(u => u.Id == user.Id).Include(u => u.Role).SingleAsync();
-
-        var generatedToken = await _tokenService.GenerateTokenAsync(new GenerateTokenRequest
-        {
-            UserID = user.Id.ToString(),
-            ExpireDate = DateTime.UtcNow.Add(TimeSpan.FromMinutes(5)),
-            Role = user.Role
-        });
-
-        await _emailSender.SendEmailAsync(new SendEmailRequest
-        {
-            ReceiverMail = request.Email,
-            MailType = MailType.ForgotPasswordMail
-        });
-
-        return new ForgotPasswordResponse()
-        {
-            isSuccess = true,
-            Token = generatedToken.Token,
-            TokenExpireDate = generatedToken.TokenExpireDate
-        };
-    }
-
-    public async Task<UserRegisterResponse> RegisterUserAsync(UserRegisterRequest request)
+    public async Task RegisterUserAsync(UserRegisterRequest request)
     {
         User newUser = new User()
         {
@@ -128,12 +88,10 @@ public class AuthenticationService : IAuthenticationService
             CurrentCountry = request.CurrentCountry,
             CurrentCity = request.CurrentCity,
             Address = request.Address,
-            RoleId = 3,
+            RoleId = 2,
         };
 
         var user = await _userRepository.AddAsync(newUser);
-        user = await _userRepository.GetAll().Where(u => u.Id == user.Id).Include(u => u.Role).SingleAsync();
-
 
         foreach (var interestId in request.InterestIdList)
         {
@@ -141,38 +99,53 @@ public class AuthenticationService : IAuthenticationService
             await _userRepository.AddInterest(user.Id, interest);
         }
 
-        var generatedToken = await _tokenService.GenerateTokenAsync(new GenerateTokenRequest
-        {
-            UserID = user.Id.ToString(),
-            Role = user.Role,
-            ExpireDate = DateTime.UtcNow.Add(TimeSpan.FromMinutes(5))
-        });
+        var generatedToken = await _tokenService.CreatePasswordTokenAsync(user.Id);
 
         await _emailSender.SendEmailAsync(new SendEmailRequest
         {
             ReceiverMail = newUser.Email,
-            MailType = MailType.SetPasswordMail
+            MailType = MailType.SetPasswordMail,
+            UrlExtension = "setpassword?token=" + generatedToken.Token
         });
+    }
 
-        return new UserRegisterResponse()
+    public async Task ForgotPasswordAsync(ForgotPasswordRequest request)
+    {
+        var emailExists = await EmailExistsAsync(new EmailExistsRequest() { Email = request.Email });
+        if (!emailExists) return;
+
+        var userId = await _userRepository.GetIdByEmailAsync(request.Email);
+        var generatedToken = await _tokenService.CreatePasswordTokenAsync(userId);
+
+        await _emailSender.SendEmailAsync(new SendEmailRequest
         {
-            isSuccess = true,
-            Token = generatedToken.Token,
-            TokenExpireDate = generatedToken.TokenExpireDate
-        };
+            ReceiverMail = request.Email,
+            MailType = MailType.ForgotPasswordMail,
+            UrlExtension = "setpassword?token=" + generatedToken.Token
+        });
     }
 
     public async Task SetPasswordAsync(SetPasswordRequest request)
     {
-        var user = await _userRepository.GetAll().Where(a => a.Id == _httpContextService.GetCurrentUserID()).SingleAsync();
-        var plainPassword = await _cryptionService.Decrypt(request.Password);
+        var passwordToken = await _passwordTokenRepository.GetByTokenAsync(request.Token);
 
-        string hashedPassword = BCrypt.Net.BCrypt.HashPassword(plainPassword);
+        if (passwordToken is null) return;
 
-        user.RoleId = 2;
-        user.Password = hashedPassword;
+        if (DateTime.UtcNow < passwordToken.ExpireDate)
+        {
+            var user = await _userRepository.GetAll().Where(a => a.Id == passwordToken.UserId).SingleAsync();
+            var plainPassword = await _cryptionService.Decrypt(request.Password);
 
-        await _userRepository.UpdateAsync(user);
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(plainPassword);
+
+            user.RoleId = 2;
+            user.Password = hashedPassword;
+
+            await _userRepository.UpdateAsync(user);
+        }
+
+        await _passwordTokenRepository.DeleteAsync(passwordToken);
+
     }
 }
 

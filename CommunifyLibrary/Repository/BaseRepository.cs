@@ -29,7 +29,7 @@ namespace CommunifyLibrary.Repository
 
         public async Task<T> AddAsync(T Entity)
         {
-            var Entry = await _context.AddAsync(Entity); //return the object that has been added
+            var Entry = await _context.AddAsync(Entity);
             await _context.SaveChangesAsync();
 
             return Entry.Entity;

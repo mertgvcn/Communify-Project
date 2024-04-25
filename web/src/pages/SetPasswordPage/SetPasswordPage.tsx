@@ -1,19 +1,24 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 //css
 import './SetPasswordPage.css'
+//models
+import { SetPasswordRequest } from '../../models/parameterModels/AuthenticationParameterModels';
+import { TokenViewModel } from '../../models/viewModels/TokenViewModel';
 //icons
 import { RiLockPasswordLine } from "react-icons/ri";
 //hooks
 import useDynamicValidation from '../../hooks/useDynamicValidation';
 //helpers
-import { useNavigate } from 'react-router-dom';
-import { deleteCookie } from '../../utils/Cookie';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { setPassword } from '../../utils/apis/AuthenticationAPI';
 import { SetPasswordValidator } from '../../validators/RegisterValidators/SetPasswordValidator';
+import { PasswordTokenExists } from '../../utils/apis/PasswordTokenAPI';
 import toast, { Toaster } from 'react-hot-toast';
 //components
 import TextInput from '../../components/Elements/TextInput/TextInput'
 import PrimaryButton from '../../components/Elements/Buttons/PrimaryButton/PrimaryButton';
+import ErrorPage from '../ErrorPage/ErrorPage';
+import { jwtDecode } from 'jwt-decode';
 
 export type SetPasswordFormData = {
     password: string,
@@ -22,17 +27,31 @@ export type SetPasswordFormData = {
 
 const SetPasswordPage = () => {
     const navigate = useNavigate()
-    const formValidator = new SetPasswordValidator()
+    const [searchParams, setSearchParams] = useSearchParams();
+    const token = searchParams.get("token")
 
     //states
     const [formData, setFormData] = useState<SetPasswordFormData>({
         password: "",
         confirmPassword: "",
     })
-    const { validationErrors, errorList } = useDynamicValidation(formData, formValidator, [formData.password, formData.confirmPassword])
+    const [validPasswordToken, setValidPasswordToken] = useState(false)
     const [buttonBlocker, setButtonBlocker] = useState(false)
 
+    const formValidator = new SetPasswordValidator()
+    const { validationErrors, errorList } = useDynamicValidation(formData, formValidator, [formData.password, formData.confirmPassword])
+
     //functions
+    useEffect(() => {
+        if (token != null)
+            CheckPasswordTokenExists(token!)
+    }, [])
+
+    const CheckPasswordTokenExists = async (token: string) => {
+        const response = await PasswordTokenExists(token)
+        setValidPasswordToken(response)
+    }
+
     const handleChange = (e: any) => {
         const { name, value } = e.target
 
@@ -45,22 +64,31 @@ const SetPasswordPage = () => {
         if (Object.keys(errorList).length === 0) {
             setButtonBlocker(true)
 
-            await setPassword(formData.password)
+            const setPasswordRequest: SetPasswordRequest = {
+                token: token!,
+                password: formData.password
+            }
+            const response = setPassword(setPasswordRequest)
 
-            deleteCookie("jwt")
-            toast.success("Password set successfully")
-            navigate("/", { state: { loginFormState: true } })
-            
+            await toast.promise(
+                response,
+                {
+                    loading: 'Please wait...',
+                    success: <b>Password set successfully.</b>,
+                    error: null
+                }
+            )
+
             setTimeout(() => {
                 setButtonBlocker(false)
-                window.location.reload()
+                navigate("/", { state: { loginFormState: true } })
             }, 1000)
         }
     }
 
-    return (
+    return validPasswordToken ? (
         <div className="set-password-wrapper">
-            <Toaster toastOptions={{style: {fontSize: 14}}}/>
+            <Toaster toastOptions={{ style: { fontSize: 14 } }} />
 
             <div className='set-password-container'>
                 <span className='set-password-title'>Please Set Your Password</span>
@@ -80,7 +108,7 @@ const SetPasswordPage = () => {
                 <PrimaryButton value={'Submit'} width={440} height={40} fontSize={16} disabled={buttonBlocker} onClickFunction={handleSubmit} />
             </div>
         </div>
-    )
+    ) : <ErrorPage />
 }
 
 export default SetPasswordPage

@@ -3,7 +3,6 @@ import React, { useRef, useState } from 'react'
 import './ForgotPassword.css'
 //types
 import { FormStateType } from '../RegisterForm/types/FormStateType';
-import { ForgotPasswordResponse } from '../../../models/parameterModels/AuthenticationParameterModels';
 //icons
 import { IoMdArrowBack } from "react-icons/io";
 import { IoCloseCircleOutline } from "react-icons/io5";
@@ -49,9 +48,10 @@ const ForgotPassword = (props: ForgotPasswordType) => {
   const handleSendEmail = async () => {
     if (Object.keys(errorList).length === 0) {
       setButtonBlocker(true)
+      
       const response = forgotPassword(formData.email)
 
-      toast.promise(
+      await toast.promise(
         response,
         {
           loading: 'Email sending...',
@@ -60,15 +60,9 @@ const ForgotPassword = (props: ForgotPasswordType) => {
         }
       )
 
-      const data: ForgotPasswordResponse = (await response)
-
-      if (data.isSuccess) {
-        setCookie("jwt", data.token, data.tokenExpireDate)
-
-        setTimeout(() => {
-          props.setForgotPasswordState(false)
-        }, 1000)
-      }
+      setTimeout(() => {
+        props.setForgotPasswordState(false)
+      }, 1000)
     }
 
     setTimeout(() => {

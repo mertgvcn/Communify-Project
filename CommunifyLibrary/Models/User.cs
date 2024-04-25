@@ -26,7 +26,7 @@
 
         public string? Password { get; set; }
 
-        public long RoleId { get; set; } //Can establish a relation with the object that has same id with this property.
+        public long RoleId { get; set; }
         public Role Role { get; set; }
 
         public ICollection<Interest> Interests { get; set; }

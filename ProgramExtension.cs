@@ -2,6 +2,7 @@
 using Communify_Backend.Services;
 using Communify_Backend.Services.Interfaces;
 using CommunifyLibrary.Repository;
+using CommunifyLibrary.Repository.Interfaces;
 using CommunifyLibrary.Repository.MockRepository;
 using LethalCompany_Backend.Services;
 using LethalCompany_Backend.Services.Interfaces;
@@ -56,6 +57,7 @@ namespace Communify_Backend
                 collection.AddScoped<IUserRepository, UserRepository>();
                 collection.AddScoped<IRoleRepository, RoleRepository>();
                 collection.AddScoped<IInterestRepository, InterestRepository>();
+                collection.AddScoped<IPasswordTokenRepository, PasswordTokenRepository>();
             }
         }
 

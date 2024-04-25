@@ -4,13 +4,13 @@ import { Link, } from 'react-router-dom'
 import './Navbar.css'
 //types
 import { FormStateType } from '../Forms/RegisterForm/types/FormStateType'
+//models
+import { Roles } from '../../models/enums/Roles';
+import { InterestViewModel } from '../../models/viewModels/InterestViewModel'
 //icons
 import { FaUserCircle } from "react-icons/fa";
 //helpers
-import { Roles } from '../../models/entityModels/Token'
 import { GetInterests } from '../../utils/apis/InterestAPI'
-//models
-import { InterestViewModel } from '../../models/viewModels/InterestModels'
 //components
 import PrimaryButton from '../Elements/Buttons/PrimaryButton/PrimaryButton'
 import SecondaryButton from '../Elements/Buttons/SecondaryButton/SecondaryButton'

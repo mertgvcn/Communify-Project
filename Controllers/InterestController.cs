@@ -1,7 +1,8 @@
-﻿using CommunifyLibrary;
+﻿using CommunifyLibrary.Repository;
 using LethalCompany_Backend.Models.InterestModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace LethalCompany_Backend.Controllers
 {
@@ -10,22 +11,22 @@ namespace LethalCompany_Backend.Controllers
     [AllowAnonymous]
     public class InterestController : Controller
     {
-        private readonly CommunifyContext context;
+        private readonly IInterestRepository _interestRepository;
 
-        public InterestController(CommunifyContext context)
+        public InterestController(IInterestRepository interestRepository)
         {
-            this.context = context;
+            _interestRepository = interestRepository;
         }
 
         [HttpGet("GetInterests")]
         public async Task<JsonResult> GetInterests()
         {
-            var interests = context.Interests.Select(a => new InterestViewModel
+            var interests = await _interestRepository.GetAll().Select(a => new InterestViewModel
             {
                 Id = a.Id,
                 Name = a.Name,
                 IsChecked = false
-            }).ToList();
+            }).ToListAsync();
 
             return new JsonResult(interests);
         }

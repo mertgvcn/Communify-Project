@@ -4,14 +4,13 @@ import './styles/Form4_Interests.css'
 //types
 import { FormDataType } from '../types/FormDataType'
 import { FormLocationsType } from '../types/FormLocationsType'
-//helpers
-import { RegisterRequest, RegisterResponse } from '../../../../models/parameterModels/AuthenticationParameterModels'
-import { register } from '../../../../utils/apis/AuthenticationAPI'
-import { setCookie } from '../../../../utils/Cookie'
-import { toast } from 'react-hot-toast'
 //models
-import { Gender } from '../../../../models/entityModels/User'
-import { InterestViewModel } from '../../../../models/viewModels/InterestModels'
+import { InterestViewModel } from '../../../../models/viewModels/InterestViewModel'
+import { Genders } from '../../../../models/enums/Genders'
+//helpers
+import { RegisterRequest } from '../../../../models/parameterModels/AuthenticationParameterModels'
+import { register } from '../../../../utils/apis/AuthenticationAPI'
+import { toast } from 'react-hot-toast'
 //components
 import SecondaryButton from '../../../Elements/Buttons/SecondaryButton/SecondaryButton'
 import PrimaryButton from '../../../Elements/Buttons/PrimaryButton/PrimaryButton'
@@ -25,7 +24,7 @@ type Form4Type = {
     setSelectedInterests: React.Dispatch<React.SetStateAction<InterestViewModel[]>>,
 
     formData: FormDataType,
-    genderState: Gender | null
+    genderState: Genders | null
 }
 
 const Form4 = (props: Form4Type) => {
@@ -82,19 +81,14 @@ const Form4 = (props: Form4Type) => {
 
         const response = register(registerRequest)
 
-        toast.promise(
+        await toast.promise(
             response,
             {
                 loading: 'Registration in progress...',
                 success: <b>Registration successful.</b>,
-                error: <b>Registration failed!</b>,
+                error: null
             }
         )
-
-        const data: RegisterResponse = await response
-
-        if (data.isSuccess)
-            setCookie("jwt", data.token, data.tokenExpireDate)
     }
 
     return (
