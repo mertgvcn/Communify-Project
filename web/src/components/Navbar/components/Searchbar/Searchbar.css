@@ -9,14 +9,13 @@
     position: absolute;
     top: 0px;
     left: 0px;
-    width: 36px;
+    width: 40px;
     height: 100%;
     font-size: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
     color: #18403c;
-    border-right: 1px solid #18403c30;
 }
 
 .searchbar-wrapper .searchbar {
@@ -27,7 +26,7 @@
     border: none;
     color: #18403c;
     font-size: 16px;
-    padding: 0px 46px;
+    padding: 0px 36px;
     box-sizing: border-box;
     border: 1px solid #18403c30;
 }
