@@ -11,6 +11,8 @@ namespace CommunifyLibrary.Models
         [NotMapped]
         public string FullName { get => FirstName.Trim() + " " + LastName.Trim(); }
 
+        public string Username { get; set; }
+
         public DateTime BirthDate { get; set; }
 
         public string BirthCountry { get; set; }

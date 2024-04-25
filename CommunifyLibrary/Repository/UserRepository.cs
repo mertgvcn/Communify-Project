@@ -8,6 +8,9 @@ public class UserRepository(CommunifyContext context) : BaseRepository<User>(con
     public IQueryable<User> GetByEmail(string email) => context.Users.Where(a => a.Email == email);
     public async Task<long> GetIdByEmailAsync(string email) => (await GetByEmail(email).SingleAsync()).Id;
 
+    public async Task<List<User>> SearchUserAsync(string input)
+        => await context.Users.Where(a => a.FullName.Contains(input) || a.Username.Contains(input)).OrderBy(a => a.FirstName).ToListAsync();
+
     public async Task AddInterest(long userId, Interest interest)
     {
         var user = await GetByIdAsync(userId);
@@ -18,9 +21,5 @@ public class UserRepository(CommunifyContext context) : BaseRepository<User>(con
         await context.SaveChangesAsync();
     }
 
-    public async Task<List<User>> SearchUserByName(string input)
-    {
-        return await context.Users.Where(a => a.FullName.Contains(input)).OrderBy(a => a.FirstName).ToListAsync();
-    }
 }
 

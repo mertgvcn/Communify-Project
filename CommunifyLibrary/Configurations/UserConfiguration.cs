@@ -17,6 +17,10 @@ namespace CommunifyLibrary.Configurations
                 .IsRequired(true)
                 .HasMaxLength(64);
 
+            builder.Property(x => x.Username)
+                .IsRequired(true)
+                .HasMaxLength(32);
+
             builder.Property(x => x.BirthDate)
                 .IsRequired(true);
 
