@@ -1,10 +1,15 @@
-﻿namespace CommunifyLibrary.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace CommunifyLibrary.Models
 {
     public class User : BaseEntity
     {
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
+
+        [NotMapped]
+        public string FullName { get => FirstName.Trim() + " " + LastName.Trim(); }
 
         public DateTime BirthDate { get; set; }
 

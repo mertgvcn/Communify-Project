@@ -17,5 +17,10 @@ public class UserRepository(CommunifyContext context) : BaseRepository<User>(con
         user.Interests.Add(interest);
         await context.SaveChangesAsync();
     }
+
+    public async Task<List<User>> SearchUserByName(string input)
+    {
+        return await context.Users.Where(a => a.FullName.Contains(input)).OrderBy(a => a.FirstName).ToListAsync();
+    }
 }
 
