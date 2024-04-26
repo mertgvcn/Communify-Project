@@ -12,7 +12,7 @@ public class UserRepository(CommunifyContext context) : BaseRepository<User>(con
         input = input.ToLower();
 
         return context.Users
-            .Where(a => String.Concat(a.FirstName.ToLower(), " ", a.LastName.ToLower()).Contains(input) || a.Username.Contains(input))
+            .Where(a => a.isActive == true && (String.Concat(a.FirstName.ToLower(), " ", a.LastName.ToLower()).Contains(input) || a.Username.Contains(input)))
             .OrderBy(a => a.FirstName);
     }
 
