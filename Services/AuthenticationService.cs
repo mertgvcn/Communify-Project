@@ -153,6 +153,7 @@ public class AuthenticationService : IAuthenticationService
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(plainPassword);
 
             user.RoleId = 2;
+            user.isActive = true;
             user.Password = hashedPassword;
 
             await _userRepository.UpdateAsync(user);
