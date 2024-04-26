@@ -7,7 +7,7 @@ namespace CommunifyLibrary.Repository
         IQueryable<User> GetAll();
         IQueryable<User> GetByEmail(string email);
         IQueryable<User> GetByUsername(string username);
-        IQueryable<User> SearchUser(string input);
+        IQueryable<User> SearchUsers(string input);
         Task<User> GetByIdAsync(long id);
         Task<long> GetIdByEmailAsync(string email);
         Task UpdateAsync(User user);

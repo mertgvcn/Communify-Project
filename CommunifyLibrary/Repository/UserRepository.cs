@@ -7,7 +7,7 @@ public class UserRepository(CommunifyContext context) : BaseRepository<User>(con
 {
     public IQueryable<User> GetByEmail(string email) => context.Users.Where(a => a.Email == email);
     public IQueryable<User> GetByUsername(string username) => context.Users.Where(a => a.Username == username);
-    public IQueryable<User> SearchUser(string input)
+    public IQueryable<User> SearchUsers(string input)
         => context.Users.Where(a => String.Concat(a.FirstName, " ", a.LastName).Contains(input) || a.Username.Contains(input)).OrderBy(a => a.FirstName);
 
     public async Task<long> GetIdByEmailAsync(string email) => (await GetByEmail(email).SingleAsync()).Id;
