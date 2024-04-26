@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using CommunifyLibrary.NonPersistentModels.Enums;
 
 namespace CommunifyLibrary.Models
 {
@@ -7,9 +7,6 @@ namespace CommunifyLibrary.Models
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
-
-        [NotMapped]
-        public string FullName { get => FirstName.Trim() + " " + LastName.Trim(); }
 
         public string Username { get; set; }
 
@@ -37,13 +34,5 @@ namespace CommunifyLibrary.Models
         public Role Role { get; set; }
 
         public ICollection<Interest> Interests { get; set; }
-    }
-
-    public enum Genders
-    {
-        Woman,
-        Man,
-        NonBinary,
-        NotSpecified
     }
 }

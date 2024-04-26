@@ -1,5 +1,5 @@
 ﻿using Communify_Backend.Services.Interfaces;
-using LethalCompany_Backend.Models.AuthenticationModels;
+using CommunifyLibrary.NonPersistentModels.ParameterModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

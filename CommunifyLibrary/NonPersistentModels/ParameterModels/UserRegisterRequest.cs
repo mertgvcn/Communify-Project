@@ -1,6 +1,6 @@
 ﻿using CommunifyLibrary.Models;
 
-namespace LethalCompany_Backend.Models.AuthenticationModels;
+namespace CommunifyLibrary.NonPersistentModels.ParameterModels;
 
 public class UserRegisterRequest
 {

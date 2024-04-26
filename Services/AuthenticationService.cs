@@ -1,8 +1,8 @@
 ﻿using Communify_Backend.Services.Interfaces;
 using CommunifyLibrary.Models;
+using CommunifyLibrary.NonPersistentModels.ParameterModels;
 using CommunifyLibrary.Repository;
 using CommunifyLibrary.Repository.Interfaces;
-using LethalCompany_Backend.Models.AuthenticationModels;
 using LethalCompany_Backend.Models.MailSenderModel;
 using LethalCompany_Backend.Models.TokenModels;
 using LethalCompany_Backend.Services.Interfaces;

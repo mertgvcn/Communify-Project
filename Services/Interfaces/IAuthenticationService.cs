@@ -1,5 +1,5 @@
 ﻿
-using LethalCompany_Backend.Models.AuthenticationModels;
+using CommunifyLibrary.NonPersistentModels.ParameterModels;
 
 namespace Communify_Backend.Services.Interfaces
 {
