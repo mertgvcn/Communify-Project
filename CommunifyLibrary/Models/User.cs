@@ -34,5 +34,7 @@ namespace CommunifyLibrary.Models
         public Role Role { get; set; }
 
         public ICollection<Interest> Interests { get; set; }
+
+        public bool isActive { get; set; }
     }
 }
