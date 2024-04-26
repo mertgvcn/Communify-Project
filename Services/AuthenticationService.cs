@@ -90,18 +90,18 @@ public class AuthenticationService : IAuthenticationService
     {
         User newUser = new User()
         {
-            FirstName = request.FirstName,
-            LastName = request.LastName,
-            Username = request.Username,
-            PhoneNumber = request.PhoneNumber,
+            FirstName = request.FirstName.Trim(),
+            LastName = request.LastName.Trim(),
+            Username = request.Username.Trim(),
+            PhoneNumber = request.PhoneNumber.Trim(),
             BirthDate = request.BirthDate,
-            Email = request.Email,
+            Email = request.Email.Trim(),
             Gender = request.Gender,
-            BirthCountry = request.PhoneNumber,
-            BirthCity = request.Email,
-            CurrentCountry = request.CurrentCountry,
-            CurrentCity = request.CurrentCity,
-            Address = request.Address,
+            BirthCountry = request.PhoneNumber.Trim(),
+            BirthCity = request.Email.Trim(),
+            CurrentCountry = request.CurrentCountry.Trim(),
+            CurrentCity = request.CurrentCity.Trim(),
+            Address = request.Address.Trim(),
             RoleId = 2,
         };
 
