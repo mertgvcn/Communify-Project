@@ -1,4 +1,5 @@
 ﻿using CommunifyLibrary.Models;
+using CommunifyLibrary.NonPersistentModels.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace CommunifyLibrary.Repository.MockRepository
@@ -104,7 +105,7 @@ namespace CommunifyLibrary.Repository.MockRepository
             throw new NotImplementedException();
         }
 
-        public Task<List<User>> SearchUserAsync(string input)
+        public IQueryable<User> SearchUsers(string input)
         {
             throw new NotImplementedException();
         }

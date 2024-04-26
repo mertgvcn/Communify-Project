@@ -1,10 +1,9 @@
 ﻿using Communify_Backend.Services.Interfaces;
 using CommunifyLibrary.Models;
+using CommunifyLibrary.NonPersistentModels.Enums;
 using CommunifyLibrary.NonPersistentModels.ParameterModels;
 using CommunifyLibrary.Repository;
 using CommunifyLibrary.Repository.Interfaces;
-using LethalCompany_Backend.Models.MailSenderModel;
-using LethalCompany_Backend.Models.TokenModels;
 using LethalCompany_Backend.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
@@ -119,7 +118,7 @@ public class AuthenticationService : IAuthenticationService
         await _emailSender.SendEmailAsync(new SendEmailRequest
         {
             ReceiverMail = newUser.Email,
-            MailType = MailType.SetPasswordMail,
+            MailType = MailTypes.SetPasswordMail,
             UrlExtension = "setpassword?token=" + generatedToken.Token
         });
     }
@@ -135,7 +134,7 @@ public class AuthenticationService : IAuthenticationService
         await _emailSender.SendEmailAsync(new SendEmailRequest
         {
             ReceiverMail = request.Email,
-            MailType = MailType.ForgotPasswordMail,
+            MailType = MailTypes.ForgotPasswordMail,
             UrlExtension = "setpassword?token=" + generatedToken.Token
         });
     }
