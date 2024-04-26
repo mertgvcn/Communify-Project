@@ -21,9 +21,11 @@ public class NavbarService : INavbarService
 
     public async Task<List<SearchedUserViewModel>> SearchAsync(SearchRequest request)
     {
+        if (request.Input.Trim() == "") return [];
+
         //To Do : Daha sonra postlara göre, communitylere göre arama seçenekleri eklenecek
         var searchResult = await _userRepository.SearchUsers(request.Input)
-                                    .ProjectTo<SearchedUserViewModel>(_mapper.ConfigurationProvider).ToListAsync();
+                                    .ProjectTo<SearchedUserViewModel>(_mapper.ConfigurationProvider).Take(5).ToListAsync();
         return searchResult;
     }
 }
