@@ -1,11 +1,10 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 //css
 import './Searchbar.css'
 //models
 import { SearchTypes } from '../../../../models/enums/SearchTypes';
 import { SearchRequest } from '../../../../models/parameterModels/SearchRequest';
 import { SearchedUserViewModel } from '../../../../models/viewModels/SearchedUserViewModel';
-import { SearchedCommunityViewModel } from '../../../../models/viewModels/SearchedCommunityViewModel';
 //icons
 import { IoMdSearch } from "react-icons/io";
 //helpers
@@ -13,59 +12,90 @@ import { Search } from '../../../../utils/apis/NavbarAPI';
 //components
 import SearchResultCard from './components/SearchResultCard';
 
-type SearchResultType = {
+export type SearchResultType = {
     users: SearchedUserViewModel[],
-    communities: SearchedCommunityViewModel[]
+    communities: [],
+    posts: [],
+    anyResult: boolean
 }
 
 const Searchbar = () => {
-    const searchInputRef = useRef("")    
+    const searchInputRef = useRef("")
+    const dropDownRef = useRef<any>(null)
+
     const [searchResult, setSearchResult] = useState<SearchResultType>({
         users: [],
-        communities: []
+        communities: [],
+        posts: [],
+        anyResult: false
     })
+    const [dropDownState, setDropDownState] = useState(false)
     const [timer, setTimer] = useState<any>(null)
 
-    const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    useEffect(() => {
+        let handler = (e: MouseEvent) => {
+            if (!dropDownRef.current.contains(e.target)) {
+                setDropDownState(false)
+            }
+        }
+
+        document.addEventListener("mousedown", handler)
+
+        return () => {
+            document.removeEventListener("mousedown", handler)
+        }
+    })
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         searchInputRef.current = e.target.value
         clearTimeout(timer)
 
         const newTimer = setTimeout(async () => {
             const request: SearchRequest = {
-                input: searchInputRef.current,
+                input: searchInputRef.current.trim(),
                 searchType: SearchTypes.User
             }
 
-            const users = await Search(request) //ToDo: ilerde sadece user yerine, community ve postta dönmesi gerek
+            const result: SearchResultType = await Search(request)
             //temporary
-            const results: SearchResultType = {
-                users: users,
-                communities: []
-            }
 
-            setSearchResult(results)
+            setSearchResult(result)
         }, 300)
 
         setTimer(newTimer)
     }
 
-
     return (
-        <div className='searchbar-wrapper'>
-            <div className='searchbar-icon'>
-                <IoMdSearch style={{marginRight:-6}}/>
-            </div>
-            <input className='searchbar' type="text" placeholder='Search Communify'
-                    value={searchInputRef.current} onChange={handleChange}/>
+        <div className={`searchbar-wrapper ${(dropDownState && searchInputRef.current.trim()) ? `active` : `inactive`} `} ref={dropDownRef}>
 
-
-            {(searchResult.users.length > 0 || searchResult.communities.length > 0) &&
-                <div className='searchbar-drop-down'>
-                    {searchResult.users.map((result, idx) => (
-                        <SearchResultCard data={result} key={idx}/>
-                    ))}
+            <div className='searchbar' onClick={() => setDropDownState(current => !current)} >
+                <div className='searchbar-icon'>
+                    <IoMdSearch style={{ marginRight: -6 }} />
                 </div>
-            }
+                <input className='searchbar-input' type="text" placeholder='Search Communify'
+                    value={searchInputRef.current} onChange={handleChange} />
+            </div>
+
+            <div className={`searchbar-drop-down ${(dropDownState && searchInputRef.current.trim()) ? `active` : `inactive`} `}>
+
+                {
+                    searchResult.users.map((result, idx) => (
+                        <SearchResultCard data={result} key={idx} />
+                    ))
+                }
+
+                <div className='search-for-wrapper'>
+                    <div className='icon'>
+                        <IoMdSearch />
+                    </div>
+
+                    <div className='info'>
+                        <span className='message'>Search for "{searchInputRef.current}"</span>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
     )
 }
