@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar/Navbar'
 //pages
 import HomePage from '../pages/HomePage/HomePage'
 import ErrorPage from '../pages/ErrorPage/ErrorPage'
+import Sidebar from '../components/Sidebar/Sidebar'
 
 const RouterUser = () => {
 
@@ -13,6 +14,7 @@ const RouterUser = () => {
         return (
             <>
                 <Navbar role={Roles.User}/>
+                <Sidebar />
                 <Outlet />
             </>
         )
