@@ -1,6 +1,7 @@
 export type FormDataType = {
     firstName: string;
     lastName: string;
+    username: string;
     phoneNumber: string;
     birthDate: string;
     email: string;

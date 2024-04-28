@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using System.Reflection;
 using System.Text;
 
 namespace Communify_Backend
@@ -43,6 +44,8 @@ namespace Communify_Backend
             collection.AddScoped<ITokenService, TokenService>();
             collection.AddScoped<ICryptionService, CryptionService>();
             collection.AddScoped<IEmailSender, EmailSender>();
+            collection.AddScoped<INavbarService, NavbarService>();
+            collection.AddAutoMapper(Assembly.GetExecutingAssembly());
         }
 
         public static void ConfigureRepositories(this IServiceCollection collection, IConfiguration configuration)

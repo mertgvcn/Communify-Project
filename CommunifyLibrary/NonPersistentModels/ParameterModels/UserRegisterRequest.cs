@@ -1,12 +1,14 @@
-﻿using CommunifyLibrary.Models;
+﻿using CommunifyLibrary.NonPersistentModels.Enums;
 
-namespace LethalCompany_Backend.Models.AuthenticationModels;
+namespace CommunifyLibrary.NonPersistentModels.ParameterModels;
 
 public class UserRegisterRequest
 {
     public string FirstName { get; set; }
 
     public string LastName { get; set; }
+
+    public string Username { get; set; }
 
     public string PhoneNumber { get; set; }
 

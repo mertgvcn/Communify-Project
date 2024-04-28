@@ -1,4 +1,4 @@
-﻿namespace LethalCompany_Backend.Models.TokenModels;
+﻿namespace CommunifyLibrary.NonPersistentModels.ParameterModels;
 
 public class GenerateTokenResponse
 {

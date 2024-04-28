@@ -1,5 +1,5 @@
 ﻿using Communify_Backend.Services.Interfaces;
-using LethalCompany_Backend.NonPersistentModels.TokenModels;
+using CommunifyLibrary.NonPersistentModels.ParameterModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +19,6 @@ public class PasswordTokenController : Controller
 
 
     [HttpPost("PasswordTokenExists")]
-    public async Task<bool> PasswordTokenExists(PasswordTokenExists request)
+    public async Task<bool> PasswordTokenExists(PasswordTokenExistsRequest request)
         => await _tokenService.PasswordTokenExistsAsync(request);
 }

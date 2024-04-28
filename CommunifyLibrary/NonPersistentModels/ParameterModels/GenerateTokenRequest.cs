@@ -1,6 +1,6 @@
 ﻿using CommunifyLibrary.Models;
 
-namespace LethalCompany_Backend.Models.TokenModels;
+namespace CommunifyLibrary.NonPersistentModels.ParameterModels;
 
 public class GenerateTokenRequest
 {

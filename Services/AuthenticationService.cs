@@ -1,12 +1,12 @@
 ﻿using Communify_Backend.Services.Interfaces;
 using CommunifyLibrary.Models;
+using CommunifyLibrary.NonPersistentModels.Enums;
+using CommunifyLibrary.NonPersistentModels.ParameterModels;
 using CommunifyLibrary.Repository;
 using CommunifyLibrary.Repository.Interfaces;
-using LethalCompany_Backend.Models.AuthenticationModels;
-using LethalCompany_Backend.Models.MailSenderModel;
-using LethalCompany_Backend.Models.TokenModels;
 using LethalCompany_Backend.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace Communify_Backend.Services;
 
@@ -45,11 +45,24 @@ public class AuthenticationService : IAuthenticationService
             AuthenticateResult = false,
             AuthToken = "No Token",
             AccessTokenExpireDate = DateTime.Now,
-            ReplyMessage = "Email or password is wrong",
+            ReplyMessage = "Your credentials are wrong",
             Role = "No Role",
         };
 
-        var user = _userRepository.GetByEmail(request.Email).Include(user => user.Role).FirstOrDefault();
+        Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$"); //email check regex
+        Match isEmail = regex.Match(request.Credential);
+
+        User user;
+
+        if (isEmail.Success)
+        {
+            user = await _userRepository.GetByEmail(request.Credential).Include(user => user.Role).FirstOrDefaultAsync();
+        }
+        else
+        {
+            user = await _userRepository.GetByUsername(request.Credential).Include(user => user.Role).FirstOrDefaultAsync();
+        }
+
         var plainPassword = await _cryptionService.Decrypt(request.Password);
 
         if (user is not null && BCrypt.Net.BCrypt.Verify(plainPassword, user.Password))
@@ -77,17 +90,18 @@ public class AuthenticationService : IAuthenticationService
     {
         User newUser = new User()
         {
-            FirstName = request.FirstName,
-            LastName = request.LastName,
-            PhoneNumber = request.PhoneNumber,
+            FirstName = request.FirstName.Trim(),
+            LastName = request.LastName.Trim(),
+            Username = request.Username.Trim(),
+            PhoneNumber = request.PhoneNumber.Trim(),
             BirthDate = request.BirthDate,
-            Email = request.Email,
+            Email = request.Email.Trim(),
             Gender = request.Gender,
-            BirthCountry = request.PhoneNumber,
-            BirthCity = request.Email,
-            CurrentCountry = request.CurrentCountry,
-            CurrentCity = request.CurrentCity,
-            Address = request.Address,
+            BirthCountry = request.PhoneNumber.Trim(),
+            BirthCity = request.Email.Trim(),
+            CurrentCountry = request.CurrentCountry.Trim(),
+            CurrentCity = request.CurrentCity.Trim(),
+            Address = request.Address.Trim(),
             RoleId = 2,
         };
 
@@ -104,7 +118,7 @@ public class AuthenticationService : IAuthenticationService
         await _emailSender.SendEmailAsync(new SendEmailRequest
         {
             ReceiverMail = newUser.Email,
-            MailType = MailType.SetPasswordMail,
+            MailType = MailTypes.SetPasswordMail,
             UrlExtension = "setpassword?token=" + generatedToken.Token
         });
     }
@@ -120,7 +134,7 @@ public class AuthenticationService : IAuthenticationService
         await _emailSender.SendEmailAsync(new SendEmailRequest
         {
             ReceiverMail = request.Email,
-            MailType = MailType.ForgotPasswordMail,
+            MailType = MailTypes.ForgotPasswordMail,
             UrlExtension = "setpassword?token=" + generatedToken.Token
         });
     }
@@ -139,6 +153,7 @@ public class AuthenticationService : IAuthenticationService
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(plainPassword);
 
             user.RoleId = 2;
+            user.isActive = true;
             user.Password = hashedPassword;
 
             await _userRepository.UpdateAsync(user);

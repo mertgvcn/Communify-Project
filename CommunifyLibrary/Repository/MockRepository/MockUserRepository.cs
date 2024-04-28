@@ -1,4 +1,5 @@
 ﻿using CommunifyLibrary.Models;
+using CommunifyLibrary.NonPersistentModels.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace CommunifyLibrary.Repository.MockRepository
@@ -95,6 +96,16 @@ namespace CommunifyLibrary.Repository.MockRepository
         }
 
         public Task<long> GetIdByEmailAsync(string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IQueryable<User> GetByUsername(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IQueryable<User> SearchUsers(string input)
         {
             throw new NotImplementedException();
         }

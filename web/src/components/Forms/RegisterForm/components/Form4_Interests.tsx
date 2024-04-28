@@ -67,6 +67,7 @@ const Form4 = (props: Form4Type) => {
         const registerRequest: RegisterRequest = {
             firstName: props.formData.firstName,
             lastName: props.formData.lastName,
+            username: props.formData.username,
             phoneNumber: props.formData.phoneNumber,
             email: props.formData.email,
             birthDate: props.formData.birthDate,

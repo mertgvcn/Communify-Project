@@ -23,7 +23,7 @@
 #register-form1 .inputs {
     display: flex;
     flex-direction: column;
-    max-height: 240px;
+    max-height: 280px;
     overflow-y: scroll;
 }
 

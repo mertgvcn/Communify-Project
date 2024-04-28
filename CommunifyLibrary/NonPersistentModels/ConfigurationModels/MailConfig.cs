@@ -1,4 +1,4 @@
-﻿namespace LethalCompany_Backend.Models.MailSenderModel;
+﻿namespace CommunifyLibrary.NonPersistentModels.ConfigurationModels;
 
 public class MailConfig
 {
