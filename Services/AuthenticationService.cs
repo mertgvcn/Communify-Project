@@ -18,6 +18,7 @@ public class AuthenticationService : IAuthenticationService
     private readonly ITokenService _tokenService;
     private readonly ICryptionService _cryptionService;
     private readonly IEmailSender _emailSender;
+    private readonly IHttpContextService _httpContextService;
 
     public AuthenticationService(
         IUserRepository userRepository,
@@ -25,7 +26,8 @@ public class AuthenticationService : IAuthenticationService
         IPasswordTokenRepository passwordTokenRepository,
         ITokenService tokenService,
         ICryptionService cryptionService,
-        IEmailSender emailSender
+        IEmailSender emailSender,
+        IHttpContextService httpContextService
         )
     {
         _userRepository = userRepository;
@@ -34,6 +36,7 @@ public class AuthenticationService : IAuthenticationService
         _tokenService = tokenService;
         _cryptionService = cryptionService;
         _emailSender = emailSender;
+        _httpContextService = httpContextService;
     }
 
     public async Task<bool> EmailExistsAsync(EmailExistsRequest request) => await _userRepository.GetByEmail(request.Email).AnyAsync();
@@ -97,8 +100,8 @@ public class AuthenticationService : IAuthenticationService
             BirthDate = request.BirthDate,
             Email = request.Email.Trim(),
             Gender = request.Gender,
-            BirthCountry = request.PhoneNumber.Trim(),
-            BirthCity = request.Email.Trim(),
+            BirthCountry = request.BirthCountry.Trim(),
+            BirthCity = request.BirthCity.Trim(),
             CurrentCountry = request.CurrentCountry.Trim(),
             CurrentCity = request.CurrentCity.Trim(),
             Address = request.Address.Trim(),
@@ -135,6 +138,21 @@ public class AuthenticationService : IAuthenticationService
         {
             ReceiverMail = request.Email,
             MailType = MailTypes.ForgotPasswordMail,
+            UrlExtension = "setpassword?token=" + generatedToken.Token
+        });
+    }
+
+    public async Task ChangePasswordAsync()
+    {
+        var userId = _httpContextService.GetCurrentUserID();
+        var user = await _userRepository.GetByIdAsync(userId);
+
+        var generatedToken = await _tokenService.CreatePasswordTokenAsync(user.Id);
+
+        await _emailSender.SendEmailAsync(new SendEmailRequest
+        {
+            ReceiverMail = user.Email,
+            MailType = MailTypes.ChangePasswordMail,
             UrlExtension = "setpassword?token=" + generatedToken.Token
         });
     }

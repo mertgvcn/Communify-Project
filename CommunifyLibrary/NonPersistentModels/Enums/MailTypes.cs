@@ -2,5 +2,6 @@
 public enum MailTypes
 {
     SetPasswordMail,
-    ForgotPasswordMail
+    ForgotPasswordMail,
+    ChangePasswordMail
 }

@@ -1,8 +1,6 @@
 .sidebar-wrapper {
     position: sticky;
     z-index: 999;
-    top: 65px;
-    left: 0px;
     width: 280px;
     height: calc(100vh - 65px);
     border-right: 1px solid #d6d6d6;

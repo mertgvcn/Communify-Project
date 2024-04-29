@@ -1,10 +1,12 @@
 import axios from "axios"
 //helpers
 import { Encrypt } from "../Cryption"
+import { getCookie } from "../Cookie"
 //models
 import { LoginRequest, LoginResponse, RegisterRequest, SetPasswordRequest } from "../../models/parameterModels/AuthenticationParameterModels"
 
 const baseUrl = process.env.REACT_APP_BASEURL
+const API_KEY = 'bearer ' + getCookie("jwt")
 
 export const EmailExists = async (email: string): Promise<boolean> => {
     const response = await axios.post(baseUrl + '/api/Authentication/EmailExists', {
@@ -28,14 +30,14 @@ export const login = async (request: LoginRequest): Promise<LoginResponse> => {
 export const register = async (request: RegisterRequest): Promise<void> => {
     //Convert string to date Type 
     const dateParts = request.birthDate.split("/");
-    const date = new Date(Number(dateParts[2]), Number(dateParts[1])-1, Number(dateParts[0]), 12)
-    
+    const date = new Date(Number(dateParts[2]), Number(dateParts[1]) - 1, Number(dateParts[0]), 12)
+
     //Convert interestViewModel to interestIdList
     let interestIdList: number[] = []
     request.interests.forEach(interest => {
         interestIdList.push(interest.id)
     });
-    
+
     const response = await axios.post(baseUrl + '/api/Authentication/Register', {
         firstName: request.firstName,
         lastName: request.lastName,
@@ -51,7 +53,7 @@ export const register = async (request: RegisterRequest): Promise<void> => {
         address: request.address,
         interestIdList: interestIdList,
     })
-    
+
     return response.data
 }
 
@@ -63,13 +65,25 @@ export const forgotPassword = async (email: string): Promise<void> => {
     return response.data
 }
 
+export const changePassword = async (): Promise<void> => {
+    const response = await axios.post(baseUrl + '/api/Authentication/ChangePassword', {},
+        {
+            headers: {
+                'Authorization': API_KEY
+            }
+        }
+    )
+
+    return response.data
+}
+
 export const setPassword = async (request: SetPasswordRequest): Promise<void> => {
     const encryptedPassword = await Encrypt(request.password)
-    
+
     const response = await axios.post(baseUrl + '/api/Authentication/SetPassword', {
         token: request.token,
         password: encryptedPassword
     })
-    
+
     return response.data
 }

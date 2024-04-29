@@ -86,7 +86,7 @@ const ForgotPassword = (props: ForgotPasswordType) => {
 
       <div className="forgot-password-wrapper">
 
-        <div className="row">
+        <div className="col">
 
           <div className="navigation-buttons">
             <div className='back-button'>
@@ -107,7 +107,7 @@ const ForgotPassword = (props: ForgotPasswordType) => {
               onChangeFunction={handleChange} icon={MdOutlineMail}
               errorMessage={validationErrors.email} />
           </div>
-
+          
         </div>
 
         <div className='confirm-button'>

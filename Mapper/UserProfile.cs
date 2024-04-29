@@ -10,5 +10,9 @@ public class UserProfile : Profile
     {
         CreateMap<User, SearchedUserViewModel>()
             .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FirstName + " " + src.LastName));
+
+        CreateMap<User, UserInformationViewModel>();
+
+        CreateMap<User, UserInformationSummaryViewModel>();
     }
 }

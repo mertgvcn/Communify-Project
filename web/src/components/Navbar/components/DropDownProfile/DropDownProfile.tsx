@@ -9,40 +9,49 @@ import { FaSignOutAlt } from "react-icons/fa";
 import { deleteCookie } from '../../../../utils/Cookie';
 import { useNavigate } from 'react-router';
 
-const DropDownProfile = () => {
-  const navigate = useNavigate()
+type dropDownProfileType = {
+    setDropDownProfileState : React.Dispatch<React.SetStateAction<boolean>>
+}
 
-  const handleLogout = () => {
-    navigate("/", { state: { loginFormState: true } })
-    deleteCookie("jwt")
+const DropDownProfile = (props : dropDownProfileType) => {
+    const navigate = useNavigate()
 
-    setTimeout(() => {
-      window.location.reload()
-    }, 300)
-  }
+    const handleProfile = async () => {
+        navigate("/profile")
+        props.setDropDownProfileState(false)
+    }
 
-  return (
-    <div className='drop-down-profile'>
-      <ul className='list-wrapper'>
+    const handleLogout = () => {
+        navigate("/", { state: { loginFormState: true } })
+        deleteCookie("jwt")
 
-        <li style={{ borderTopLeftRadius: 10, borderTopRightRadius: 10 }}>
-          <FaUser className='icon' />
-          <span>Profile</span>
-        </li>
+        setTimeout(() => {
+            window.location.reload()
+        }, 300)
+    }
 
-        <li>
-          <IoMdSettings className='icon' />
-          <span>Settings</span>
-        </li>
+    return (
+        <div className='drop-down-profile'>
+            <ul className='list-wrapper'>
 
-        <li style={{ borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }} onClick={handleLogout}>
-          <FaSignOutAlt className='icon' />
-          <span>Logout</span>
-        </li>
+                <li style={{ borderTopLeftRadius: 10, borderTopRightRadius: 10 }} onClick={handleProfile}>
+                    <FaUser className='icon' />
+                    <span>Profile</span>
+                </li>
 
-      </ul>
-    </div>
-  )
+                <li>
+                    <IoMdSettings className='icon' />
+                    <span>Settings</span>
+                </li>
+
+                <li style={{ borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }} onClick={handleLogout}>
+                    <FaSignOutAlt className='icon' />
+                    <span>Logout</span>
+                </li>
+
+            </ul>
+        </div>
+    )
 }
 
 export default DropDownProfile

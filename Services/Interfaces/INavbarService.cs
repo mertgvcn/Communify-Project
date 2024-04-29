@@ -5,4 +5,5 @@ namespace LethalCompany_Backend.Services.Interfaces;
 public interface INavbarService
 {
     Task<List<SearchedUserViewModel>> SearchAsync(SearchRequest request);
+    Task<UserInformationSummaryViewModel> GetUserInformationSummaryAsync();
 }

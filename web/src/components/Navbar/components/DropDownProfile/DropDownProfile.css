@@ -1,10 +1,12 @@
 .drop-down-profile {
     position: absolute;
+    z-index: 999;
     top: 75px;
     right: 1rem;
     width: 180px;
     border-radius: 10px;
     border: 1px solid #18403c40;
+    background-color: rgb(245, 245, 245);
 }
 
 .drop-down-profile::before {

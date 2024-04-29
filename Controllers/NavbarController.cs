@@ -1,4 +1,5 @@
 ﻿using CommunifyLibrary.NonPersistentModels.ParameterModels;
+using CommunifyLibrary.NonPersistentModels.ViewModels;
 using LethalCompany_Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +8,6 @@ namespace LethalCompany_Backend.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[AllowAnonymous]
 public class NavbarController : Controller
 {
     private readonly INavbarService _navbarService;
@@ -18,6 +18,7 @@ public class NavbarController : Controller
     }
 
     [HttpPost("Search")]
+    [AllowAnonymous]
     public async Task<JsonResult> Search(SearchRequest request)
     {
         var users = await _navbarService.SearchAsync(request);
@@ -35,4 +36,8 @@ public class NavbarController : Controller
         return new JsonResult(result);
     }
 
+    [HttpGet("GetUserInformationSummary")]
+    [Authorize(Roles = "User")]
+    public async Task<UserInformationSummaryViewModel> GetUserInformationSummary()
+        => await _navbarService.GetUserInformationSummaryAsync();
 }

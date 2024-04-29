@@ -31,7 +31,7 @@ const Navbar = (props: NavbarType) => {
     registerFormState: false
   })
   const [forgotPasswordState, setForgotPasswordState] = useState<boolean>(false)
-  const [isDropDownProfile, setDropDownProfile] = useState<boolean>(false)
+  const [dropDownProfileState, setDropDownProfileState] = useState<boolean>(false)
 
   const [interestList, setInterestList] = useState<InterestViewModel[]>([])
 
@@ -90,7 +90,7 @@ const Navbar = (props: NavbarType) => {
               }
 
               {props.role == Roles.User.valueOf() &&
-                <div className="user" onClick={() => { setDropDownProfile((prev) => !prev) }}>
+                <div className="user" onClick={() => { setDropDownProfileState((prev) => !prev) }}>
                   <FaUserCircle />
                 </div>
               }
@@ -104,7 +104,7 @@ const Navbar = (props: NavbarType) => {
       {formState.loginFormState && <LoginForm setFormState={setFormState} setForgotPasswordState={setForgotPasswordState} setInterestList={setInterestList} />}
       {formState.registerFormState && <RegisterForm setFormState={setFormState} interestList={interestList} />}
       {forgotPasswordState && <ForgotPassword setFormState={setFormState} setForgotPasswordState={setForgotPasswordState} />}
-      {isDropDownProfile && <DropDownProfile />}
+      {dropDownProfileState && <DropDownProfile setDropDownProfileState={setDropDownProfileState}/>}
     </>
   )
 }
