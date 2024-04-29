@@ -75,7 +75,7 @@ const Form1 = (props: Form1Type) => {
 
                 <div className='inputs'>
 
-                    <div className='row' style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <div className='row' style={{ justifyContent: 'space-between' }}>
 
                         <TextInput name='firstName' placeholder='First Name'
                             width={200} height={30} fontSize={16} isPassword={false}
@@ -89,7 +89,7 @@ const Form1 = (props: Form1Type) => {
 
                     </div>
 
-                    <div className='row' style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <div className='row' style={{ justifyContent: 'space-between' }}>
 
                         <TextInput name='phoneNumber' placeholder='Phone Number'
                             width={200} height={30} fontSize={16} isPassword={false}

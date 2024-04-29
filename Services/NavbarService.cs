@@ -11,11 +11,13 @@ namespace LethalCompany_Backend.Services;
 public class NavbarService : INavbarService
 {
     private readonly IUserRepository _userRepository;
+    private readonly IHttpContextService _httpContextService;
     private readonly IMapper _mapper;
 
-    public NavbarService(IUserRepository userRepository, IMapper mapper)
+    public NavbarService(IUserRepository userRepository, IHttpContextService httpContextService, IMapper mapper)
     {
         _userRepository = userRepository;
+        _httpContextService = httpContextService;
         _mapper = mapper;
     }
 
@@ -25,7 +27,18 @@ public class NavbarService : INavbarService
 
         //To Do : Daha sonra postlara göre, communitylere göre arama seçenekleri eklenecek
         var searchResult = await _userRepository.SearchUsers(request.Input)
-                                    .ProjectTo<SearchedUserViewModel>(_mapper.ConfigurationProvider).Take(5).ToListAsync();
+                                    .ProjectTo<SearchedUserViewModel>(_mapper.ConfigurationProvider)
+                                    .Take(5).ToListAsync();
         return searchResult;
+    }
+
+    public async Task<UserInformationSummaryViewModel> GetUserInformationSummaryAsync()
+    {
+        var userId = _httpContextService.GetCurrentUserID();
+        var userInformationSummary = await _userRepository.GetAll().Where(u => u.Id == userId)
+                                                .ProjectTo<UserInformationSummaryViewModel>(_mapper.ConfigurationProvider)
+                                                .SingleAsync();
+
+        return userInformationSummary;
     }
 }

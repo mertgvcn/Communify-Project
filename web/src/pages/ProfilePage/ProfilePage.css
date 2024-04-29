@@ -1,0 +1,124 @@
+.profile-page-wrapper {
+    display: flex;
+    flex-direction: row;
+    height: calc(100vh - 65px);
+    width: 100%;
+}
+
+.profile-page-wrapper .post-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+    height: 100%;
+    padding: 1rem 2rem;
+    box-sizing: border-box;
+}
+
+.profile-page-wrapper .user-details-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    height: 100%;
+    padding: 1rem 1rem;
+    box-sizing: border-box;
+
+}
+
+.user-details-container {
+    position: sticky;
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    border: 1px solid #d6d6d6;
+    padding: 0rem 1rem;
+    box-sizing: border-box;
+}
+
+/**Containerın içi*/
+
+/*User info (icon-title)*/
+.user-summary-info {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: fit-content;
+    padding: 1rem 0rem;
+    box-sizing: border-box;
+}
+
+.user-summary-info>.icon {
+    display: flex;
+    width: 100%;
+    height: fit-content;
+    justify-content: center;
+    font-size: 4rem;
+    color: #2c9ba6;
+}
+
+.user-summary-info>.info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    margin-top: 0.75rem;
+    text-align: center;
+}
+
+.user-summary-info>.info>.full-name {
+    font-size: 20px;
+    font-weight: 500;
+    color: #18403c;
+}
+
+.user-summary-info>.info>.username {
+    font-size: 16px;
+    color: #7a8282
+}
+
+/*user stats*/
+.user-stats {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: fit-content;
+    padding: 1rem 0rem;
+    box-sizing: border-box;
+}
+
+.user-stats .stat {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.user-stats .stat .stat-title {
+    color: #7a8282;
+}
+
+/*profile management*/
+.profile-management {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: fit-content;
+    padding: 1rem 0rem;
+    box-sizing: border-box;
+}
+
+.profile-management .manager {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.profile-management .manager .info {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-management .manager .info .description {
+    font-size: 12px;
+    color: #7a8282;
+}

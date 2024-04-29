@@ -9,7 +9,9 @@
     border-radius: 2px;
     color: #18403c;
     background-color: rgb(245,245,245);
-    padding: 2px 30px;
+    padding: 2px 0px;
+    padding-left: 30px;
+    padding-right: 10px;
     box-sizing: border-box;
 }
 

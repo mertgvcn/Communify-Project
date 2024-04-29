@@ -45,6 +45,7 @@ namespace Communify_Backend
             collection.AddScoped<ICryptionService, CryptionService>();
             collection.AddScoped<IEmailSender, EmailSender>();
             collection.AddScoped<INavbarService, NavbarService>();
+            collection.AddScoped<IUserProfileService, UserProfileService>();
             collection.AddAutoMapper(Assembly.GetExecutingAssembly());
         }
 

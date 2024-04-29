@@ -68,7 +68,7 @@ const Form3 = (props: Form3Type) => {
                 </div>
 
                 <div className='inputs'>
-                    <div className='row'>
+                    <div className='row' style={{justifyContent: 'space-between'}}>
 
                         <TextInput name="birthCountry" placeholder='Birth Country'
                             width={200} height={36} fontSize={16} isPassword={false}
@@ -82,7 +82,7 @@ const Form3 = (props: Form3Type) => {
 
                     </div>
 
-                    <div className="row">
+                    <div className="row" style={{justifyContent: 'space-between'}}>
 
                         <TextInput name='currentCountry' placeholder='Current Country'
                             width={200} height={36} fontSize={16} isPassword={false}
