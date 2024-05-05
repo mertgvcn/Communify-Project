@@ -141,7 +141,7 @@ const ProfilePage = () => {
 
             </div>
 
-            {editProfileState && <EditProfile editProfileData={editProfileData} setEditProfileDate={setEditProfileData} setEditProfileState={setEditProfileState} />}
+            {editProfileState && <EditProfile editProfileData={editProfileData} setEditProfileData={setEditProfileData} setEditProfileState={setEditProfileState} />}
         </>
 
     ) : null

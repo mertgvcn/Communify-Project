@@ -12,7 +12,7 @@ import { LoginRequest, LoginResponse } from '../../../models/parameterModels/Aut
 import { GetInterests } from '../../../utils/apis/InterestAPI';
 import { login } from '../../../utils/apis/AuthenticationAPI';
 import { setCookie } from '../../../utils/Cookie';
-import { LoginValidator } from '../../../validators/LoginValidator/LoginValidator';
+import { LoginValidator } from '../../../validators/LoginValidator';
 import toast, { Toaster } from 'react-hot-toast';
 //icons
 import { RiLockPasswordLine } from "react-icons/ri";
