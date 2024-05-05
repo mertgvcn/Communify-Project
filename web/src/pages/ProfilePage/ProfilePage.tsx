@@ -14,6 +14,7 @@ import { changePassword } from '../../utils/apis/AuthenticationAPI';
 //components
 import PrimaryButton from '../../components/Elements/Buttons/PrimaryButton/PrimaryButton';
 import EditProfile from './components/EditProfile/EditProfile';
+import ResetPassword from './components/ResetPassword/ResetPassword';
 
 const ProfilePage = () => {
 
@@ -23,6 +24,8 @@ const ProfilePage = () => {
 
     const [editProfileData, setEditProfileData] = useState<UserInformationViewModel | null>(null)
     const [editProfileState, setEditProfileState] = useState(false)
+
+    const [resetPasswordState, setResetPasswordState] = useState(false)
 
     useEffect(() => {
         fetchUserInformationSummary()
@@ -41,22 +44,7 @@ const ProfilePage = () => {
     }
 
     const handleChangePassword = async () => {
-        setButtonBlocker(true)
-
-        const response = changePassword()
-
-        await toast.promise(
-            response,
-            {
-                loading: 'Email sending...',
-                success: <b>Email successfully sent.</b>,
-                error: null
-            }
-        )
-
-        setTimeout(() => {
-            setButtonBlocker(false)
-        }, 2000)
+        setResetPasswordState(true)
     }
 
     return userInformationSummary ? (
@@ -128,7 +116,7 @@ const ProfilePage = () => {
                                         <span className='description'>Change your password</span>
                                     </div>
 
-                                    <PrimaryButton width={70} height={30} value='Reset' fontSize={12} onClickFunction={handleChangePassword} disabled={buttonBlocker} />
+                                    <PrimaryButton width={70} height={30} value='Reset' fontSize={12} onClickFunction={handleChangePassword} />
                                 </div>
 
                             </div>
@@ -142,6 +130,7 @@ const ProfilePage = () => {
             </div>
 
             {editProfileState && <EditProfile editProfileData={editProfileData} setEditProfileDate={setEditProfileData} setEditProfileState={setEditProfileState} />}
+            {resetPasswordState && <ResetPassword setResetPasswordState={setResetPasswordState} />}
         </>
 
     ) : null
