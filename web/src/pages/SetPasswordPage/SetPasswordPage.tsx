@@ -11,7 +11,7 @@ import useDynamicValidation from '../../hooks/useDynamicValidation';
 //helpers
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { setPassword } from '../../utils/apis/AuthenticationAPI';
-import { SetPasswordValidator } from '../../validators/RegisterValidators/SetPasswordValidator';
+import { SetPasswordValidator } from '../../validators/SetPasswordValidator';
 import { PasswordTokenExists } from '../../utils/apis/PasswordTokenAPI';
 import toast, { Toaster } from 'react-hot-toast';
 //components

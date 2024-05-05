@@ -12,9 +12,13 @@ import { FaTrash } from "react-icons/fa";
 //models
 import { UserInformationViewModel } from '../../../../models/viewModels/UserInformationViewModel'
 import { Genders } from '../../../../models/enums/Genders'
+//hooks
+import useDynamicValidation from '../../../../hooks/useDynamicValidation'
+//helpers
+import { format } from 'date-fns'
+import { EditProfileValidator } from '../../../../validators/EditProfileValidator'
 //compoenents
 import TextInput from '../../../../components/Elements/TextInput/TextInput'
-import { format } from 'date-fns'
 
 type EditProfileType = {
     editProfileData: UserInformationViewModel | null,
@@ -24,6 +28,19 @@ type EditProfileType = {
 }
 
 const EditProfile = ({ editProfileData, setEditProfileData, setEditProfileState }: EditProfileType) => {
+    const formValidator = new EditProfileValidator()
+
+    const { validationErrors, errorList } = useDynamicValidation(editProfileData, formValidator,
+        [editProfileData?.firstName, editProfileData?.lastName, editProfileData?.username, editProfileData?.email, editProfileData?.phoneNumber,
+        editProfileData?.currentCountry, editProfileData?.currentCity, editProfileData?.address])
+
+    const handleChange = (e: any) => {
+        const { name, value } = e.target
+
+        setEditProfileData({
+            ...editProfileData!, [name]: value
+        })
+    }
 
     return editProfileData ? (
         <div className='edit-profile-background'>
@@ -71,49 +88,81 @@ const EditProfile = ({ editProfileData, setEditProfileData, setEditProfileState 
                             <div className="row" style={{ justifyContent: 'space-between', marginBottom: 8 }}>
                                 <div className="detail">
                                     <span className='label'>First Name</span>
-                                    <TextInput width={270} height={36} fontSize={16} isPassword={false}
-                                        icon={PiUserBold} value={editProfileData.firstName} />
+
+                                    <TextInput name='firstName' value={editProfileData.firstName}
+                                        width={270} height={36} fontSize={16} isPassword={false}
+                                        icon={PiUserBold} onChangeFunction={handleChange}
+                                        errorMessage={validationErrors.firstName} />
                                 </div>
 
                                 <div className="detail">
                                     <span className='label'>Last Name</span>
-                                    <TextInput width={270} height={36} fontSize={16} isPassword={false}
-                                        icon={PiUserBold} value={editProfileData.lastName} />
+
+                                    <TextInput name='lastName' value={editProfileData.lastName}
+                                        width={270} height={36} fontSize={16} isPassword={false}
+                                        icon={PiUserBold} onChangeFunction={handleChange}
+                                        errorMessage={validationErrors.lastName} />
                                 </div>
                             </div>
 
                             <div className="row" style={{ justifyContent: 'space-between', marginBottom: 16 }}>
                                 <div className="detail">
                                     <span className='label'>Username</span>
-                                    <TextInput width={270} height={36} fontSize={16} isPassword={false}
-                                        icon={PiIdentificationCardBold} value={editProfileData.username} />
+
+                                    <TextInput name='username' value={editProfileData.username}
+                                        width={270} height={36} fontSize={16} isPassword={false}
+                                        icon={PiIdentificationCardBold} onChangeFunction={handleChange}
+                                        errorMessage={validationErrors.username} />
                                 </div>
 
                                 <div className="detail">
                                     <span className='label'>Email</span>
-                                    <TextInput width={270} height={36} fontSize={16} isPassword={false}
-                                        icon={MdOutlineMail} value={editProfileData.email} />
+
+                                    <TextInput name='email' value={editProfileData.email}
+                                        width={270} height={36} fontSize={16} isPassword={false}
+                                        icon={MdOutlineMail} onChangeFunction={handleChange}
+                                        errorMessage={validationErrors.email} />
                                 </div>
                             </div>
 
                             <div className="row" style={{ justifyContent: 'space-between', marginBottom: 16 }}>
                                 <div className="detail">
                                     <span className='label'>Phone Number</span>
-                                    <TextInput width={270} height={36} fontSize={16} isPassword={false}
-                                        icon={GrPhone} value={editProfileData.phoneNumber} />
+
+                                    <TextInput name='phoneNumber' value={editProfileData.phoneNumber}
+                                        width={270} height={36} fontSize={16} isPassword={false}
+                                        icon={GrPhone} onChangeFunction={handleChange}
+                                        errorMessage={validationErrors.phoneNumber} />
                                 </div>
 
-                                <div className="detail">
-                                    <span className='label'>Current Place</span>
-                                    <TextInput width={270} height={36} fontSize={16} isPassword={false}
-                                        icon={IoLocationOutline} value={`${editProfileData.currentCountry}/${editProfileData.currentCity}`} />
+                                <div className="row" style={{ width: 270, justifyContent: 'space-between' }}>
+                                    <div className="detail">
+                                        <span className='label'>Current Country</span>
+
+                                        <TextInput name='currentCountry' value={editProfileData.currentCountry}
+                                            width={125} height={36} fontSize={16} isPassword={false}
+                                            icon={IoLocationOutline} onChangeFunction={handleChange}
+                                            errorMessage={validationErrors.currentCountry} />
+                                    </div>
+
+                                    <div className="detail">
+                                        <span className='label'>Current City</span>
+
+                                        <TextInput name='currentCity' value={editProfileData.currentCity}
+                                            width={125} height={36} fontSize={16} isPassword={false}
+                                            icon={IoLocationOutline} onChangeFunction={handleChange}
+                                            errorMessage={validationErrors.currentCity} />
+                                    </div>
                                 </div>
                             </div>
 
                             <div className="detail">
                                 <span className='label'>Address</span>
-                                <TextInput width={'100%'} height={36} fontSize={16} isPassword={false}
-                                    icon={TbBuildingCommunity} value={editProfileData.address} />
+
+                                <TextInput name='address' value={editProfileData.address}
+                                    width={'100%'} height={36} fontSize={16} isPassword={false}
+                                    icon={TbBuildingCommunity} onChangeFunction={handleChange}
+                                    errorMessage={validationErrors.address} />
                             </div>
 
                         </div>

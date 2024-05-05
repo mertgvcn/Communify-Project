@@ -1,5 +1,5 @@
 import { Validator } from "fluentvalidation-ts";
-import { SetPasswordFormData } from "../../pages/SetPasswordPage/SetPasswordPage";
+import { SetPasswordFormData } from "../pages/SetPasswordPage/SetPasswordPage";
 
 export class SetPasswordValidator extends Validator<SetPasswordFormData> {
     passwordPattern = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(\S).{8,20}$/)

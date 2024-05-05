@@ -11,7 +11,7 @@ import { MdOutlineMail } from "react-icons/md";
 import useDynamicValidation from '../../../hooks/useDynamicValidation';
 //helpers
 import { setCookie } from '../../../utils/Cookie';
-import { ForgotPasswordValidator } from '../../../validators/RegisterValidators/ForgotPasswordValidator';
+import { ForgotPasswordValidator } from '../../../validators/ForgotPasswordValidator';
 import { forgotPassword } from '../../../utils/apis/AuthenticationAPI';
 import toast, { Toaster } from 'react-hot-toast';
 //components

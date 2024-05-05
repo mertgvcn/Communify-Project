@@ -1,5 +1,5 @@
 import { Validator } from "fluentvalidation-ts";
-import { FormDataType } from "../../components/Forms/LoginForm/LoginForm";
+import { FormDataType } from "../components/Forms/LoginForm/LoginForm";
 
 export class LoginValidator extends Validator<FormDataType> {
     constructor() {
