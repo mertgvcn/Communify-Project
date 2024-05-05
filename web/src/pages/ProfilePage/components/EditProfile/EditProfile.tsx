@@ -18,12 +18,12 @@ import { format } from 'date-fns'
 
 type EditProfileType = {
     editProfileData: UserInformationViewModel | null,
-    setEditProfileDate: React.Dispatch<React.SetStateAction<UserInformationViewModel | null>>,
+    setEditProfileData: React.Dispatch<React.SetStateAction<UserInformationViewModel | null>>,
 
     setEditProfileState: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const EditProfile = ({ editProfileData, setEditProfileDate, setEditProfileState }: EditProfileType) => {
+const EditProfile = ({ editProfileData, setEditProfileData, setEditProfileState }: EditProfileType) => {
 
     return editProfileData ? (
         <div className='edit-profile-background'>
