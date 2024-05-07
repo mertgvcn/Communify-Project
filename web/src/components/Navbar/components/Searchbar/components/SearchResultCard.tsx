@@ -3,6 +3,8 @@ import React from 'react'
 import './SearchResultCard.css'
 //icons
 import { FaUserCircle } from "react-icons/fa";
+//helpers
+import { useNavigate } from 'react-router-dom';
 //models
 import { SearchedUserViewModel } from '../../../../../models/viewModels/SearchedUserViewModel'
 
@@ -11,8 +13,14 @@ type SearchResultCardType = {
 }
 
 const SearchResultCard = (props: SearchResultCardType) => {
+    const navigate = useNavigate()
+
+    const handleProfileClick = () => {
+        navigate("/profile", {state : {username : props.data.username}})
+    }
+
     return (
-        <div className='search-result-card-wrapper'>
+        <div className='search-result-card-wrapper' onClick={handleProfileClick}>
             <div className='icon'>
                 <FaUserCircle />
             </div>
