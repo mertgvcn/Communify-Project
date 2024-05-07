@@ -8,6 +8,7 @@ import { UserInformationSummaryViewModel } from '../../models/viewModels/UserInf
 import { UserInformationViewModel } from '../../models/viewModels/UserInformationViewModel';
 //helpers
 import toast, { Toaster } from 'react-hot-toast';
+import { useLocation } from 'react-router-dom';
 import { getUserInformationSummary } from '../../utils/apis/NavbarAPI';
 import { getUserInformation } from '../../utils/apis/UserProfileAPI';
 import { changePassword } from '../../utils/apis/AuthenticationAPI';
@@ -16,6 +17,8 @@ import PrimaryButton from '../../components/Elements/Buttons/PrimaryButton/Prima
 import EditProfile from './components/EditProfile/EditProfile';
 
 const ProfilePage = () => {
+    const location = useLocation()
+    console.log(location.state.username)
 
     const [userInformationSummary, setUserInformationSummary] = useState<UserInformationSummaryViewModel | null>(null)
     const [isOwner, setIsOwner] = useState(true); //ToDo: burayı prop olarak alıcaz. Güvenliğe dikkat etmek lazım.

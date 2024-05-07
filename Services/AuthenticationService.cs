@@ -1,4 +1,5 @@
-﻿using Communify_Backend.Services.Interfaces;
+﻿using AutoMapper;
+using Communify_Backend.Services.Interfaces;
 using CommunifyLibrary.Models;
 using CommunifyLibrary.NonPersistentModels.Enums;
 using CommunifyLibrary.NonPersistentModels.ParameterModels;
@@ -19,6 +20,7 @@ public class AuthenticationService : IAuthenticationService
     private readonly ICryptionService _cryptionService;
     private readonly IEmailSender _emailSender;
     private readonly IHttpContextService _httpContextService;
+    private readonly IMapper _mapper;
 
     public AuthenticationService(
         IUserRepository userRepository,
@@ -27,7 +29,8 @@ public class AuthenticationService : IAuthenticationService
         ITokenService tokenService,
         ICryptionService cryptionService,
         IEmailSender emailSender,
-        IHttpContextService httpContextService
+        IHttpContextService httpContextService,
+        IMapper mapper
         )
     {
         _userRepository = userRepository;
@@ -37,6 +40,7 @@ public class AuthenticationService : IAuthenticationService
         _cryptionService = cryptionService;
         _emailSender = emailSender;
         _httpContextService = httpContextService;
+        _mapper = mapper;
     }
 
     public async Task<bool> EmailExistsAsync(EmailExistsRequest request) => await _userRepository.GetByEmail(request.Email).AnyAsync();
@@ -48,7 +52,7 @@ public class AuthenticationService : IAuthenticationService
             AuthenticateResult = false,
             AuthToken = "No Token",
             AccessTokenExpireDate = DateTime.Now,
-            ReplyMessage = "Your credentials are wrong",
+            ReplyMessage = "Your credentials are invalid",
             Role = "No Role",
         };
 
@@ -59,16 +63,16 @@ public class AuthenticationService : IAuthenticationService
 
         if (isEmail.Success)
         {
-            user = await _userRepository.GetByEmail(request.Credential).Include(user => user.Role).FirstOrDefaultAsync();
+            user = await _userRepository.GetByEmail(request.Credential).Include(user => user.Role).SingleAsync();
         }
         else
         {
-            user = await _userRepository.GetByUsername(request.Credential).Include(user => user.Role).FirstOrDefaultAsync();
+            user = await _userRepository.GetByUsername(request.Credential).Include(user => user.Role).SingleAsync();
         }
 
         var plainPassword = await _cryptionService.Decrypt(request.Password);
 
-        if (user is not null && BCrypt.Net.BCrypt.Verify(plainPassword, user.Password))
+        if (BCrypt.Net.BCrypt.Verify(plainPassword, user.Password))
         {
             var generatedToken = await _tokenService.GenerateTokenAsync(new GenerateTokenRequest
             {
@@ -82,31 +86,15 @@ public class AuthenticationService : IAuthenticationService
             response.AccessTokenExpireDate = generatedToken.ExpireDate;
             response.ReplyMessage = "Login Successful";
             response.Role = user.Role.Name;
-
-            return await Task.FromResult(response);
         }
 
-        return await Task.FromResult(response);
+        return response;
     }
 
     public async Task RegisterUserAsync(UserRegisterRequest request)
     {
-        User newUser = new User()
-        {
-            FirstName = request.FirstName.Trim(),
-            LastName = request.LastName.Trim(),
-            Username = request.Username.Trim(),
-            PhoneNumber = request.PhoneNumber.Trim(),
-            BirthDate = request.BirthDate,
-            Email = request.Email.Trim(),
-            Gender = request.Gender,
-            BirthCountry = request.BirthCountry.Trim(),
-            BirthCity = request.BirthCity.Trim(),
-            CurrentCountry = request.CurrentCountry.Trim(),
-            CurrentCity = request.CurrentCity.Trim(),
-            Address = request.Address.Trim(),
-            RoleId = 2,
-        };
+        User newUser = _mapper.Map<User>(request);
+        newUser.RoleId = 2;
 
         var user = await _userRepository.AddAsync(newUser);
 
