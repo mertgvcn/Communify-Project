@@ -45,26 +45,33 @@ const ResetPassword = (props: ResetPasswordType) => {
 
             <div className='reset-password-wrapper'>
 
-                <div className='reset-password-form'>
-                    <span className='reset-password-title'>Please Set Your New Password</span>
-
-                    <TextInput name='currentPassword' placeholder="Current Password"
-                        width={440} height={40} fontSize={16} isPassword={true}
-                        icon={RiLockPasswordLine} onChangeFunction={handleChange} />
-
-                    <TextInput name='newPassword' placeholder="New Password"
-                        width={440} height={40} fontSize={16} isPassword={true}
-                        icon={RiLockPasswordLine} onChangeFunction={handleChange} />
-
-                    <TextInput name='confirmPassword' placeholder="Confirm New Password"
-                        width={440} height={40} fontSize={16} isPassword={true}
-                        icon={RiLockPasswordLine} onChangeFunction={handleChange} />
-
-                    <div style={{ marginTop: '0.5rem' }}>
-                        <PrimaryButton value={'Submit'} width={280} height={40} fontSize={16} disabled={buttonBlocker} onClickFunction={handleSubmit} />
-                    </div>
+                <div className="close-button-wrapper">
+                    <IoCloseCircleOutline style={{ float: 'right', cursor: 'pointer' }} onClick={() => props.setResetPasswordState(false)} />
                 </div>
 
+                <div className='reset-password-form'>
+
+                    <span className='reset-password-title'>Please Set Your New Password </span>
+
+                    <div className="inputs">
+                        <TextInput name='currentPassword' placeholder="Current Password"
+                            width={440} height={40} fontSize={16} isPassword={true}
+                            icon={RiLockPasswordLine} onChangeFunction={handleChange} />
+
+                        <TextInput name='newPassword' placeholder="New Password"
+                            width={440} height={40} fontSize={16} isPassword={true}
+                            icon={RiLockPasswordLine} onChangeFunction={handleChange} />
+
+                        <TextInput name='confirmPassword' placeholder="Confirm New Password"
+                            width={440} height={40} fontSize={16} isPassword={true}
+                            icon={RiLockPasswordLine} onChangeFunction={handleChange} />
+                    </div>
+
+                </div>
+
+                <div className='submit-button-wrapper'>
+                    <PrimaryButton value={'Submit'} width={280} height={40} fontSize={16} disabled={buttonBlocker} onClickFunction={handleSubmit} />
+                </div>
             </div>
         </div>
     )
