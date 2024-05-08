@@ -11,8 +11,11 @@ type SearchResultCardType = {
 }
 
 const SearchResultCard = (props: SearchResultCardType) => {
+    const handleClick = () => {
+        window.location.href = '../../../../../pages/HomePage';
+    }
     return (
-        <div className='search-result-card-wrapper'>
+        <div className='search-result-card-wrapper' onClick={handleClick}>
             <div className='icon'>
                 <FaUserCircle />
             </div>
