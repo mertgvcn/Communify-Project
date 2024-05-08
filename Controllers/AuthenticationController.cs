@@ -48,9 +48,9 @@ public class AuthenticationController : Controller
 
     [HttpPost("ChangePassword")]
     [Authorize(Roles = "User")]
-    public async Task ChangePassword()
+    public async Task ChangePassword([FromBody] ChangePasswordRequest request)
     {
-        await authenticationService.ChangePasswordAsync();
+        await authenticationService.ChangePasswordAsync(request);
     }
 
     [HttpPost("SetPassword")]
