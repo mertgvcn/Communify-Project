@@ -1,9 +1,8 @@
 ﻿using Communify_Backend.Services.Interfaces;
 using CommunifyLibrary.Models;
+using CommunifyLibrary.NonPersistentModels.ParameterModels;
 using CommunifyLibrary.Repository;
 using CommunifyLibrary.Repository.Interfaces;
-using LethalCompany_Backend.Models.TokenModels;
-using LethalCompany_Backend.NonPersistentModels.TokenModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -85,7 +84,7 @@ public class TokenService : ITokenService
         };
     }
 
-    public async Task<bool> PasswordTokenExistsAsync(PasswordTokenExists request)
+    public async Task<bool> PasswordTokenExistsAsync(PasswordTokenExistsRequest request)
         => await _passwordTokenRepository.PasswordTokenExistsAsync(request.Token);
 
 }

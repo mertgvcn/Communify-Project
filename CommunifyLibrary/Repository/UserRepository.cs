@@ -6,6 +6,16 @@ namespace CommunifyLibrary.Repository;
 public class UserRepository(CommunifyContext context) : BaseRepository<User>(context), IUserRepository
 {
     public IQueryable<User> GetByEmail(string email) => context.Users.Where(a => a.Email == email);
+    public IQueryable<User> GetByUsername(string username) => context.Users.Where(a => a.Username == username);
+    public IQueryable<User> SearchUsers(string input)
+    {
+        input = input.ToLower();
+
+        return context.Users
+            .Where(a => a.isActive == true && (String.Concat(a.FirstName.ToLower(), " ", a.LastName.ToLower()).Contains(input) || a.Username.Contains(input)))
+            .OrderBy(a => a.FirstName);
+    }
+
     public async Task<long> GetIdByEmailAsync(string email) => (await GetByEmail(email).SingleAsync()).Id;
 
     public async Task AddInterest(long userId, Interest interest)
@@ -17,5 +27,6 @@ public class UserRepository(CommunifyContext context) : BaseRepository<User>(con
         user.Interests.Add(interest);
         await context.SaveChangesAsync();
     }
+
 }
 

@@ -11,7 +11,7 @@ import { MdOutlineMail } from "react-icons/md";
 import useDynamicValidation from '../../../hooks/useDynamicValidation';
 //helpers
 import { setCookie } from '../../../utils/Cookie';
-import { ForgotPasswordValidator } from '../../../validators/RegisterValidators/ForgotPasswordValidator';
+import { ForgotPasswordValidator } from '../../../validators/ForgotPasswordValidator';
 import { forgotPassword } from '../../../utils/apis/AuthenticationAPI';
 import toast, { Toaster } from 'react-hot-toast';
 //components
@@ -86,7 +86,7 @@ const ForgotPassword = (props: ForgotPasswordType) => {
 
       <div className="forgot-password-wrapper">
 
-        <div className="row">
+        <div className="col">
 
           <div className="navigation-buttons">
             <div className='back-button'>
@@ -107,7 +107,7 @@ const ForgotPassword = (props: ForgotPasswordType) => {
               onChangeFunction={handleChange} icon={MdOutlineMail}
               errorMessage={validationErrors.email} />
           </div>
-
+          
         </div>
 
         <div className='confirm-button'>

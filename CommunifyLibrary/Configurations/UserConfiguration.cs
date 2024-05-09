@@ -1,4 +1,5 @@
 ﻿using CommunifyLibrary.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CommunifyLibrary.Configurations
@@ -16,6 +17,10 @@ namespace CommunifyLibrary.Configurations
             builder.Property(x => x.LastName)
                 .IsRequired(true)
                 .HasMaxLength(64);
+
+            builder.Property(x => x.Username)
+                .IsRequired(true)
+                .HasMaxLength(32);
 
             builder.Property(x => x.BirthDate)
                 .IsRequired(true);
@@ -54,6 +59,10 @@ namespace CommunifyLibrary.Configurations
             builder.Property(x => x.Password)
                 .IsRequired(false)
                 .HasMaxLength(256);
+
+            builder.Property(x => x.isActive)
+                .IsRequired(false)
+                .HasDefaultValue(false);
         }
     }
 }

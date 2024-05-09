@@ -1,5 +1,5 @@
 ﻿
-using LethalCompany_Backend.Models.AuthenticationModels;
+using CommunifyLibrary.NonPersistentModels.ParameterModels;
 
 namespace Communify_Backend.Services.Interfaces
 {
@@ -9,6 +9,7 @@ namespace Communify_Backend.Services.Interfaces
         Task<UserLoginResponse> LoginUserAsync(UserLoginRequest request);
         Task RegisterUserAsync(UserRegisterRequest user);
         Task ForgotPasswordAsync(ForgotPasswordRequest request);
+        Task ChangePasswordAsync();
         Task SetPasswordAsync(SetPasswordRequest request);
     }
 }

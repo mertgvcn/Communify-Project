@@ -1,10 +1,12 @@
 .drop-down-profile {
     position: absolute;
+    z-index: 999;
     top: 75px;
     right: 1rem;
     width: 180px;
     border-radius: 10px;
-    border: 1px solid #18403c;
+    border: 1px solid #18403c40;
+    background-color: rgb(245, 245, 245);
 }
 
 .drop-down-profile::before {
@@ -16,11 +18,10 @@
     height: 10px;
     box-sizing: border-box;
     transform: rotate(45deg);
-    border-color: #18403c;
-    border-top: 1px solid;
-    border-left: 1px solid;
+    border-top: 1px solid #18403c60;
+    border-left: 1px solid #18403c60;
     border-bottom-right-radius: 100%;
-    background-color: rgb(245,245,245);
+    background-color: rgb(245, 245, 245);
 }
 
 .drop-down-profile .list-wrapper {
@@ -42,14 +43,16 @@
 }
 
 .drop-down-profile .list-wrapper li:hover {
-    background-color: #9dd2cf98;
+    background-color: rgb(235,235,235);
 } 
 
 .drop-down-profile .list-wrapper li .icon {
     display: grid;
-    flex: 25%
+    flex: 25%;
+    color: #2c9ba6;
 }
 
 .drop-down-profile .list-wrapper li span {
     flex: 75%;
+    color: #18403c;
 }

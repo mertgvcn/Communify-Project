@@ -1,5 +1,5 @@
-﻿using LethalCompany_Backend.Exceptions;
-using LethalCompany_Backend.Models.MailSenderModel;
+﻿using CommunifyLibrary.NonPersistentModels.ConfigurationModels;
+using LethalCompany_Backend.Exceptions;
 using LethalCompany_Backend.Services.Interfaces;
 using MailKit.Net.Smtp;
 using MimeKit;

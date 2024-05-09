@@ -11,6 +11,7 @@ type TextInputType = {
   errorMessage?: string
   fontSize?: number,
   placeholder?: string,
+  value?: string,
   name?: string,
   title?: string,
   onChangeFunction?: React.ChangeEventHandler<HTMLInputElement>,
@@ -18,7 +19,7 @@ type TextInputType = {
 }
 
 const TextInput = (props: TextInputType) => {
-  const {width, height, isPassword, errorMessage, fontSize, placeholder, name, title, onChangeFunction} = props
+  const {width, height, isPassword, errorMessage, fontSize, placeholder, value, name, title, onChangeFunction} = props
 
   return (
     <div className='input-template'  style={{ width: width, marginBottom: 10}}>
@@ -27,7 +28,7 @@ const TextInput = (props: TextInputType) => {
         <input
           type={isPassword ? "password" : "text"}
           className='text-input'
-          name={name} placeholder={placeholder} title={title}
+          name={name} placeholder={placeholder} title={title} value={value}
           onChange={onChangeFunction}
           style={{
             width: width,

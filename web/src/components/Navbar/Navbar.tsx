@@ -16,8 +16,9 @@ import PrimaryButton from '../Elements/Buttons/PrimaryButton/PrimaryButton'
 import SecondaryButton from '../Elements/Buttons/SecondaryButton/SecondaryButton'
 import LoginForm from '../Forms/LoginForm/LoginForm'
 import RegisterForm from '../Forms/RegisterForm/RegisterForm'
-import DropDownProfile from './components/DropDownProfile/DropDownProfile'
 import ForgotPassword from '../Forms/ForgotPasswordForm/ForgotPassword';
+import DropDownProfile from './components/DropDownProfile/DropDownProfile'
+import Searchbar from './components/Searchbar/Searchbar';
 
 type NavbarType = {
   role: Roles,
@@ -30,7 +31,7 @@ const Navbar = (props: NavbarType) => {
     registerFormState: false
   })
   const [forgotPasswordState, setForgotPasswordState] = useState<boolean>(false)
-  const [isDropDownProfile, setDropDownProfile] = useState<boolean>(false)
+  const [dropDownProfileState, setDropDownProfileState] = useState<boolean>(false)
 
   const [interestList, setInterestList] = useState<InterestViewModel[]>([])
 
@@ -62,32 +63,48 @@ const Navbar = (props: NavbarType) => {
       <nav className="navbar-wrapper">
         <div className="navbar-components">
 
-          <div className="navbar-logo">
-            <Link to='/' className='link'>
-              <img src={require(`../../assets/logos/large_logo.png`)} alt="img not found" />
-            </Link>
+          <div className='column'>
+            <div className="navbar-logo">
+              <Link to='/' className='link'>
+                <img src={require(`../../assets/logos/large_logo.png`)} alt="img not found" />
+              </Link>
+            </div>
           </div>
 
-          {props.role == Roles.Guest.valueOf() &&
-            <div className='navbar-buttons'>
-              <PrimaryButton value='Login' fontSize={16} width="120px" height="40px" onClickFunction={handleLoginForm} />
-              <SecondaryButton value='Sign Up' fontSize={16} width="120px" height="40px" onClickFunction={handleRegisterForm} />
-            </div>
-          }
 
-          {props.role == Roles.User.valueOf() &&
-            <div className="user" onClick={() => { setDropDownProfile((prev) => !prev) }}>
-              <FaUserCircle />
+          <div className='column'>
+            <div className='search-bar'>
+              <Searchbar />
             </div>
-          }
+          </div>
+
+
+          <div className='column'>
+            <div className='role-based-components'>
+
+              {props.role == Roles.Guest.valueOf() &&
+                <div className='navbar-buttons'>
+                  <PrimaryButton value='Login' fontSize={16} width="120px" height="40px" onClickFunction={handleLoginForm} />
+                  <SecondaryButton value='Sign Up' fontSize={16} width="120px" height="40px" onClickFunction={handleRegisterForm} />
+                </div>
+              }
+
+              {props.role == Roles.User.valueOf() &&
+                <div className="user" onClick={() => { setDropDownProfileState((prev) => !prev) }}>
+                  <FaUserCircle />
+                </div>
+              }
+
+            </div>
+          </div>
 
         </div>
       </nav >
 
       {formState.loginFormState && <LoginForm setFormState={setFormState} setForgotPasswordState={setForgotPasswordState} setInterestList={setInterestList} />}
       {formState.registerFormState && <RegisterForm setFormState={setFormState} interestList={interestList} />}
-      {forgotPasswordState && <ForgotPassword setFormState={setFormState} setForgotPasswordState={setForgotPasswordState}/>}
-      {isDropDownProfile && <DropDownProfile />}
+      {forgotPasswordState && <ForgotPassword setFormState={setFormState} setForgotPasswordState={setForgotPasswordState} />}
+      {dropDownProfileState && <DropDownProfile setDropDownProfileState={setDropDownProfileState}/>}
     </>
   )
 }

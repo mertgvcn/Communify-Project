@@ -1,10 +1,14 @@
-﻿namespace CommunifyLibrary.Models
+﻿using CommunifyLibrary.NonPersistentModels.Enums;
+
+namespace CommunifyLibrary.Models
 {
     public class User : BaseEntity
     {
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
+
+        public string Username { get; set; }
 
         public DateTime BirthDate { get; set; }
 
@@ -30,13 +34,7 @@
         public Role Role { get; set; }
 
         public ICollection<Interest> Interests { get; set; }
-    }
 
-    public enum Genders
-    {
-        Woman,
-        Man,
-        NonBinary,
-        NotSpecified
+        public bool isActive { get; set; }
     }
 }

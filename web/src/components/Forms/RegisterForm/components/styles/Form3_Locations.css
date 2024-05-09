@@ -18,12 +18,6 @@
     overflow-y: scroll;
 }
 
-#register-form3 .inputs .row {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
 #register-form3  .buttons {
     width: 100%;
     display: flex;

@@ -2,7 +2,7 @@ import { Genders } from "../enums/Genders"
 import { InterestViewModel } from "../viewModels/InterestViewModel"
 
 export type LoginRequest = {
-    email: string,
+    credential: string,
     password: string
 }
 
@@ -17,6 +17,7 @@ export type LoginResponse = {
 export type RegisterRequest = {
     firstName: string,
     lastName: string,
+    username: string,
     phoneNumber: string,
     email: string,
     birthDate: string,

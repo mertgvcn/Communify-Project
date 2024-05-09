@@ -181,6 +181,13 @@ namespace CommunifyLibrary.Migrations
                     b.Property<long>("RoleId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("boolean");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RoleId");

@@ -1,4 +1,6 @@
-﻿using CommunifyLibrary.Repository;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CommunifyLibrary.Repository;
 using LethalCompany_Backend.Models.InterestModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,23 +14,22 @@ namespace LethalCompany_Backend.Controllers
     public class InterestController : Controller
     {
         private readonly IInterestRepository _interestRepository;
+        private readonly IMapper _mapper;
 
-        public InterestController(IInterestRepository interestRepository)
+        public InterestController(IInterestRepository interestRepository, IMapper mapper)
         {
             _interestRepository = interestRepository;
+            _mapper = mapper;
         }
 
         [HttpGet("GetInterests")]
-        public async Task<JsonResult> GetInterests()
+        public async Task<List<InterestViewModel>> GetInterests()
         {
-            var interests = await _interestRepository.GetAll().Select(a => new InterestViewModel
-            {
-                Id = a.Id,
-                Name = a.Name,
-                IsChecked = false
-            }).ToListAsync();
+            var interests = await _interestRepository.GetAll()
+                .ProjectTo<InterestViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
 
-            return new JsonResult(interests);
+            return interests;
         }
     }
 }

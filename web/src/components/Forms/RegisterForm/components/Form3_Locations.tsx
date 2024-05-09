@@ -11,7 +11,7 @@ import { IoLocationOutline } from "react-icons/io5";
 //hooks
 import useDynamicValidation from '../../../../hooks/useDynamicValidation';
 //helpers
-import { Form3Validator } from '../../../../validators/RegisterValidators/Form3Validator';
+import { Form3Validator } from '../../../../validators/Form3Validator';
 //components
 import SecondaryButton from '../../../Elements/Buttons/SecondaryButton/SecondaryButton'
 import PrimaryButton from '../../../Elements/Buttons/PrimaryButton/PrimaryButton'
@@ -68,7 +68,7 @@ const Form3 = (props: Form3Type) => {
                 </div>
 
                 <div className='inputs'>
-                    <div className='row'>
+                    <div className='row' style={{justifyContent: 'space-between'}}>
 
                         <TextInput name="birthCountry" placeholder='Birth Country'
                             width={200} height={36} fontSize={16} isPassword={false}
@@ -82,7 +82,7 @@ const Form3 = (props: Form3Type) => {
 
                     </div>
 
-                    <div className="row">
+                    <div className="row" style={{justifyContent: 'space-between'}}>
 
                         <TextInput name='currentCountry' placeholder='Current Country'
                             width={200} height={36} fontSize={16} isPassword={false}
