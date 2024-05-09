@@ -20,17 +20,10 @@ public class UserRepository(CommunifyContext context, IInterestRepository intere
 
     public async Task AddInterest(long userId, long interestId)
     {
-        var user = await GetAll().Where(a => a.Id == userId)
-            .Include(a => a.Interests)
-            .Include(a => a.Followers)
-            .Include(a => a.Followings)
-            .SingleAsync();
-        Interest interest = await interestRepository.GetByIdAsync(interestId);
-        var a = await GetByIdAsync(54);
-        var b = await GetByIdAsync(54);
+        var user = await GetAll().Where(u => u.Id == userId).Include(u => u.Interests).SingleAsync();
 
-        user.Followers.Add(a);
-        user.Followings.Add(b);
+        Interest interest = await interestRepository.GetByIdAsync(interestId);
+
         user.Interests.Add(interest);
         await context.SaveChangesAsync();
     }
