@@ -19,6 +19,7 @@ import LoginForm from '../Forms/LoginForm/LoginForm'
 import RegisterForm from '../Forms/RegisterForm/RegisterForm'
 import ForgotPassword from '../Forms/ForgotPasswordForm/ForgotPassword';
 import Searchbar from './components/Searchbar/Searchbar';
+import Notification from './components/Notification/Notification';
 import UserMenu from './components/UserMenu/UserMenu';
 
 type NavbarType = {
@@ -32,6 +33,7 @@ const Navbar = (props: NavbarType) => {
         registerFormState: false
     })
     const [forgotPasswordState, setForgotPasswordState] = useState<boolean>(false)
+
     const [notificationState, setNotificationState] = useState<boolean>(false)
     const [userMenuState, setUserMenuState] = useState<boolean>(false)
 
@@ -58,6 +60,16 @@ const Navbar = (props: NavbarType) => {
             loginFormState: false,
             registerFormState: true
         })
+    }
+
+    const handleNotification = async () => {
+        setNotificationState((prev) => !prev)
+        setUserMenuState(false)
+    }
+
+    const handleUserMenu = () => {
+        setUserMenuState((prev) => !prev)
+        setNotificationState(false)
     }
 
     return (
@@ -93,10 +105,10 @@ const Navbar = (props: NavbarType) => {
 
                             {props.role == Roles.User.valueOf() &&
                                 <>
-                                    <div className="button" style={{ fontSize: 36, marginRight: 16 }} onClick={() => { setNotificationState((prev) => !prev) }}>
+                                    <div className="button" style={{ fontSize: 36, marginRight: 16 }} onClick={handleNotification}>
                                         <IoIosNotifications />
                                     </div>
-                                    <div className="button" style={{ fontSize: 36 }} onClick={() => { setUserMenuState((prev) => !prev) }}>
+                                    <div className="button" style={{ fontSize: 36 }} onClick={handleUserMenu}>
                                         <FaUserCircle />
                                     </div>
                                 </>
@@ -112,7 +124,7 @@ const Navbar = (props: NavbarType) => {
             {formState.registerFormState && <RegisterForm setFormState={setFormState} interestList={interestList} />}
             {forgotPasswordState && <ForgotPassword setFormState={setFormState} setForgotPasswordState={setForgotPasswordState} />}
 
-
+            {notificationState && <Notification setNotificationState={setNotificationState} />}
             {userMenuState && <UserMenu setUserMenuState={setUserMenuState} />}
         </>
     )
