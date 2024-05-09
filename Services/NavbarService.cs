@@ -38,13 +38,4 @@ public class NavbarService : INavbarService
 
         return (await _userRepository.GetByIdAsync(userId)).Username;
     }
-
-    public async Task<UserInformationSummaryViewModel> GetUserInformationSummaryAsync(string username)
-    {
-        var userInformationSummary = await _userRepository.GetAll().Where(u => u.Username == username)
-                                                .ProjectTo<UserInformationSummaryViewModel>(_mapper.ConfigurationProvider)
-                                                .SingleAsync();
-
-        return userInformationSummary;
-    }
 }

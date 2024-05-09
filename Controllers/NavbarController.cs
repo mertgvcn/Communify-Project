@@ -1,5 +1,4 @@
 ﻿using CommunifyLibrary.NonPersistentModels.ParameterModels;
-using CommunifyLibrary.NonPersistentModels.ViewModels;
 using LethalCompany_Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -39,8 +38,4 @@ public class NavbarController : Controller
     [HttpGet]
     public async Task<string> GetUsername()
      => await _navbarService.GetUsernameAsync();
-
-    [HttpGet]
-    public async Task<UserInformationSummaryViewModel> GetUserInformationSummary(string username)
-        => await _navbarService.GetUserInformationSummaryAsync(username);
 }
