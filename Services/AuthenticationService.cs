@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Communify_Backend.Services.Interfaces;
+using CommunifyLibrary.Enums;
 using CommunifyLibrary.Models;
-using CommunifyLibrary.NonPersistentModels.Enums;
 using CommunifyLibrary.NonPersistentModels.ParameterModels;
 using CommunifyLibrary.Repository;
 using CommunifyLibrary.Repository.Interfaces;
@@ -14,7 +14,6 @@ namespace Communify_Backend.Services;
 public class AuthenticationService : IAuthenticationService
 {
     private readonly IUserRepository _userRepository;
-    private readonly IInterestRepository _interestRepository;
     private readonly IPasswordTokenRepository _passwordTokenRepository;
     private readonly ITokenService _tokenService;
     private readonly ICryptionService _cryptionService;
@@ -24,7 +23,6 @@ public class AuthenticationService : IAuthenticationService
 
     public AuthenticationService(
         IUserRepository userRepository,
-        IInterestRepository interestRepository,
         IPasswordTokenRepository passwordTokenRepository,
         ITokenService tokenService,
         ICryptionService cryptionService,
@@ -34,7 +32,6 @@ public class AuthenticationService : IAuthenticationService
         )
     {
         _userRepository = userRepository;
-        _interestRepository = interestRepository;
         _passwordTokenRepository = passwordTokenRepository;
         _tokenService = tokenService;
         _cryptionService = cryptionService;
@@ -100,8 +97,7 @@ public class AuthenticationService : IAuthenticationService
 
         foreach (var interestId in request.InterestIdList)
         {
-            var interest = await _interestRepository.GetByIdAsync(interestId);
-            await _userRepository.AddInterest(user.Id, interest);
+            await _userRepository.AddInterest(user.Id, interestId);
         }
 
         var generatedToken = await _tokenService.CreatePasswordTokenAsync(user.Id);

@@ -16,7 +16,7 @@ const SearchResultCard = (props: SearchResultCardType) => {
     const navigate = useNavigate()
 
     const handleProfileClick = () => {
-        navigate("/profile", {state : {username : props.data.username}})
+        navigate("/profile", { state: { username: props.data.username } })
     }
 
     return (
@@ -28,7 +28,7 @@ const SearchResultCard = (props: SearchResultCardType) => {
             <div className='info'>
                 <span className='full-name'>{props.data.fullName}</span>
                 <span className='username'>#{props.data.username}</span>
-            </div>        
+            </div>
         </div>
     )
 }

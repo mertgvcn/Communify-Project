@@ -20,6 +20,14 @@ public class UserProfileService : IUserProfileService
         _mapper = mapper;
     }
 
+    public async Task<bool> IsProfileOwnerAsync(string username)
+    {
+        var userId = _httpContextService.GetCurrentUserID();
+        if (userId == -1) return false;
+
+        return (await _userRepository.GetByIdAsync(userId)).Username == username;
+    }
+
     public async Task<UserInformationViewModel> GetUserInformationAsync()
     {
         var userId = _httpContextService.GetCurrentUserID();

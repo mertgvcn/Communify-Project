@@ -3,6 +3,7 @@ using System;
 using CommunifyLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CommunifyLibrary.Migrations
 {
     [DbContext(typeof(CommunifyContext))]
-    partial class CommunifyContextModelSnapshot : ModelSnapshot
+    [Migration("20240508191557_FollowingsAndFollowers")]
+    partial class FollowingsAndFollowers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,37 +50,6 @@ namespace CommunifyLibrary.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Interests");
-                });
-
-            modelBuilder.Entity("CommunifyLibrary.Models.Notification", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTime?>("DateModified")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("Seen")
-                        .HasColumnType("boolean");
-
-                    b.Property<long?>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Notification");
                 });
 
             modelBuilder.Entity("CommunifyLibrary.Models.PasswordToken", b =>
@@ -256,13 +227,6 @@ namespace CommunifyLibrary.Migrations
                     b.ToTable("Followings", (string)null);
                 });
 
-            modelBuilder.Entity("CommunifyLibrary.Models.Notification", b =>
-                {
-                    b.HasOne("CommunifyLibrary.Models.User", null)
-                        .WithMany("Notifications")
-                        .HasForeignKey("UserId");
-                });
-
             modelBuilder.Entity("CommunifyLibrary.Models.PasswordToken", b =>
                 {
                     b.HasOne("CommunifyLibrary.Models.User", "User")
@@ -316,11 +280,6 @@ namespace CommunifyLibrary.Migrations
             modelBuilder.Entity("CommunifyLibrary.Models.Role", b =>
                 {
                     b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("CommunifyLibrary.Models.User", b =>
-                {
-                    b.Navigation("Notifications");
                 });
 #pragma warning restore 612, 618
         }
