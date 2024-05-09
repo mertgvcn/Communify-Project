@@ -5,9 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LethalCompany_Backend.Controllers;
 
-[Authorize(Roles = "User")]
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/[controller]/[action]")]
 public class UserProfileController : Controller
 {
     private readonly IUserProfileService _userProfileService;
@@ -17,7 +16,13 @@ public class UserProfileController : Controller
         _userProfileService = userProfileService;
     }
 
-    [HttpGet("GetUserInformation")]
+    [HttpGet]
+    [Authorize(Roles = "User")]
     public async Task<UserInformationViewModel> GetUserInformation()
-    => await _userProfileService.GetUserInformationAsync();
+        => await _userProfileService.GetUserInformationAsync();
+
+    [HttpGet]
+    [AllowAnonymous]
+    public async Task<bool> IsProfileOwner(string username)
+        => await _userProfileService.IsProfileOwnerAsync(username);
 }

@@ -18,7 +18,6 @@ import toast, { Toaster } from 'react-hot-toast';
 import TextInput from '../../components/Elements/TextInput/TextInput'
 import PrimaryButton from '../../components/Elements/Buttons/PrimaryButton/PrimaryButton';
 import ErrorPage from '../ErrorPage/ErrorPage';
-import { jwtDecode } from 'jwt-decode';
 
 export type SetPasswordFormData = {
     password: string,

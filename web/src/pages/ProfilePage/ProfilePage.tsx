@@ -8,31 +8,42 @@ import { UserInformationSummaryViewModel } from '../../models/viewModels/UserInf
 import { UserInformationViewModel } from '../../models/viewModels/UserInformationViewModel';
 //helpers
 import toast, { Toaster } from 'react-hot-toast';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { getUserInformationSummary } from '../../utils/apis/NavbarAPI';
-import { getUserInformation } from '../../utils/apis/UserProfileAPI';
+import { getUserInformation, isProfileOwner } from '../../utils/apis/UserProfileAPI';
 import { changePassword } from '../../utils/apis/AuthenticationAPI';
 //components
 import PrimaryButton from '../../components/Elements/Buttons/PrimaryButton/PrimaryButton';
 import EditProfile from './components/EditProfile/EditProfile';
+import SecondaryButton from '../../components/Elements/Buttons/SecondaryButton/SecondaryButton';
 
 const ProfilePage = () => {
-
-    const [userInformationSummary, setUserInformationSummary] = useState<UserInformationSummaryViewModel | null>(null)
-    const [isOwner, setIsOwner] = useState(true); //ToDo: burayı prop olarak alıcaz. Güvenliğe dikkat etmek lazım.
+    const location = useLocation()
+    
+    const [isOwner, setIsOwner] = useState<boolean>(false); 
     const [buttonBlocker, setButtonBlocker] = useState(false)
+    
+    const [userInformationSummary, setUserInformationSummary] = useState<UserInformationSummaryViewModel | null>(null)
 
     const [editProfileData, setEditProfileData] = useState<UserInformationViewModel | null>(null)
     const [editProfileState, setEditProfileState] = useState(false)
 
     useEffect(() => {
         fetchUserInformationSummary()
-    }, [])
+        checkIfProfileOwner()
+    }, [location.state.username])
 
     const fetchUserInformationSummary = async () => {
-        const response = await getUserInformationSummary()
+        const response = await getUserInformationSummary(location.state.username)
         setUserInformationSummary(response)
     }
 
+    const checkIfProfileOwner = async () => {
+        const response = await isProfileOwner(location.state.username)
+        setIsOwner(response)
+    }
+
+    //Profile owner functions
     const handleEditProfile = async () => {
         const response = await getUserInformation()
 
@@ -65,7 +76,7 @@ const ProfilePage = () => {
                 <Toaster toastOptions={{ style: { fontSize: 14 } }} />
 
                 <div className='post-wrapper'>
-                    Posts
+                    Posts/Community Memberships
                 </div>
 
                 <div className='user-details-wrapper'>
@@ -133,7 +144,10 @@ const ProfilePage = () => {
 
                             </div>
                             :
-                            null
+                            <div className='follow-button-wrapper'>
+                                <PrimaryButton width={"48%"} height={36} value='Follow' fontSize={14} onClickFunction={() => {}} disabled={buttonBlocker} />
+                                <SecondaryButton width={"48%"} height={36} value='Chat' fontSize={14} onClickFunction={() => {}} disabled={buttonBlocker} />
+                            </div>
                         }
 
                     </div>

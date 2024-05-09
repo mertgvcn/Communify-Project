@@ -6,18 +6,21 @@ import { FaUser } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { FaSignOutAlt } from "react-icons/fa";
 //helpers
-import { deleteCookie } from '../../../../utils/Cookie';
 import { useNavigate } from 'react-router';
+import { getUsername } from '../../../../utils/apis/NavbarAPI';
+import { deleteCookie } from '../../../../utils/Cookie';
 
 type dropDownProfileType = {
-    setDropDownProfileState : React.Dispatch<React.SetStateAction<boolean>>
+    setDropDownProfileState: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const DropDownProfile = (props : dropDownProfileType) => {
+const DropDownProfile = (props: dropDownProfileType) => {
     const navigate = useNavigate()
 
     const handleProfile = async () => {
-        navigate("/profile")
+        const username = await getUsername()
+
+        navigate("/profile", { state: { username: username } })
         props.setDropDownProfileState(false)
     }
 
