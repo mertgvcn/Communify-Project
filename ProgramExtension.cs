@@ -62,6 +62,7 @@ namespace Communify_Backend
                 collection.AddScoped<IRoleRepository, RoleRepository>();
                 collection.AddScoped<IInterestRepository, InterestRepository>();
                 collection.AddScoped<IPasswordTokenRepository, PasswordTokenRepository>();
+                collection.AddScoped<INotificationRepository, NotificationRepository>();
             }
         }
 

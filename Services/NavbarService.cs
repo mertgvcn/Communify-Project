@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using CommunifyLibrary.NonPersistentModels.ParameterModels;
 using CommunifyLibrary.NonPersistentModels.ViewModels;
 using CommunifyLibrary.Repository;
+using CommunifyLibrary.Repository.Interfaces;
 using LethalCompany_Backend.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,12 +12,14 @@ namespace LethalCompany_Backend.Services;
 public class NavbarService : INavbarService
 {
     private readonly IUserRepository _userRepository;
+    private readonly INotificationRepository _notificationRepository;
     private readonly IHttpContextService _httpContextService;
     private readonly IMapper _mapper;
 
-    public NavbarService(IUserRepository userRepository, IHttpContextService httpContextService, IMapper mapper)
+    public NavbarService(IUserRepository userRepository, INotificationRepository notificationRepository, IHttpContextService httpContextService, IMapper mapper)
     {
         _userRepository = userRepository;
+        _notificationRepository = notificationRepository;
         _httpContextService = httpContextService;
         _mapper = mapper;
     }
@@ -30,6 +33,17 @@ public class NavbarService : INavbarService
                                     .ProjectTo<SearchedUserViewModel>(_mapper.ConfigurationProvider)
                                     .Take(5).ToListAsync();
         return searchResult;
+    }
+
+    public async Task<List<NotificationViewModel>> GetNotificationsAsync()
+    {
+        var userId = _httpContextService.GetCurrentUserID();
+
+        var notifications = await _notificationRepository.GetAll().Where(n => n.UserId == userId)
+                                     .ProjectTo<NotificationViewModel>(_mapper.ConfigurationProvider)
+                                     .ToListAsync();
+
+        return notifications;
     }
 
     public async Task<string> GetUsernameAsync()
