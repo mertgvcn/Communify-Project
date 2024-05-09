@@ -1,4 +1,4 @@
-import { Genders } from "../enums/Genders"
+import { Genders } from "../../enums/Genders"
 import { InterestViewModel } from "../viewModels/InterestViewModel"
 
 export type LoginRequest = {

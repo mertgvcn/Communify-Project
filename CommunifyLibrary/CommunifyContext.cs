@@ -14,6 +14,7 @@ namespace CommunifyLibrary
         public DbSet<Role> Roles { get; set; }
         public DbSet<Interest> Interests { get; set; }
         public DbSet<PasswordToken> PasswordTokens { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -6,5 +6,4 @@ public interface INavbarService
 {
     Task<List<SearchedUserViewModel>> SearchAsync(SearchRequest request);
     Task<string> GetUsernameAsync();
-    Task<UserInformationSummaryViewModel> GetUserInformationSummaryAsync(string username);
 }

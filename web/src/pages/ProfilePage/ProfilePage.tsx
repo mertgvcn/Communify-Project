@@ -4,13 +4,12 @@ import './ProfilePage.css'
 //icons
 import { FaUserCircle } from 'react-icons/fa'
 //models
-import { UserInformationSummaryViewModel } from '../../models/viewModels/UserInformationSummaryViewModel';
+import { ProfilePageDataModel } from '../../models/pageViewModels/ProfilePageDataModel';
 import { UserInformationViewModel } from '../../models/viewModels/UserInformationViewModel';
 //helpers
 import toast, { Toaster } from 'react-hot-toast';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { getUserInformationSummary } from '../../utils/apis/NavbarAPI';
-import { getUserInformation, isProfileOwner } from '../../utils/apis/UserProfileAPI';
+import { useLocation } from 'react-router-dom';
+import { getProfilePageData, getUserInformation, toggleFollowUser } from '../../utils/apis/UserProfileAPI';
 import { changePassword } from '../../utils/apis/AuthenticationAPI';
 //components
 import PrimaryButton from '../../components/Elements/Buttons/PrimaryButton/PrimaryButton';
@@ -19,28 +18,55 @@ import SecondaryButton from '../../components/Elements/Buttons/SecondaryButton/S
 
 const ProfilePage = () => {
     const location = useLocation()
-    
-    const [isOwner, setIsOwner] = useState<boolean>(false); 
+
+    //States
     const [buttonBlocker, setButtonBlocker] = useState(false)
-    
-    const [userInformationSummary, setUserInformationSummary] = useState<UserInformationSummaryViewModel | null>(null)
+
+    const [profilePageData, setProfilePageData] = useState<ProfilePageDataModel>({
+        profileStatus: {
+            isOwner: false,
+            isFollower: false
+        },
+        userInformationSummary: null
+    });
 
     const [editProfileData, setEditProfileData] = useState<UserInformationViewModel | null>(null)
     const [editProfileState, setEditProfileState] = useState(false)
 
+    //On page load functions
     useEffect(() => {
-        fetchUserInformationSummary()
-        checkIfProfileOwner()
+        fetchProfilePageData();
     }, [location.state.username])
 
-    const fetchUserInformationSummary = async () => {
-        const response = await getUserInformationSummary(location.state.username)
-        setUserInformationSummary(response)
+    const fetchProfilePageData = async () => {
+        const response = await getProfilePageData(location.state.username)
+        setProfilePageData(response)
     }
 
-    const checkIfProfileOwner = async () => {
-        const response = await isProfileOwner(location.state.username)
-        setIsOwner(response)
+    //Profile visitor functions
+    const handleToggleFollow = async () => {
+        setButtonBlocker(true)
+
+        const response = toggleFollowUser(location.state.username, profilePageData.profileStatus.isFollower)
+
+        await toast.promise(
+            response,
+            {
+                loading: 'Please wait...',
+                success: <b>{`You ${profilePageData.profileStatus.isFollower ? 'unfollowed' : 'started following'} ${location.state.username}`}</b>,
+                error: null
+            }
+        )
+
+        setProfilePageData({
+            ...profilePageData,
+            profileStatus: {
+                isOwner: false,
+                isFollower: !profilePageData.profileStatus.isFollower
+            }
+        })
+
+        setButtonBlocker(false)
     }
 
     //Profile owner functions
@@ -70,7 +96,7 @@ const ProfilePage = () => {
         }, 2000)
     }
 
-    return userInformationSummary ? (
+    return profilePageData.userInformationSummary ? (
         <>
             <div className='profile-page-wrapper'>
                 <Toaster toastOptions={{ style: { fontSize: 14 } }} />
@@ -88,8 +114,8 @@ const ProfilePage = () => {
                             </div>
 
                             <div className='info'>
-                                <span className='full-name'>{`${userInformationSummary.firstName} ${userInformationSummary.lastName}`}</span>
-                                <span className='username'>{`#${userInformationSummary.username}`}</span>
+                                <span className='full-name'>{`${profilePageData.userInformationSummary.firstName} ${profilePageData.userInformationSummary.lastName}`}</span>
+                                <span className='username'>{`#${profilePageData.userInformationSummary.username}`}</span>
                             </div>
                         </div>
 
@@ -105,14 +131,18 @@ const ProfilePage = () => {
                                 <span className='stat-value'>8</span>
                             </div>
                             <div className='stat'>
-                                <span className='stat-title'>Friends</span>
+                                <span className='stat-title'>Followers</span>
                                 <span className='stat-value'>78</span>
+                            </div>
+                            <div className='stat'>
+                                <span className='stat-title'>Following</span>
+                                <span className='stat-value'>15</span>
                             </div>
                         </div>
 
                         <div className="line"></div>
 
-                        {isOwner ?
+                        {profilePageData.profileStatus.isOwner ?
                             <div className='profile-management'>
 
                                 <div className='manager'>
@@ -144,9 +174,14 @@ const ProfilePage = () => {
 
                             </div>
                             :
-                            <div className='follow-button-wrapper'>
-                                <PrimaryButton width={"48%"} height={36} value='Follow' fontSize={14} onClickFunction={() => {}} disabled={buttonBlocker} />
-                                <SecondaryButton width={"48%"} height={36} value='Chat' fontSize={14} onClickFunction={() => {}} disabled={buttonBlocker} />
+                            <div className='button-wrapper'>
+                                <PrimaryButton width={"48%"} height={36} fontSize={14} 
+                                    value={profilePageData.profileStatus.isFollower ? 'Unfollow' : 'Follow'}
+                                    onClickFunction={handleToggleFollow} disabled={buttonBlocker}
+                                />
+
+                                <SecondaryButton width={"48%"} height={36} value='Chat'
+                                    fontSize={14} onClickFunction={() => { }} disabled={buttonBlocker} />
                             </div>
                         }
 

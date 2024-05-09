@@ -123,8 +123,8 @@
     color: #7a8282;
 }
 
-/*follow button*/
-.follow-button-wrapper {
+/*follow-chat buttons*/
+.button-wrapper {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
