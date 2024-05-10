@@ -5,6 +5,7 @@ using CommunifyLibrary.Models;
 using CommunifyLibrary.NonPersistentModels.ParameterModels;
 using CommunifyLibrary.Repository;
 using CommunifyLibrary.Repository.Interfaces;
+using LethalCompany_Backend.Exceptions;
 using LethalCompany_Backend.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
@@ -126,14 +127,8 @@ public class AuthenticationService : IAuthenticationService
         });
     }
 
-    public async Task<ChangePasswordResponse> ChangePasswordAsync(ChangePasswordRequest request)
+    public async Task ChangePasswordAsync(ChangePasswordRequest request)
     {
-        ChangePasswordResponse response = new ChangePasswordResponse()
-        {
-            IsSuccess = false,
-            ReplyMessage = "Current password is incorrect",
-        };
-
         var userId = _httpContextService.GetCurrentUserID();
         var user = await _userRepository.GetByIdAsync(userId);
 
@@ -146,18 +141,16 @@ public class AuthenticationService : IAuthenticationService
             {
                 user.Password = BCrypt.Net.BCrypt.HashPassword(plainNewPassword);
                 await _userRepository.UpdateAsync(user);
-
-                response.IsSuccess = true;
-                response.ReplyMessage = "Password changed successfully";
             }
             else
             {
-                response.IsSuccess = false;
-                response.ReplyMessage = "New password cannot be the same as the old password";
+                throw new SamePasswordException("New password cannot be the same as the old password");
             }
         }
-
-        return response;
+        else
+        {
+            throw new InvalidPasswordException("Invalid password");
+        }
     }
 
 
