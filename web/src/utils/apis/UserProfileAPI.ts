@@ -1,12 +1,12 @@
 import axios from "axios"
 import { getCookie } from "../Cookie"
-import { ProfilePageDataModel } from "../../models/pageViewModels/ProfilePageDataModel"
+import { ProfilePageViewModel } from "../../models/pageViewModels/ProfilePageViewModel"
 import { UserInformationViewModel } from "../../models/viewModels/UserInformationViewModel"
 
 const baseUrl = process.env.REACT_APP_BASEURL
 const API_KEY = 'bearer ' + getCookie("jwt")
 
-export const getProfilePageData = async (username: string): Promise<ProfilePageDataModel> => {
+export const getProfilePageData = async (username: string): Promise<ProfilePageViewModel> => {
     const response = await axios.get(baseUrl + '/api/ProfilePage/GetProfilePageData',
         {
             params: {

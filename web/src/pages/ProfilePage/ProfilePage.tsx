@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react'
 import './ProfilePage.css'
 //icons
 import { FaUserCircle } from 'react-icons/fa'
+import { IoIosInformationCircle } from "react-icons/io";
 //models
-import { ProfilePageDataModel } from '../../models/pageViewModels/ProfilePageDataModel';
+import { ProfilePageViewModel } from '../../models/pageViewModels/ProfilePageViewModel';
 import { UserInformationViewModel } from '../../models/viewModels/UserInformationViewModel';
 //helpers
 import toast, { Toaster } from 'react-hot-toast';
@@ -22,12 +23,11 @@ const ProfilePage = () => {
     //States
     const [buttonBlocker, setButtonBlocker] = useState(false)
 
-    const [profilePageData, setProfilePageData] = useState<ProfilePageDataModel>({
-        profileStatus: {
-            isOwner: false,
-            isFollower: false
-        },
-        userInformationSummary: null
+    const [profilePageData, setProfilePageData] = useState<ProfilePageViewModel>({
+        userInformationSummary: null,
+        profileStats: null,
+        profileStatus: null,
+        isSuccess: false
     });
 
     const [editProfileData, setEditProfileData] = useState<UserInformationViewModel | null>(null)
@@ -47,22 +47,26 @@ const ProfilePage = () => {
     const handleToggleFollow = async () => {
         setButtonBlocker(true)
 
-        const response = toggleFollowUser(location.state.username, profilePageData.profileStatus.isFollower)
+        const response = await toggleFollowUser(location.state.username, profilePageData.profileStatus!.isFollower) //TODO: response false dönerse guesttir login popup aç
 
-        await toast.promise(
-            response,
+        await toast(
+            `You ${profilePageData.profileStatus!.isFollower ? 'unfollowed' : 'started following'} ${location.state.username}`,
             {
-                loading: 'Please wait...',
-                success: <b>{`You ${profilePageData.profileStatus.isFollower ? 'unfollowed' : 'started following'} ${location.state.username}`}</b>,
-                error: null
-            }
+                icon: <IoIosInformationCircle style={{fontSize: 24, color: "#174540"}}/>
+            }       
         )
+
+        if (profilePageData.profileStatus!.isFollower)
+            profilePageData.profileStats!.followerCount--
+        else
+            profilePageData.profileStats!.followerCount++
+
 
         setProfilePageData({
             ...profilePageData,
             profileStatus: {
                 isOwner: false,
-                isFollower: !profilePageData.profileStatus.isFollower
+                isFollower: !profilePageData.profileStatus!.isFollower
             }
         })
 
@@ -96,7 +100,7 @@ const ProfilePage = () => {
         }, 2000)
     }
 
-    return profilePageData.userInformationSummary ? (
+    return profilePageData.isSuccess ? (
         <>
             <div className='profile-page-wrapper'>
                 <Toaster toastOptions={{ style: { fontSize: 14 } }} />
@@ -114,8 +118,8 @@ const ProfilePage = () => {
                             </div>
 
                             <div className='info'>
-                                <span className='full-name'>{`${profilePageData.userInformationSummary.firstName} ${profilePageData.userInformationSummary.lastName}`}</span>
-                                <span className='username'>{`#${profilePageData.userInformationSummary.username}`}</span>
+                                <span className='full-name'>{`${profilePageData.userInformationSummary?.firstName} ${profilePageData.userInformationSummary?.lastName}`}</span>
+                                <span className='username'>{`#${profilePageData.userInformationSummary?.username}`}</span>
                             </div>
                         </div>
 
@@ -132,17 +136,17 @@ const ProfilePage = () => {
                             </div>
                             <div className='stat'>
                                 <span className='stat-title'>Followers</span>
-                                <span className='stat-value'>78</span>
+                                <span className='stat-value'>{profilePageData.profileStats?.followerCount}</span>
                             </div>
                             <div className='stat'>
                                 <span className='stat-title'>Following</span>
-                                <span className='stat-value'>15</span>
+                                <span className='stat-value'>{profilePageData.profileStats?.followingCount}</span>
                             </div>
                         </div>
 
                         <div className="line"></div>
 
-                        {profilePageData.profileStatus.isOwner ?
+                        {profilePageData.profileStatus!.isOwner ?
                             <div className='profile-management'>
 
                                 <div className='manager'>
@@ -175,8 +179,8 @@ const ProfilePage = () => {
                             </div>
                             :
                             <div className='button-wrapper'>
-                                <PrimaryButton width={"48%"} height={36} fontSize={14} 
-                                    value={profilePageData.profileStatus.isFollower ? 'Unfollow' : 'Follow'}
+                                <PrimaryButton width={"48%"} height={36} fontSize={14}
+                                    value={profilePageData.profileStatus?.isFollower ? 'Unfollow' : 'Follow'}
                                     onClickFunction={handleToggleFollow} disabled={buttonBlocker}
                                 />
 

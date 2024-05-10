@@ -3,5 +3,5 @@ public class NotificationViewModel
 {
     public string Message { get; set; }
     public bool Seen { get; set; }
-    public DateTime DateCreated { get; }
+    public DateTime DateCreated { get; set; }
 }

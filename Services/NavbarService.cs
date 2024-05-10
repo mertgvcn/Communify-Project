@@ -31,7 +31,8 @@ public class NavbarService : INavbarService
         //To Do : Daha sonra postlara göre, communitylere göre arama seçenekleri eklenecek
         var searchResult = await _userRepository.SearchUsers(request.Input)
                                     .ProjectTo<SearchedUserViewModel>(_mapper.ConfigurationProvider)
-                                    .Take(5).ToListAsync();
+                                    .Take(5)
+                                    .ToListAsync();
         return searchResult;
     }
 
@@ -41,6 +42,8 @@ public class NavbarService : INavbarService
 
         var notifications = await _notificationRepository.GetAll().Where(n => n.UserId == userId)
                                      .ProjectTo<NotificationViewModel>(_mapper.ConfigurationProvider)
+                                     .OrderByDescending(n => n.DateCreated)
+                                     .Take(5)
                                      .ToListAsync();
 
         return notifications;

@@ -65,6 +65,7 @@
 
 /*USER*/
 .navbar-components .button {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -72,6 +73,17 @@
     cursor: pointer;
 }
 
+.navbar-components .button .unseen-notification-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: rgb(180, 0, 0);
+    font-size: 14px;
+}
+
 .navbar-components .button:hover {
     color: #1c6c74;
+    .unseen-notification-icon {
+        color: rgb(134, 0, 0);   
+    }
 }

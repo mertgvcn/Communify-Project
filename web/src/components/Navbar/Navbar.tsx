@@ -6,11 +6,14 @@ import './Navbar.css'
 import { FormStateType } from '../Forms/RegisterForm/types/FormStateType'
 //models
 import { Roles } from '../../enums/Roles';
+import { NotificationViewModel } from '../../models/viewModels/NotificationViewModel';
 import { InterestViewModel } from '../../models/viewModels/InterestViewModel'
 //icons
 import { FaUserCircle } from "react-icons/fa";
 import { IoIosNotifications } from "react-icons/io";
+import { FaCircleDot } from "react-icons/fa6";
 //helpers
+import { getNotifications } from '../../utils/apis/NavbarAPI';
 import { GetInterests } from '../../utils/apis/InterestAPI'
 //components
 import PrimaryButton from '../Elements/Buttons/PrimaryButton/PrimaryButton'
@@ -35,6 +38,8 @@ const Navbar = (props: NavbarType) => {
     const [forgotPasswordState, setForgotPasswordState] = useState<boolean>(false)
 
     const [notificationState, setNotificationState] = useState<boolean>(false)
+    const [notifications, setNotifications] = useState<NotificationViewModel[]>([])
+
     const [userMenuState, setUserMenuState] = useState<boolean>(false)
 
     const [interestList, setInterestList] = useState<InterestViewModel[]>([])
@@ -63,6 +68,9 @@ const Navbar = (props: NavbarType) => {
     }
 
     const handleNotification = async () => {
+        const response = await getNotifications()
+        setNotifications(response)
+
         setNotificationState((prev) => !prev)
         setUserMenuState(false)
     }
@@ -106,6 +114,9 @@ const Navbar = (props: NavbarType) => {
                             {props.role == Roles.User.valueOf() &&
                                 <>
                                     <div className="button" style={{ fontSize: 36, marginRight: 16 }} onClick={handleNotification}>
+                                        <div className='unseen-notification-icon'>
+                                            <FaCircleDot />
+                                        </div>
                                         <IoIosNotifications />
                                     </div>
                                     <div className="button" style={{ fontSize: 36 }} onClick={handleUserMenu}>
@@ -124,7 +135,7 @@ const Navbar = (props: NavbarType) => {
             {formState.registerFormState && <RegisterForm setFormState={setFormState} interestList={interestList} />}
             {forgotPasswordState && <ForgotPassword setFormState={setFormState} setForgotPasswordState={setForgotPasswordState} />}
 
-            {notificationState && <Notification setNotificationState={setNotificationState} />}
+            {notificationState && <Notification setNotificationState={setNotificationState} notifications={notifications} />}
             {userMenuState && <UserMenu setUserMenuState={setUserMenuState} />}
         </>
     )
