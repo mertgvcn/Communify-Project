@@ -5,7 +5,7 @@ import './Navbar.css'
 //types
 import { FormStateType } from '../Forms/RegisterForm/types/FormStateType'
 //models
-import { Roles } from '../../models/enums/Roles';
+import { Roles } from '../../enums/Roles';
 import { InterestViewModel } from '../../models/viewModels/InterestViewModel'
 //icons
 import { FaUserCircle } from "react-icons/fa";

@@ -3,7 +3,7 @@ import axios from "axios"
 import { Encrypt } from "../Cryption"
 import { getCookie } from "../Cookie"
 //models
-import { ChangePasswordRequest, LoginRequest, LoginResponse, RegisterRequest, SetPasswordRequest } from "../../models/parameterModels/AuthenticationParameterModels"
+import { ChangePasswordRequest, ChangePasswordResponse, LoginRequest, LoginResponse, RegisterRequest, SetPasswordRequest } from "../../models/parameterModels/AuthenticationParameterModels"
 
 const baseUrl = process.env.REACT_APP_BASEURL
 const API_KEY = 'bearer ' + getCookie("jwt")
@@ -65,7 +65,7 @@ export const forgotPassword = async (email: string): Promise<void> => {
     return response.data
 }
 
-export const changePassword = async (request: ChangePasswordRequest): Promise<void> => {
+export const changePassword = async (request: ChangePasswordRequest): Promise<ChangePasswordResponse> => {
     const response = await axios.post(baseUrl + '/api/Authentication/ChangePassword', 
     {
         oldPassword : request.oldPassword,
