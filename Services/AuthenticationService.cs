@@ -141,19 +141,7 @@ public class AuthenticationService : IAuthenticationService
             UrlExtension = "setpassword?token=" + generatedToken.Token
         });
     }
-    /*
-    public async Task ChangePasswordAsync(ChangePasswordRequest request)
-    {
-        var userId = _httpContextService.GetCurrentUserID();
-        var user = await _userRepository.GetByIdAsync(userId);
 
-        if (BCrypt.Net.BCrypt.Verify(request.oldPassword, user.Password))
-        {
-            user.Password = BCrypt.Net.BCrypt.HashPassword(request.newPassword);
-            await _userRepository.UpdateAsync(user);
-        };
-    }
-    */
     public async Task<ChangePasswordResponse> ChangePasswordAsync(ChangePasswordRequest request)
     {
         ChangePasswordResponse response = new ChangePasswordResponse()
@@ -165,11 +153,14 @@ public class AuthenticationService : IAuthenticationService
         var userId = _httpContextService.GetCurrentUserID();
         var user = await _userRepository.GetByIdAsync(userId);
 
-        if (BCrypt.Net.BCrypt.Verify(request.oldPassword, user.Password))
+        var plainOldPassword = await _cryptionService.Decrypt(request.oldPassword);
+        var plainNewPassword = await _cryptionService.Decrypt(request.newPassword);
+
+        if (BCrypt.Net.BCrypt.Verify(plainOldPassword, user.Password))
         {
             if (request.oldPassword != request.newPassword)
             {
-                user.Password = BCrypt.Net.BCrypt.HashPassword(request.newPassword);
+                user.Password = BCrypt.Net.BCrypt.HashPassword(plainNewPassword);
                 await _userRepository.UpdateAsync(user);
 
                 response.IsSuccess = true;
