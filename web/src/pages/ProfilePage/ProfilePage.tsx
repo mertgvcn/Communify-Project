@@ -14,7 +14,7 @@ import { changePassword } from '../../utils/apis/AuthenticationAPI';
 //components
 import PrimaryButton from '../../components/Elements/Buttons/PrimaryButton/PrimaryButton';
 import EditProfile from './components/EditProfile/EditProfile';
-import ResetPassword from './components/ResetPassword/ResetPassword';
+import ChangePassword from './components/ChangePassword/ChangePassword';
 
 const ProfilePage = () => {
 
@@ -25,7 +25,7 @@ const ProfilePage = () => {
     const [editProfileData, setEditProfileData] = useState<UserInformationViewModel | null>(null)
     const [editProfileState, setEditProfileState] = useState(false)
 
-    const [resetPasswordState, setResetPasswordState] = useState(false)
+    const [changePasswordState, setChangePasswordState] = useState(false)
 
     useEffect(() => {
         fetchUserInformationSummary()
@@ -44,7 +44,7 @@ const ProfilePage = () => {
     }
 
     const handleChangePassword = async () => {
-        setResetPasswordState(true)
+        setChangePasswordState(true)
     }
 
     return userInformationSummary ? (
@@ -130,7 +130,7 @@ const ProfilePage = () => {
             </div>
 
             {editProfileState && <EditProfile editProfileData={editProfileData} setEditProfileDate={setEditProfileData} setEditProfileState={setEditProfileState} />}
-            {resetPasswordState && <ResetPassword setResetPasswordState={setResetPasswordState} />}
+            {changePasswordState && <ChangePassword setChangePasswordState={setChangePasswordState} />}
         </>
 
     ) : null
