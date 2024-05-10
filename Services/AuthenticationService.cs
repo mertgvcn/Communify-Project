@@ -141,7 +141,7 @@ public class AuthenticationService : IAuthenticationService
             UrlExtension = "setpassword?token=" + generatedToken.Token
         });
     }
-
+    /*
     public async Task ChangePasswordAsync(ChangePasswordRequest request)
     {
         var userId = _httpContextService.GetCurrentUserID();
@@ -153,6 +153,38 @@ public class AuthenticationService : IAuthenticationService
             await _userRepository.UpdateAsync(user);
         };
     }
+    */
+    public async Task<ChangePasswordResponse> ChangePasswordAsync(ChangePasswordRequest request)
+    {
+        ChangePasswordResponse response = new ChangePasswordResponse()
+        {
+            IsSuccess = false,
+            ReplyMessage = "Current password is incorrect",
+        };
+
+        var userId = _httpContextService.GetCurrentUserID();
+        var user = await _userRepository.GetByIdAsync(userId);
+
+        if (BCrypt.Net.BCrypt.Verify(request.oldPassword, user.Password))
+        {
+            if (request.oldPassword != request.newPassword)
+            {
+                user.Password = BCrypt.Net.BCrypt.HashPassword(request.newPassword);
+                await _userRepository.UpdateAsync(user);
+
+                response.IsSuccess = true;
+                response.ReplyMessage = "Password changed successfully";
+            }
+            else
+            {
+                response.IsSuccess = false;
+                response.ReplyMessage = "New password cannot be the same as the old password";
+            }
+        }
+
+        return response;
+    }
+
 
     public async Task SetPasswordAsync(SetPasswordRequest request)
     {
