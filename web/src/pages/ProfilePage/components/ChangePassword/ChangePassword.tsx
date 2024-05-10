@@ -45,26 +45,28 @@ const ChangePassword = (props: ChangePasswordType) => {
     }
 
     const handleSubmit = async () => {
+        if(Object.keys(errorList).length !== 0) return;
+
         setButtonBlocker(true)
 
         const changePasswordRequest: ChangePasswordRequest = {
             oldPassword: formData.oldPassword,
             newPassword: formData.newPassword,
         }
-        const response = changePassword(changePasswordRequest)
+        const response = await changePassword(changePasswordRequest)
 
-        await toast.promise(
-            response,
-            {
-                loading: 'Please wait...',
-                success: <b>Password set successfully.</b>,
-                error: null
-            }
-        )
-        setTimeout(() => {
-            setButtonBlocker(false)
-            props.setChangePasswordState(false)
-        }, 1000)
+        if (response.isSuccess) {
+            toast.success(response.replyMessage)
+
+            setTimeout(() => {
+                props.setChangePasswordState(false)
+            }, 1000)
+        }
+        else {
+            toast.error(response.replyMessage)
+        }
+        
+        setButtonBlocker(false)
     }
 
     return (
