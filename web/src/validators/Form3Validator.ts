@@ -1,5 +1,5 @@
 import { Validator } from "fluentvalidation-ts";
-import { FormDataType } from "../../components/Forms/RegisterForm/types/FormDataType";
+import { FormDataType } from "../components/Forms/RegisterForm/types/FormDataType";
 
 export class Form3Validator extends Validator<FormDataType> {
     constructor() {

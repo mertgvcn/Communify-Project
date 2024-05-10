@@ -16,9 +16,24 @@ export const Search = async (request: SearchRequest): Promise<SearchResultType> 
     return response.data
 }
 
-export const getUserInformationSummary = async (): Promise<UserInformationSummaryViewModel> => {
+export const getUsername = async (): Promise<string> => {
+    const response = await axios.get(baseUrl + '/api/Navbar/GetUsername',
+        {
+            headers: {
+                'Authorization': API_KEY
+            }
+        }
+    )
+
+    return response.data
+}
+
+export const getUserInformationSummary = async (username : string): Promise<UserInformationSummaryViewModel> => {
     const response = await axios.get(baseUrl + '/api/Navbar/GetUserInformationSummary',
         {
+            params: {
+                username: username
+            },
             headers: {
                 'Authorization': API_KEY
             }

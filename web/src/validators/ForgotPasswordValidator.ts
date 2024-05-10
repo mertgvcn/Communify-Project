@@ -1,5 +1,5 @@
 import { Validator } from "fluentvalidation-ts";
-import { ForgotPasswordDataType } from "../../components/Forms/ForgotPasswordForm/ForgotPassword";
+import { ForgotPasswordDataType } from "../components/Forms/ForgotPasswordForm/ForgotPassword";
 
 export class ForgotPasswordValidator extends Validator<ForgotPasswordDataType> {
     constructor() {

@@ -14,7 +14,7 @@ import { PiIdentificationCardBold } from "react-icons/pi";
 import useDynamicValidation from '../../../../hooks/useDynamicValidation'
 //helpers
 import { EmailExists } from '../../../../utils/apis/AuthenticationAPI'
-import { Form1Validator } from '../../../../validators/RegisterValidators/Form1Validator'
+import { Form1Validator } from '../../../../validators/Form1Validator'
 import toast from 'react-hot-toast';
 //components
 import PrimaryButton from '../../../Elements/Buttons/PrimaryButton/PrimaryButton'
