@@ -56,15 +56,15 @@ const ChangePassword = (props: ChangePasswordType) => {
         }
         const response = await changePassword(changePasswordRequest)
 
-        if (response.isSuccess) {
-            toast.success(response.replyMessage)
+        if (response.status == 200) {
+            toast.success(response.data)
 
             setTimeout(() => {
                 props.setChangePasswordState(false)
             }, 1000)
         }
         else {
-            toast.error(response.replyMessage)
+            toast.error(response.data)
         }
         
         setButtonBlocker(false)

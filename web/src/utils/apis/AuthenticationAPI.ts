@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios, { AxiosResponse } from "axios"
 //helpers
 import { Encrypt } from "../Cryption"
 import { getCookie } from "../Cookie"
@@ -65,7 +65,7 @@ export const forgotPassword = async (email: string): Promise<void> => {
     return response.data
 }
 
-export const changePassword = async (request: ChangePasswordRequest): Promise<ChangePasswordResponse> => {
+export const changePassword = async (request: ChangePasswordRequest): Promise<AxiosResponse<any, any>> => {
     const encryptedOldPassword = await Encrypt(request.oldPassword);
     const encryptedNewPassword = await Encrypt(request.newPassword);
 
@@ -81,7 +81,7 @@ export const changePassword = async (request: ChangePasswordRequest): Promise<Ch
         }
     )
 
-    return response.data
+    return response
 }
 
 export const setPassword = async (request: SetPasswordRequest): Promise<void> => {
