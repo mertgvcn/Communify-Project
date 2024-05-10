@@ -5,8 +5,10 @@ using CommunifyLibrary.Models;
 using CommunifyLibrary.NonPersistentModels.ParameterModels;
 using CommunifyLibrary.Repository;
 using CommunifyLibrary.Repository.Interfaces;
+using LethalCompany_Backend.Exceptions;
 using LethalCompany_Backend.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Security;
 using System.Text.RegularExpressions;
 
 namespace Communify_Backend.Services;
@@ -145,12 +147,15 @@ public class AuthenticationService : IAuthenticationService
     {
         var passwordToken = await _passwordTokenRepository.GetByTokenAsync(request.Token);
 
-        if (passwordToken is null) return;
+        if (passwordToken is null) throw new PasswordTokenNotFoundException("Token bulunamadi");
 
         if (DateTime.UtcNow < passwordToken.ExpireDate)
         {
             var user = await _userRepository.GetAll().Where(a => a.Id == passwordToken.UserId).SingleAsync();
             var plainPassword = await _cryptionService.Decrypt(request.Password);
+
+            bool ValidPassword = true;
+            if (!ValidPassword) throw new PasswordException("Password invalid");
 
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(plainPassword);
 

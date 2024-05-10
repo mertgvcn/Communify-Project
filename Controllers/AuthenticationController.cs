@@ -1,7 +1,9 @@
 ﻿using Communify_Backend.Services.Interfaces;
 using CommunifyLibrary.NonPersistentModels.ParameterModels;
+using LethalCompany_Backend.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Security;
 
 namespace Communify_Backend.Controllers;
 
@@ -36,7 +38,18 @@ public class AuthenticationController : Controller
     [AllowAnonymous]
     public async Task Register([FromBody] UserRegisterRequest user)
     {
-        await authenticationService.RegisterUserAsync(user);
+        //Exception ve status handling örneği
+        try
+        {
+            await authenticationService.RegisterUserAsync(user);
+        }
+        catch (PasswordException ex)
+        {
+            StatusCode(203);
+        }
+        catch (PasswordTokenNotFoundException ex)
+        {
+        }
     }
 
     [HttpPost("ForgotPassword")]

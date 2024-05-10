@@ -49,6 +49,13 @@ public class NavbarService : INavbarService
         return notifications;
     }
 
+    public async Task<bool> CheckNotifications()
+    {
+        //Bell icon üstündeki yeni mesaj var için
+        var userId = _httpContextService.GetCurrentUserID();
+        return await _notificationRepository.GetAll().AnyAsync(n => n.UserId == userId && !n.Seen);
+    }
+
     public async Task<string> GetUsernameAsync()
     {
         var userId = _httpContextService.GetCurrentUserID();
