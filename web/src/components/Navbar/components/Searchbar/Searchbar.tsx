@@ -77,10 +77,9 @@ const Searchbar = () => {
             </div>
 
             <div className={`searchbar-drop-down ${(dropDownState && searchInputRef.current.trim()) ? `active` : `inactive`} `}>
-
                 {
                     searchResult.users.map((result, idx) => (
-                        <SearchResultCard data={result} key={idx} />
+                        <SearchResultCard data={result} setDropDownState={setDropDownState} key={idx} />
                     ))
                 }
 

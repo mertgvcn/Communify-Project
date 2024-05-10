@@ -3,19 +3,22 @@ import React, { useEffect, useState } from 'react'
 import './ProfilePage.css'
 //icons
 import { FaUserCircle } from 'react-icons/fa'
+import { IoIosInformationCircle } from "react-icons/io";
 //models
-import { ProfilePageDataModel } from '../../models/pageViewModels/ProfilePageDataModel';
+import { ProfilePageViewModel } from '../../models/pageViewModels/ProfilePageViewModel';
 import { UserInformationViewModel } from '../../models/viewModels/UserInformationViewModel';
+import { UserInformationSummaryViewModel } from '../../models/viewModels/UserInformationSummaryViewModel';
 //helpers
 import toast, { Toaster } from 'react-hot-toast';
 import { useLocation } from 'react-router-dom';
-import { getProfilePageData, getUserInformation, toggleFollowUser } from '../../utils/apis/UserProfileAPI';
+import { getFollowers, getProfilePageData, getUserInformation, toggleFollowUser } from '../../utils/apis/UserProfileAPI';
 import { changePassword } from '../../utils/apis/AuthenticationAPI';
 //components
 import PrimaryButton from '../../components/Elements/Buttons/PrimaryButton/PrimaryButton';
-import EditProfile from './components/EditProfile/EditProfile';
-import ChangePassword from './components/ChangePassword/ChangePassword';
 import SecondaryButton from '../../components/Elements/Buttons/SecondaryButton/SecondaryButton';
+import ChangePassword from './components/ChangePassword/ChangePassword';
+import EditProfile from './components/EditProfile/EditProfile';
+import FollowerFollowingList from './components/FollowerFollowingList/FollowerFollowingList';
 
 
 const ProfilePage = () => {
@@ -24,18 +27,20 @@ const ProfilePage = () => {
     //States
     const [buttonBlocker, setButtonBlocker] = useState(false)
 
-    const [profilePageData, setProfilePageData] = useState<ProfilePageDataModel>({
-        profileStatus: {
-            isOwner: false,
-            isFollower: false
-        },
-        userInformationSummary: null
+    const [profilePageData, setProfilePageData] = useState<ProfilePageViewModel>({
+        userInformationSummary: null,
+        profileStats: null,
+        profileStatus: null,
+        isSuccess: false
     });
 
-    const [editProfileData, setEditProfileData] = useState<UserInformationViewModel | null>(null)
     const [editProfileState, setEditProfileState] = useState(false)
-    
+    const [editProfileData, setEditProfileData] = useState<UserInformationViewModel | null>(null)
+
     const [changePasswordState, setChangePasswordState] = useState(false)
+            
+    const [followerFollowingListState, setFollowerFollowingListState] = useState(false)
+    const [followerList, setFollowerList] = useState<UserInformationSummaryViewModel[]>([])
 
     //On page load functions
     useEffect(() => {
@@ -51,22 +56,26 @@ const ProfilePage = () => {
     const handleToggleFollow = async () => {
         setButtonBlocker(true)
 
-        const response = toggleFollowUser(location.state.username, profilePageData.profileStatus.isFollower)
+        const response = await toggleFollowUser(location.state.username, profilePageData.profileStatus!.isFollower) //TODO: response false dönerse guesttir login popup aç
 
-        await toast.promise(
-            response,
+        await toast(
+            `You ${profilePageData.profileStatus!.isFollower ? 'unfollowed' : 'started following'} ${location.state.username}`,
             {
-                loading: 'Please wait...',
-                success: <b>{`You ${profilePageData.profileStatus.isFollower ? 'unfollowed' : 'started following'} ${location.state.username}`}</b>,
-                error: null
+                icon: <IoIosInformationCircle style={{ fontSize: 24, color: "#174540" }} />
             }
         )
+
+        if (profilePageData.profileStatus!.isFollower)
+            profilePageData.profileStats!.followerCount--
+        else
+            profilePageData.profileStats!.followerCount++
+
 
         setProfilePageData({
             ...profilePageData,
             profileStatus: {
                 isOwner: false,
-                isFollower: !profilePageData.profileStatus.isFollower
+                isFollower: !profilePageData.profileStatus!.isFollower
             }
         })
 
@@ -81,11 +90,18 @@ const ProfilePage = () => {
         setEditProfileState(true)
     }
 
+    const handleManageCommunifiers = async () => {
+        const response = await getFollowers()
+        
+        setFollowerList(response)
+        setFollowerFollowingListState(true)
+    }
+
     const handleChangePassword = async () => {
         setChangePasswordState(true)
     }
 
-    return profilePageData.userInformationSummary ? (
+    return profilePageData.isSuccess ? (
         <>
             <div className='profile-page-wrapper'>
                 <Toaster toastOptions={{ style: { fontSize: 14 } }} />
@@ -103,8 +119,8 @@ const ProfilePage = () => {
                             </div>
 
                             <div className='info'>
-                                <span className='full-name'>{`${profilePageData.userInformationSummary.firstName} ${profilePageData.userInformationSummary.lastName}`}</span>
-                                <span className='username'>{`#${profilePageData.userInformationSummary.username}`}</span>
+                                <span className='full-name'>{`${profilePageData.userInformationSummary?.firstName} ${profilePageData.userInformationSummary?.lastName}`}</span>
+                                <span className='username'>{`#${profilePageData.userInformationSummary?.username}`}</span>
                             </div>
                         </div>
 
@@ -121,17 +137,17 @@ const ProfilePage = () => {
                             </div>
                             <div className='stat'>
                                 <span className='stat-title'>Followers</span>
-                                <span className='stat-value'>78</span>
+                                <span className='stat-value'>{profilePageData.profileStats?.followerCount}</span>
                             </div>
                             <div className='stat'>
                                 <span className='stat-title'>Following</span>
-                                <span className='stat-value'>15</span>
+                                <span className='stat-value'>{profilePageData.profileStats?.followingCount}</span>
                             </div>
                         </div>
 
                         <div className="line"></div>
 
-                        {profilePageData.profileStatus.isOwner ?
+                        {profilePageData.profileStatus!.isOwner ?
                             <div className='profile-management'>
 
                                 <div className='manager'>
@@ -140,16 +156,20 @@ const ProfilePage = () => {
                                         <span className='description'>Customize your profile</span>
                                     </div>
 
-                                    <PrimaryButton width={70} height={30} value='Edit' fontSize={12} onClickFunction={handleEditProfile} />
+                                    <div className="button">
+                                        <PrimaryButton width={70} height={30} value='Edit' fontSize={12} onClickFunction={handleEditProfile} />
+                                    </div>
                                 </div>
 
                                 <div className='manager'>
                                     <div className='info'>
-                                        <span className='title'>My Friends</span>
-                                        <span className='description'>Manage your friend list</span>
+                                        <span className='title'>My Communifiers</span>
+                                        <span className='description'>Manage your followers and followings</span>
                                     </div>
 
-                                    <PrimaryButton width={70} height={30} value='Manage' fontSize={12} onClickFunction={() => { }} />
+                                    <div className='button'>
+                                        <PrimaryButton width={70} height={30} value='Manage' fontSize={12} onClickFunction={handleManageCommunifiers} />
+                                    </div>
                                 </div>
 
                                 <div className='manager'>
@@ -158,14 +178,16 @@ const ProfilePage = () => {
                                         <span className='description'>Change your password</span>
                                     </div>
 
-                                    <PrimaryButton width={70} height={30} value='Reset' fontSize={12} onClickFunction={handleChangePassword} />
+                                    <div className="button">
+                                        <PrimaryButton width={70} height={30} value='Reset' fontSize={12} onClickFunction={handleChangePassword} />
+                                    </div>
                                 </div>
 
                             </div>
                             :
                             <div className='button-wrapper'>
-                                <PrimaryButton width={"48%"} height={36} fontSize={14} 
-                                    value={profilePageData.profileStatus.isFollower ? 'Unfollow' : 'Follow'}
+                                <PrimaryButton width={"48%"} height={36} fontSize={14}
+                                    value={profilePageData.profileStatus?.isFollower ? 'Unfollow' : 'Follow'}
                                     onClickFunction={handleToggleFollow} disabled={buttonBlocker}
                                 />
 
@@ -179,7 +201,8 @@ const ProfilePage = () => {
 
             </div>
 
-            {editProfileState && <EditProfile editProfileData={editProfileData} setEditProfileDate={setEditProfileData} setEditProfileState={setEditProfileState} />}
+            {editProfileState && <EditProfile editProfileData={editProfileData} setEditProfileData={setEditProfileData} setEditProfileState={setEditProfileState} />}
+            {followerFollowingListState && <FollowerFollowingList followerList={followerList} setFollowerFollowingListState={setFollowerFollowingListState} />}
             {changePasswordState && <ChangePassword setChangePasswordState={setChangePasswordState} />}
         </>
 
