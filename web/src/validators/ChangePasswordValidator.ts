@@ -8,11 +8,11 @@ export class ChangePasswordValidator extends Validator<ChangePasswordFormData> {
         super();
 
         this.ruleFor("oldPassword")
-            .notEmpty().withMessage("Password is required")
+            .notEmpty().withMessage("Current password is required")
             .matches(this.passwordPattern).withMessage("Current password must contain at least 8 characters, 1 capital letter and 1 number")
 
         this.ruleFor("newPassword")
-            .notEmpty().withMessage("Password is required")
+            .notEmpty().withMessage("New password is required")
             .matches(this.passwordPattern).withMessage("New password must contain at least 8 characters, 1 capital letter and 1 number")
 
         this.ruleFor("confirmPassword")
