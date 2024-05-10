@@ -66,6 +66,31 @@ public class ProfilePageService : IProfilePageService
 
         return userInformation;
     }
+    public async Task<List<UserInformationSummaryViewModel>> GetFollowers()
+    {
+        var userId = _httpContextService.GetCurrentUserID();
+        var user = await _userRepository.GetAll().Where(u => u.Id == userId).Include(u => u.Followers).SingleAsync();
+
+        var followerList = user.Followers
+                               .AsQueryable()
+                               .ProjectTo<UserInformationSummaryViewModel>(_mapper.ConfigurationProvider)
+                               .ToList();
+
+        return followerList;
+    }
+
+    public async Task<List<UserInformationSummaryViewModel>> GetFollowings()
+    {
+        var userId = _httpContextService.GetCurrentUserID();
+        var user = await _userRepository.GetAll().Where(u => u.Id == userId).Include(u => u.Followings).SingleAsync();
+
+        var followingList = user.Followings
+                               .AsQueryable()
+                               .ProjectTo<UserInformationSummaryViewModel>(_mapper.ConfigurationProvider)
+                               .ToList();
+
+        return followingList;
+    }
 
     public async Task<bool> ToggleFollowUserAsync(FollowUserRequest request)
     {
@@ -97,6 +122,7 @@ public class ProfilePageService : IProfilePageService
 
         return true;
     }
+
     public async Task<bool> IsProfileOwnerAsync(string username)
     {
         var userId = _httpContextService.GetCurrentUserID();

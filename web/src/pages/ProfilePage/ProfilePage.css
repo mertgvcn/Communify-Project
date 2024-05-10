@@ -99,6 +99,7 @@
 .profile-management {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     width: 100%;
     height: fit-content;
     padding: 1rem 0rem;

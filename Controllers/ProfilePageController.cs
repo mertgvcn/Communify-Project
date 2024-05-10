@@ -44,4 +44,14 @@ public class ProfilePageController : Controller
     [AllowAnonymous]
     public async Task<bool> ToggleFollowUser(FollowUserRequest request)
         => await _userProfileService.ToggleFollowUserAsync(request);
+
+    [HttpGet]
+    [Authorize(Roles = "User")]
+    public async Task<List<UserInformationSummaryViewModel>> GetFollowers()
+        => await _userProfileService.GetFollowers();
+
+    [HttpGet]
+    [Authorize(Roles = "User")]
+    public async Task<List<UserInformationSummaryViewModel>> GetFollowings()
+    => await _userProfileService.GetFollowings();
 }
