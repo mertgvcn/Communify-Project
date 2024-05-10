@@ -11,14 +11,13 @@ import useDynamicValidation from '../../hooks/useDynamicValidation';
 //helpers
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { setPassword } from '../../utils/apis/AuthenticationAPI';
-import { SetPasswordValidator } from '../../validators/RegisterValidators/SetPasswordValidator';
+import { SetPasswordValidator } from '../../validators/SetPasswordValidator';
 import { PasswordTokenExists } from '../../utils/apis/PasswordTokenAPI';
 import toast, { Toaster } from 'react-hot-toast';
 //components
 import TextInput from '../../components/Elements/TextInput/TextInput'
 import PrimaryButton from '../../components/Elements/Buttons/PrimaryButton/PrimaryButton';
 import ErrorPage from '../ErrorPage/ErrorPage';
-import { jwtDecode } from 'jwt-decode';
 
 export type SetPasswordFormData = {
     password: string,

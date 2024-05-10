@@ -32,13 +32,10 @@ public class NavbarService : INavbarService
         return searchResult;
     }
 
-    public async Task<UserInformationSummaryViewModel> GetUserInformationSummaryAsync()
+    public async Task<string> GetUsernameAsync()
     {
         var userId = _httpContextService.GetCurrentUserID();
-        var userInformationSummary = await _userRepository.GetAll().Where(u => u.Id == userId)
-                                                .ProjectTo<UserInformationSummaryViewModel>(_mapper.ConfigurationProvider)
-                                                .SingleAsync();
 
-        return userInformationSummary;
+        return (await _userRepository.GetByIdAsync(userId)).Username;
     }
 }
