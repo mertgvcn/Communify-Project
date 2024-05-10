@@ -1,4 +1,5 @@
-﻿using CommunifyLibrary.NonPersistentModels.ParameterModels;
+﻿using CommunifyLibrary.NonPersistentModels.PageViewModels;
+using CommunifyLibrary.NonPersistentModels.ParameterModels;
 using CommunifyLibrary.NonPersistentModels.ViewModels;
 using LethalCompany_Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -19,23 +20,19 @@ public class ProfilePageController : Controller
 
     [HttpGet]
     [AllowAnonymous]
-    public async Task<JsonResult> GetProfilePageData(string username)
+    public async Task<ProfilePageViewModel> GetProfilePageData(string username)
     {
         var userInformationSummary = await _userProfileService.GetUserInformationSummaryAsync(username);
-        var isOwner = await _userProfileService.IsProfileOwnerAsync(username);
-        var isFollower = isOwner ? false : await _userProfileService.IsFollowerAsync(username);
+        var profileStats = await _userProfileService.GetProfileStatsAsync(username);
+        var profileStatus = await _userProfileService.GetProfileStatusAsync(username);
 
-        var response = new
+        return new ProfilePageViewModel
         {
-            userInformationSummary = userInformationSummary,
-            profileStatus = new
-            {
-                isOwner = isOwner,
-                isFollower = isFollower,
-            }
+            UserInformationSummary = userInformationSummary,
+            ProfileStats = profileStats,
+            ProfileStatus = profileStatus,
+            isSuccess = true
         };
-
-        return new JsonResult(response);
     }
 
     [HttpGet]
@@ -47,4 +44,14 @@ public class ProfilePageController : Controller
     [AllowAnonymous]
     public async Task<bool> ToggleFollowUser(FollowUserRequest request)
         => await _userProfileService.ToggleFollowUserAsync(request);
+
+    [HttpGet]
+    [Authorize(Roles = "User")]
+    public async Task<List<UserInformationSummaryViewModel>> GetFollowers()
+        => await _userProfileService.GetFollowers();
+
+    [HttpGet]
+    [Authorize(Roles = "User")]
+    public async Task<List<UserInformationSummaryViewModel>> GetFollowings()
+    => await _userProfileService.GetFollowings();
 }

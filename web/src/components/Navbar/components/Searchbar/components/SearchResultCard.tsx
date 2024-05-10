@@ -9,7 +9,8 @@ import { useNavigate } from 'react-router-dom';
 import { SearchedUserViewModel } from '../../../../../models/viewModels/SearchedUserViewModel'
 
 type SearchResultCardType = {
-    data: SearchedUserViewModel
+    data: SearchedUserViewModel,
+    setDropDownState: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const SearchResultCard = (props: SearchResultCardType) => {
@@ -17,6 +18,7 @@ const SearchResultCard = (props: SearchResultCardType) => {
 
     const handleProfileClick = () => {
         navigate("/profile", { state: { username: props.data.username } })
+        props.setDropDownState(false)
     }
 
     return (
