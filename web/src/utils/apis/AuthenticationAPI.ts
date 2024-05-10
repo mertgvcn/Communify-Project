@@ -66,10 +66,13 @@ export const forgotPassword = async (email: string): Promise<void> => {
 }
 
 export const changePassword = async (request: ChangePasswordRequest): Promise<ChangePasswordResponse> => {
+    const encryptedOldPassword = await Encrypt(request.oldPassword);
+    const encryptedNewPassword = await Encrypt(request.newPassword);
+
     const response = await axios.post(baseUrl + '/api/Authentication/ChangePassword', 
     {
-        oldPassword : request.oldPassword,
-        newPassword : request.newPassword
+        oldPassword : encryptedOldPassword,
+        newPassword : encryptedNewPassword
     },
         {
             headers: {

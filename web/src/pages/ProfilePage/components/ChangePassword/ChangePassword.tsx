@@ -12,6 +12,7 @@ import useDynamicValidation from '../../../../hooks/useDynamicValidation'
 import { ChangePasswordValidator } from '../../../../validators/ChangePasswordValidator'
 import { ChangePasswordRequest } from '../../../../models/parameterModels/AuthenticationParameterModels'
 import { changePassword } from '../../../../utils/apis/AuthenticationAPI'
+import { Encrypt } from '../../../../utils/Cryption'
 
 export type ChangePasswordFormData = {
     oldPassword: string,
