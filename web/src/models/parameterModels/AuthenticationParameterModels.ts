@@ -34,3 +34,13 @@ export type SetPasswordRequest = {
     token: string,
     password: string
 }
+
+export type ChangePasswordRequest = {
+    oldPassword: string,
+    newPassword: string
+}
+
+export type ChangePasswordResponse = {
+    replyMessage : string,
+    isSuccess : boolean
+}

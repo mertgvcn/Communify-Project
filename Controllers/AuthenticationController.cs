@@ -61,10 +61,26 @@ public class AuthenticationController : Controller
 
     [HttpPost("ChangePassword")]
     [Authorize(Roles = "User")]
-    public async Task ChangePassword()
+    public async Task<string> ChangePassword([FromBody] ChangePasswordRequest request)
     {
-        await authenticationService.ChangePasswordAsync();
+        try
+        {
+            await authenticationService.ChangePasswordAsync(request);
+            return "Password changed successfully.";
+        }
+        catch (InvalidPasswordException ex)
+        {
+            Response.StatusCode = 203;
+            return ex.Message;
+        }
+        catch (SamePasswordException ex)
+        {
+            Response.StatusCode = 203;
+            return ex.Message;
+        }
     }
+
+
 
     [HttpPost("SetPassword")]
     [AllowAnonymous]

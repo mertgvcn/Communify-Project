@@ -16,8 +16,10 @@ import { changePassword } from '../../utils/apis/AuthenticationAPI';
 //components
 import PrimaryButton from '../../components/Elements/Buttons/PrimaryButton/PrimaryButton';
 import SecondaryButton from '../../components/Elements/Buttons/SecondaryButton/SecondaryButton';
+import ChangePassword from './components/ChangePassword/ChangePassword';
 import EditProfile from './components/EditProfile/EditProfile';
 import FollowerFollowingList from './components/FollowerFollowingList/FollowerFollowingList';
+
 
 const ProfilePage = () => {
     const location = useLocation()
@@ -35,6 +37,8 @@ const ProfilePage = () => {
     const [editProfileState, setEditProfileState] = useState(false)
     const [editProfileData, setEditProfileData] = useState<UserInformationViewModel | null>(null)
 
+    const [changePasswordState, setChangePasswordState] = useState(false)
+            
     const [followerFollowingListState, setFollowerFollowingListState] = useState(false)
     const [followerList, setFollowerList] = useState<UserInformationSummaryViewModel[]>([])
 
@@ -94,22 +98,7 @@ const ProfilePage = () => {
     }
 
     const handleChangePassword = async () => {
-        setButtonBlocker(true)
-
-        const response = changePassword()
-
-        await toast.promise(
-            response,
-            {
-                loading: 'Email sending...',
-                success: <b>Email successfully sent.</b>,
-                error: null
-            }
-        )
-
-        setTimeout(() => {
-            setButtonBlocker(false)
-        }, 2000)
+        setChangePasswordState(true)
     }
 
     return profilePageData.isSuccess ? (
@@ -214,6 +203,7 @@ const ProfilePage = () => {
 
             {editProfileState && <EditProfile editProfileData={editProfileData} setEditProfileData={setEditProfileData} setEditProfileState={setEditProfileState} />}
             {followerFollowingListState && <FollowerFollowingList followerList={followerList} setFollowerFollowingListState={setFollowerFollowingListState} />}
+            {changePasswordState && <ChangePassword setChangePasswordState={setChangePasswordState} />}
         </>
 
     ) : null

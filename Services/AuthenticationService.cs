@@ -128,20 +128,32 @@ public class AuthenticationService : IAuthenticationService
         });
     }
 
-    public async Task ChangePasswordAsync()
+    public async Task ChangePasswordAsync(ChangePasswordRequest request)
     {
         var userId = _httpContextService.GetCurrentUserID();
         var user = await _userRepository.GetByIdAsync(userId);
 
-        var generatedToken = await _tokenService.CreatePasswordTokenAsync(user.Id);
+        var plainOldPassword = await _cryptionService.Decrypt(request.oldPassword);
+        var plainNewPassword = await _cryptionService.Decrypt(request.newPassword);
 
-        await _emailSender.SendEmailAsync(new SendEmailRequest
+        if (BCrypt.Net.BCrypt.Verify(plainOldPassword, user.Password))
         {
-            ReceiverMail = user.Email,
-            MailType = MailTypes.ChangePasswordMail,
-            UrlExtension = "setpassword?token=" + generatedToken.Token
-        });
+            if (request.oldPassword != request.newPassword)
+            {
+                user.Password = BCrypt.Net.BCrypt.HashPassword(plainNewPassword);
+                await _userRepository.UpdateAsync(user);
+            }
+            else
+            {
+                throw new SamePasswordException("New password cannot be the same as the old password");
+            }
+        }
+        else
+        {
+            throw new InvalidPasswordException("Invalid password");
+        }
     }
+
 
     public async Task SetPasswordAsync(SetPasswordRequest request)
     {
