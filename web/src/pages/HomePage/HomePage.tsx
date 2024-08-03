@@ -14,12 +14,14 @@ const HomePage = (props: HomePageType) => {
     if(props.role == Roles.Guest) {
       return (
         <>
+          GUEST PAGE
         </>
       )
     }
     else if (props.role == Roles.User) {
       return (
         <>
+          USER PAGE
         </>
       )
     }

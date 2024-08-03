@@ -1,8 +1,9 @@
 ﻿using CommunifyLibrary.Enums;
+using CommunifyLibrary.Models.Interfaces;
 
 namespace CommunifyLibrary.Models
 {
-    public class User : BaseEntity
+    public class User : BaseEntity, ISoftDeletableEntity
     {
         public string FirstName { get; set; }
 

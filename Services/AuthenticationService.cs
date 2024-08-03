@@ -8,8 +8,8 @@ using CommunifyLibrary.Repository.Interfaces;
 using LethalCompany_Backend.Exceptions;
 using LethalCompany_Backend.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Security;
 using System.Text.RegularExpressions;
+using PasswordException = LethalCompany_Backend.Exceptions.PasswordException;
 
 namespace Communify_Backend.Services;
 

@@ -3,7 +3,7 @@ using CommunifyLibrary.NonPersistentModels.ParameterModels;
 using LethalCompany_Backend.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Security;
+using PasswordException = LethalCompany_Backend.Exceptions.PasswordException;
 
 namespace Communify_Backend.Controllers;
 

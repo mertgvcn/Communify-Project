@@ -55,7 +55,7 @@ const Form1 = (props: Form1Type) => {
                 })
             }
             else {
-                toast.error("This email is not available", {duration: 2000})
+                toast.error("This email is not available", {duration: 2000}) //username de kontrol et.
             }
         }
 

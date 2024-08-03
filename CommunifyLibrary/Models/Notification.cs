@@ -1,5 +1,7 @@
-﻿namespace CommunifyLibrary.Models;
-public class Notification : BaseEntity
+﻿using CommunifyLibrary.Models.Interfaces;
+
+namespace CommunifyLibrary.Models;
+public class Notification : BaseEntity, IDeletableEntity
 {
     public string Message { get; set; } = default!;
     public bool Seen { get; set; }
