@@ -1,6 +1,6 @@
 import React from 'react'
 //models
-import { Roles } from '../../models/enums/Roles'
+import { Roles } from '../../enums/Roles'
 //css
 import "./HomePage.css"
 
@@ -14,12 +14,14 @@ const HomePage = (props: HomePageType) => {
     if(props.role == Roles.Guest) {
       return (
         <>
+          GUEST PAGE
         </>
       )
     }
     else if (props.role == Roles.User) {
       return (
         <>
+          USER PAGE
         </>
       )
     }

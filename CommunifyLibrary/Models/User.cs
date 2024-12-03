@@ -1,8 +1,9 @@
-﻿using CommunifyLibrary.NonPersistentModels.Enums;
+﻿using CommunifyLibrary.Enums;
+using CommunifyLibrary.Models.Interfaces;
 
 namespace CommunifyLibrary.Models
 {
-    public class User : BaseEntity
+    public class User : BaseEntity, ISoftDeletableEntity
     {
         public string FirstName { get; set; }
 
@@ -33,7 +34,13 @@ namespace CommunifyLibrary.Models
         public long RoleId { get; set; }
         public Role Role { get; set; }
 
+        public ICollection<Notification> Notifications { get; set; }
+
         public ICollection<Interest> Interests { get; set; }
+
+        public ICollection<User> Followings { get; set; }
+
+        public ICollection<User> Followers { get; set; }
 
         public bool isActive { get; set; }
     }
